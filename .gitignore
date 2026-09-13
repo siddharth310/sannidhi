@@ -1,0 +1,27 @@
+# Built application files
+*.apk
+*.aar
+*.ap_
+*.aab
+
+# Gradle
+.gradle/
+build/
+
+# Local configuration
+local.properties
+
+# Android Studio
+.idea/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+*.kotlin_module
+.kotlin/
+
+# Gradle wrapper distribution (local copy avoids network timeouts)
+gradle/wrapper/gradle-8.11.1-bin.zip
