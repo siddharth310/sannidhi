@@ -1,5 +1,5 @@
 ---
-description: Naamalu design system — palette, typography, and Jetpack Compose conventions. Apply when generating or editing UI, theme, or component code.
+description: Smaranam design system — palette, typography, and Jetpack Compose conventions. Apply when generating or editing UI, theme, or component code.
 globs:
   - "**/ui/**/*.kt"
   - "**/theme/**/*.kt"
@@ -8,7 +8,7 @@ globs:
 alwaysApply: false
 ---
 
-# Naamalu Design System
+# Smaranam Design System
 
 **Read `docs/design-system.md` before writing or editing UI code.** It is the canonical source for tokens, typography, components, and Compose structure.
 
@@ -16,15 +16,15 @@ Stack: Kotlin + Jetpack Compose, Android-only. Aesthetic: **reverent, restrained
 
 ## Non-negotiables
 
-1. Use `NaamaluTheme.colors` — never `MaterialTheme.colorScheme` for brand tokens.
+1. Use `SmaranamTheme.colors` — never `MaterialTheme.colorScheme` for brand tokens.
 2. Render all divine names via `SacredName(text, script)` — script-aware Noto Serif; never Inter, never clip/ellipsize.
 3. Gold (`#C79A3E`) is hairlines/dividers only — never fills or large surfaces.
 4. Streaks and missed days use `muted` — never red/error styling.
 5. No gradients, glows, or heavy drop shadows; prefer `0.dp` elevation + hairline borders.
-6. Themes: **Dina** (light) and **Ratri** (dark); access via `NaamaluTheme`.
+6. Themes: **Dina** (light) and **Ratri** (dark); access via `SmaranamTheme`.
 
 ## Theme files (expected layout)
 
-- `ui/theme/Color.kt`, `NaamaluColors.kt`, `Type.kt`, `Theme.kt`
+- `ui/theme/Color.kt`, `SmaranamColors.kt`, `Type.kt`, `Theme.kt`
 
 When adding colors, components, or type styles, update `docs/design-system.md` in the same change.

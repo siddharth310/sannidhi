@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.naamalu.app"
+    namespace = "com.smaranam.app"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.naamalu.app"
+        applicationId = "com.smaranam.app"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

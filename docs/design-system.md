@@ -1,10 +1,10 @@
-# Naamalu Design System
+# Smaranam Design System
 
-Naamalu (నామాలు) is a South Indian Hindu devotional Android app centered on sacred
+Smaranam is a South Indian Hindu devotional Android app centered on sacred
 name-garlands (naamavalis). Stack: Kotlin + Jetpack Compose, Android-only. The design
 is **reverent, restrained, and text-first**. The sacred name is the hero; UI chrome recedes.
 
-Source of truth for exact token values is the `naamalu-app-design` skill. Values below
+Source of truth for exact token values is the `smaranam-app-design` skill. Values below
 marked *(proposed)* are derivations to reconcile with that skill before shipping.
 
 ## Design principles (these override convenience and Material defaults)
@@ -90,17 +90,17 @@ Because tokens exceed Material3's `ColorScheme` (we add `hairline`, `muted`), de
 custom token set via `CompositionLocal`, and also map into a Material3 scheme for interop.
 
 - `ui/theme/Color.kt` — raw `Color(0xFF…)` constants only.
-- `ui/theme/NaamaluColors.kt` — `data class NaamaluColors(...)` with the semantic tokens above;
+- `ui/theme/SmaranamColors.kt` — `data class SmaranamColors(...)` with the semantic tokens above;
   `dinaColors()` and `ratriColors()` factory functions; a `staticCompositionLocalOf`.
 - `ui/theme/Type.kt` — the three `FontFamily` declarations, a `notoSerifFor(script)` selector,
   and the `Typography`/custom text styles.
-- `ui/theme/Theme.kt` — `NaamaluTheme(darkTheme: Boolean = isSystemInDarkTheme(), content)`
+- `ui/theme/Theme.kt` — `SmaranamTheme(darkTheme: Boolean = isSystemInDarkTheme(), content)`
   that provides tokens + typography and wraps `MaterialTheme`.
-- Access tokens through an `object NaamaluTheme` with `@Composable @ReadOnlyComposable`
-  getters: `NaamaluTheme.colors.hairline`, `NaamaluTheme.typography.nameHero`.
+- Access tokens through an `object SmaranamTheme` with `@Composable @ReadOnlyComposable`
+  getters: `SmaranamTheme.colors.hairline`, `SmaranamTheme.typography.nameHero`.
 
 Do not read colors off `MaterialTheme.colorScheme` for brand tokens — go through
-`NaamaluTheme.colors` so light/dark and custom tokens stay correct.
+`SmaranamTheme.colors` so light/dark and custom tokens stay correct.
 
 ## Rendering names (critical path)
 
@@ -111,12 +111,12 @@ A name carries its display script. Provide one composable that is the ONLY way n
 fun SacredName(
     text: String,
     script: Script,               // TELUGU, TAMIL, DEVANAGARI, IAST
-    style: TextStyle = NaamaluTheme.typography.nameHero,
+    style: TextStyle = SmaranamTheme.typography.nameHero,
 ) {
     Text(
         text = text,
         style = style.copy(fontFamily = notoSerifFor(script)),
-        color = NaamaluTheme.colors.textPrimary,
+        color = SmaranamTheme.colors.textPrimary,
         softWrap = true,           // never clip a divine name
         maxLines = Int.MAX_VALUE,
     )
@@ -154,5 +154,5 @@ IAST/transliteration display uses Cormorant Garamond, not a Noto Serif face.
 - Do not hardcode a single script into a name composable.
 - Do not generate, "fix," or autocomplete divine names in UI code.
 - Do not add decorative gradients, glows, or heavy shadows.
-- Do not pull brand colors from `MaterialTheme.colorScheme`; use `NaamaluTheme.colors`.
+- Do not pull brand colors from `MaterialTheme.colorScheme`; use `SmaranamTheme.colors`.
 - Do not introduce new colors outside the palette without updating this file and the skill.

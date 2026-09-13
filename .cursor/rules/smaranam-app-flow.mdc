@@ -1,0 +1,38 @@
+---
+description: Smaranam app flow — navigation, screens, recitation ledger, and Stage 1 scope. Apply when building features, navigation, data models, or tracking.
+globs:
+  - "**/navigation/**/*.kt"
+  - "**/screens/**/*.kt"
+  - "**/domain/**/*.kt"
+  - "**/data/**/*.kt"
+  - "**/MainActivity.kt"
+alwaysApply: false
+---
+
+# Smaranam App Flow
+
+**Read `docs/smaranam-app-flow.md` before building or changing screens, navigation, or tracking.**
+
+Core loop: chant → app counts it → practice grows visibly. One **recitation ledger** feeds everything — never per-screen counters.
+
+## Domain nouns (stable names)
+
+- **Deity** → **Naamavali** → **Naama** (content tree)
+- **Recitation** → **Saadhana** (practice tree)
+- Recitation modes: `read`, `listen`, `japa`
+- Recitation sources: `player`, `reader`, `japa` (future: `puja`)
+
+## Stage 1 navigation (4 bottom tabs)
+
+Home (Mandir) · Library · Japa · Saadhana — plus top-bar script/theme toggle and profile.
+
+## Tracking rules
+
+1. Every completed practice writes one ledger row with `completedAt`.
+2. Badges, streaks, calendar, day detail, and history are **derived read-models** from the ledger.
+3. Streaks are non-punitive — missed days use neutral/muted styling, never error/red.
+4. Partial engagement does not inflate counts (listen ~90% threshold when implemented).
+
+## When adding a screen
+
+Check the flow doc for placement, ledger writes, and deep-links. Update `docs/smaranam-app-flow.md` if the flow changes.
