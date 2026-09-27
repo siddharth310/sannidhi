@@ -1,30 +1,18 @@
 ---
-description: Smaranam design system — palette, typography, and Jetpack Compose conventions. Apply when generating or editing UI, theme, or component code.
+description: Naamalu design system v3 — Sandhyā × Mandir. Apply when editing UI, theme, or components.
 globs:
   - "**/ui/**/*.kt"
   - "**/theme/**/*.kt"
   - "**/*Screen.kt"
-  - "**/*Composable*.kt"
 alwaysApply: false
 ---
 
-# Smaranam Design System
+# Naamalu Design System v3
 
-**Read `docs/design-system.md` before writing or editing UI code.** It is the canonical source for tokens, typography, components, and Compose structure.
+**Read `docs/design-system.md` before UI work.** Flow: `docs/smaranam-app-flow.md` until `naamalu-app-flow/SKILL.md` exists. Imagery: `docs/illustrations.md`.
 
-Stack: Kotlin + Jetpack Compose, Android-only. Aesthetic: **reverent, restrained, text-first** — the sacred name is the hero; UI chrome recedes.
+Use `NaamaluTheme` / v3 tokens (`NaamaluColors`, `NaamaluModules`, `Sky`, `NaamaluDimens`). Foundation: `ui/icons/NaamaluIcons.kt`, `ui/landscape/LandscapeLayers.kt`, `ui/layout/NaamaluInsets.kt`.
 
-## Non-negotiables
+Legacy `SmaranamTheme` maps to v3 tokens for transitional screens. New work follows §6–§7 components (Phase 2+), not v2 `MandirChrome` hairline rows.
 
-1. Use `SmaranamTheme.colors` — never `MaterialTheme.colorScheme` for brand tokens.
-2. Render all divine names via `SacredName(text, script)` — script-aware Noto Serif; never Inter, never clip/ellipsize.
-3. Gold (`#C79A3E`) is hairlines/dividers only — never fills or large surfaces.
-4. Streaks and missed days use `muted` — never red/error styling.
-5. No gradients, glows, or heavy drop shadows; prefer `0.dp` elevation + hairline borders.
-6. Themes: **Dina** (light) and **Ratri** (dark); access via `SmaranamTheme`.
-
-## Theme files (expected layout)
-
-- `ui/theme/Color.kt`, `SmaranamColors.kt`, `Type.kt`, `Theme.kt`
-
-When adding colors, components, or type styles, update `docs/design-system.md` in the same change.
+§9 never-do: status/navigation insets, no empty icon boxes, no placeholder copy, hide zero session counts, no stock icon packs on product chrome.
