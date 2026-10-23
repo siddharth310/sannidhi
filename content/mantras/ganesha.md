@@ -11,7 +11,6 @@ note: >
 sa: ॐ गं गणपतये नमः
 use: [japa, puja]
 count_default: 108
-audio: { file: ganesha.mantra.mula.mp3, length_ms: 1224, words_ms: [0, 280, 560, 860] }
 #### te
 ఓం — గం అనే బీజాక్షరంతో గణపతికి నమస్కారం.
 #### hi

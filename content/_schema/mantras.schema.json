@@ -75,7 +75,8 @@
       "properties": {
        "file": { "type": "string" },
        "length_ms": { "type": "integer", "minimum": 1 },
-       "words_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+       "words_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+       "draft": { "type": "boolean" }
       }
      }
     ]

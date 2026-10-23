@@ -53,7 +53,8 @@
      "properties": {
       "file": { "type": "string" },
       "intro_ms": { "type": "integer", "minimum": 0 },
-      "slot_ms": { "type": "integer", "minimum": 1 }
+      "slot_ms": { "type": "integer", "minimum": 1 },
+      "draft": { "type": "boolean" }
      }
     },
     {
@@ -62,7 +63,8 @@
      "additionalProperties": false,
      "properties": {
       "file": { "type": "string" },
-      "names_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      "names_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+      "draft": { "type": "boolean" }
      }
     }
    ]

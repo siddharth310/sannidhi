@@ -57,6 +57,7 @@ class Report:
     def __init__(self):
         self.errors: list[str] = []
         self.warnings: list[str] = []
+        self.notes: list[str] = []
 
     def err(self, where, msg):
         self.errors.append(f"ERROR  {where}: {msg}")
@@ -64,8 +65,11 @@ class Report:
     def warn(self, where, msg):
         self.warnings.append(f"warn   {where}: {msg}")
 
+    def note(self, where, msg):
+        self.notes.append(f"flag   {where}: {msg}")
+
     def print(self):
-        for line in self.errors + self.warnings:
+        for line in self.notes + self.errors + self.warnings:
             print(line)
         print(f"\n{len(self.errors)} errors, {len(self.warnings)} warnings")
 
@@ -218,6 +222,66 @@ def load_deities():
     return out
 
 
+def read_sidecar(stem: str):
+    """Timings written beside a recording: content/audio/<id>.json."""
+    path = os.path.join(C, "audio", f"{stem}.json")
+    if not os.path.isfile(path):
+        return None
+    try:
+        data = json.load(open(path, encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        R.err(f"audio/{stem}.json", f"sidecar is not valid JSON: {e}")
+        return None
+    if not isinstance(data, dict):
+        R.err(f"audio/{stem}.json", "sidecar must be an object")
+        return None
+    return data
+
+
+def companion_audio(stem: str):
+    for ext in (".m4a", ".mp3", ".wav"):
+        name = stem + ext
+        if os.path.isfile(os.path.join(C, "audio", name)):
+            return name
+    return None
+
+
+def rising_marks(values, length, where: str, label: str):
+    if not isinstance(values, list):
+        R.err(where, f"{label} must be a list")
+        return None
+    previous = -1
+    marks = []
+    for mark in values:
+        try:
+            at = int(mark)
+        except (TypeError, ValueError):
+            R.err(where, f"{label} values must be numbers")
+            return None
+        if at <= previous or (length is not None and at >= length):
+            R.err(where, f"{label} must rise and stay under length_ms")
+        previous = at
+        marks.append(at)
+    return marks
+
+
+def sidecar_length(side, where: str):
+    try:
+        return int(side["length_ms"])
+    except (KeyError, TypeError, ValueError):
+        R.err(where, "sidecar needs length_ms")
+        return None
+
+
+def draft_flag(side):
+    status = side.get("status")
+    if status == "draft":
+        return True
+    if status not in (None, "reviewed", "published"):
+        R.err("audio", f"sidecar status must be draft, reviewed or published, not {status}")
+    return False
+
+
 def mantra_audio(audio, sa: str, where: str, mid: str):
     """Optional one-repetition recording. Absent is fine. Never synthesised here."""
     if not audio:
@@ -254,6 +318,31 @@ def mantra_audio(audio, sa: str, where: str, mid: str):
         previous = at
         marks.append(at)
     return {"file": file_name, "length_ms": length, "words_ms": marks}
+
+
+def mantra_from_sidecar(side, sa: str, where: str, mid: str):
+    """One repetition's timings. Draft audio is marked so a release build can leave it out."""
+    where = f"audio/{mid}.json"
+    file_name = companion_audio(mid)
+    if not file_name:
+        R.err(where, f"audio file missing for {mid}")
+        file_name = f"{mid}.m4a"
+    length = sidecar_length(side, where)
+    if length is None:
+        return None
+    spoken = [part for part in str(sa).split() if part]
+    words = side.get("words_ms") or []
+    if len(words) != len(spoken):
+        R.err(where, f"words_ms has {len(words)} marks for {len(spoken)} words")
+    marks = rising_marks(words, length, where, "words_ms")
+    if marks is None:
+        return None
+    out = {"file": file_name, "length_ms": length, "words_ms": marks}
+    if draft_flag(side):
+        out["draft"] = True
+    if side.get("words_estimated"):
+        R.note(where, "word timings are estimated")
+    return out
 
 
 def media_length_ms(path: str):
@@ -303,7 +392,10 @@ def text_audio(audio, name_count: int, where: str, status: str):
                 R.err(where, "names_ms must rise and stay under the file length")
             previous = at
             marks.append(at)
-        return {"file": file_name, "names_ms": marks}
+        out = {"file": file_name, "names_ms": marks}
+        if audio.get("draft"):
+            out["draft"] = True
+        return out
     intro = audio.get("intro_ms")
     slot = audio.get("slot_ms")
     out = {"file": file_name}
@@ -311,6 +403,30 @@ def text_audio(audio, name_count: int, where: str, status: str):
         out["intro_ms"] = int(intro)
     if slot is not None:
         out["slot_ms"] = int(slot)
+    return out
+
+
+def text_from_sidecar(side, text_id: str, name_count: int, status: str):
+    where = f"audio/{text_id}.json"
+    file_name = companion_audio(text_id)
+    if not file_name:
+        (R.err if status in ("reviewed", "published") else R.warn)(where, f"audio file missing: {text_id}.m4a")
+        file_name = f"{text_id}.m4a"
+    length = sidecar_length(side, where)
+    names_ms = side.get("names_ms")
+    if not isinstance(names_ms, list):
+        R.err(where, "names_ms must be a list")
+        return None
+    if name_count and len(names_ms) != name_count:
+        R.err(where, f"names_ms has {len(names_ms)} marks for {name_count} names")
+    if length is None:
+        return None
+    marks = rising_marks(names_ms, length, where, "names_ms")
+    if marks is None:
+        return None
+    out = {"file": file_name, "names_ms": marks}
+    if draft_flag(side):
+        out["draft"] = True
     return out
 
 
@@ -342,6 +458,7 @@ def load_mantras():
             review = bool(k.get("review"))
             if review and file_status in ("reviewed", "published"):
                 R.err(f"{w} {mid}", "still marked review: remove after purohit check")
+            side = read_sidecar(mid)
             out.append({
                 "id": mid, "deity": deity, "status": file_status, "kind": "mantra",
                 "text": sacred(k.get("sa"), f"{w} {mid}"),
@@ -349,7 +466,8 @@ def load_mantras():
                 "use": as_list(k.get("use")), "count_default": k.get("count_default"),
                 "meaning": localized(sec.langs(), f"{w} {mid}", file_status),
                 "fills": k.get("fills"), "needs_review": review,
-                "audio": mantra_audio(k.get("audio"), k.get("sa") or "", w, mid),
+                "audio": (mantra_from_sidecar(side, k.get("sa") or "", w, mid) if side
+                          else mantra_audio(k.get("audio"), k.get("sa") or "", w, mid)),
             })
             if not k.get("sa") and not k.get("sa_lines"):
                 R.err(f"{w} {mid}", "mantra has no sa: or sa_lines:")
@@ -377,9 +495,13 @@ def load_texts():
                     R.err(w, f"name numbering broken at position {i}")
                 entry["names"].append({"id": f"{d['id']}.{i:03d}", "n": i, "text": sacred(n.get("sa"), f"{w} #{i}"),
                                        "flag": n.get("flag")})
+                if n.get("flag"):
+                    R.note(w, f"name {i} flagged {n.get('flag')}")
             if d.get("type") == "ashtottara" and len(entry["names"]) != 108:
                 R.err(w, f"aṣṭottaram must have 108 names, has {len(entry['names'])}")
-        entry["audio"] = text_audio(d.get("audio"), len(entry["names"]), w, st)
+        side = read_sidecar(d["id"])
+        entry["audio"] = text_from_sidecar(side, d["id"], len(entry["names"]), st) if side else text_audio(
+            d.get("audio"), len(entry["names"]), w, st)
         out.append(entry)
     return out
 
@@ -619,6 +741,15 @@ def check_refs(data, images):
             R.err("rashi/profiles.md", f"missing profile for {r['id']}")
 
 
+def drop_draft_audio(data):
+    """A release build ships no machine draft. The player then behaves as if there is no recording."""
+    for group in ("texts", "mantras"):
+        for item in data[group]:
+            audio = item.get("audio")
+            if isinstance(audio, dict) and audio.get("draft"):
+                item["audio"] = None
+
+
 def prune_for_release(data):
     """Drop draft / retired items and strip links to anything dropped."""
     keep = lambda x: x.get("status") in ("reviewed", "published")
@@ -819,6 +950,7 @@ def main():
 
     if args.release:
         prune_for_release(data)
+        drop_draft_audio(data)
 
     out_dir = os.path.join(ROOT, CONFIG["assets_out"])
     if os.path.isdir(out_dir):
@@ -856,9 +988,18 @@ def main():
     else:
         cal_index = build_calendar(master, data["observances"], out_dir)
         write_json(f"{out_dir}/calendar/index.json", cal_index)
-    for audio in glob.glob(f"{C}/audio/*.mp3"):
-        os.makedirs(f"{out_dir}/audio", exist_ok=True)
-        shutil.copy(audio, f"{out_dir}/audio/")
+    draft_stems = set()
+    for side_path in glob.glob(f"{C}/audio/*.json"):
+        side = read_sidecar(os.path.splitext(os.path.basename(side_path))[0])
+        if side and side.get("status") == "draft":
+            draft_stems.add(os.path.splitext(os.path.basename(side_path))[0])
+    for pattern in ("*.mp3", "*.m4a", "*.wav"):
+        for audio in glob.glob(f"{C}/audio/{pattern}"):
+            stem = os.path.splitext(os.path.basename(audio))[0]
+            if args.release and stem in draft_stems:
+                continue
+            os.makedirs(f"{out_dir}/audio", exist_ok=True)
+            shutil.copy(audio, f"{out_dir}/audio/")
 
     files = {}
     for path in sorted(glob.glob(f"{out_dir}/**/*", recursive=True)):
