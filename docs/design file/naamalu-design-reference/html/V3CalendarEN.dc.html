@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>v3 · Calendar — māsam view (EN / हिं)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Devanagari:wght@500;700&amp;family=Noto+Sans+Devanagari:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#7A1F2B}a:hover{color:#7A1F2B}
+
+</style>
+</helmet>
+<div style="width: 390px; height: 1320px; position: relative; overflow: hidden; background: #FBF4E9; color: #2A1A14; font-family: {{ ui }}">
+  <div style="position: absolute; left: 0; top: 0; width: 390px; height: 430px; background: linear-gradient(180deg, #141726 0%, #1E2238 60%, #2B2338 100%)"></div>
+  <svg width="390" height="430" viewBox="0 0 390 430" style="position: absolute; left: 0; top: 0">
+    <g fill="#F1EBDF" opacity="0.8"><circle cx="30" cy="70" r="1.1"/><circle cx="88" cy="118" r="0.9"/><circle cx="170" cy="60" r="1.2"/><circle cx="250" cy="98" r="0.9"/><circle cx="330" cy="64" r="1.1"/><circle cx="368" cy="130" r="0.9"/><circle cx="120" cy="170" r="0.8"/></g>
+    <path d="M0 382 C70 360 140 374 210 356 C280 340 330 362 390 350 L390 430 L0 430Z" fill="#262A3F"/>
+    <path d="M226 362 L229 348 L271 348 L274 362Z M232 348 L235 336 L265 336 L268 348Z M238 336 L241 325 L259 325 L262 336Z M243 325 L245 315 L255 315 L257 325Z M242 315 L242 310 Q250 304 258 310 L258 315Z" fill="#262A3F"/>
+    <path d="M0 408 C90 392 180 412 260 400 C320 390 360 400 390 396 L390 430 L0 430Z" fill="#1B1D2C"/>
+    <g stroke="#1B1D2C" stroke-width="3" fill="none" stroke-linecap="round"><path d="M44 410 Q48 380 42 350"/><path d="M42 350 Q24 342 12 354"/><path d="M42 350 Q28 332 18 330"/><path d="M42 350 Q52 330 66 328"/><path d="M42 350 Q62 342 74 356"/></g>
+  </svg>
+
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <button aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: rgba(241,235,223,0.1); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F1EBDF" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="display: flex; border-radius: 22px; background: rgba(241,235,223,0.1); padding: 4px">
+      <div style="height: 36px; padding: 0 14px; border-radius: 18px; background: #F4EAD9; color: #5A3E26; font-size: 14px; font-weight: 600; display: flex; align-items: center">{{ t.month }}</div>
+      <div style="height: 36px; padding: 0 14px; border-radius: 18px; color: #CFCADB; font-size: 14px; display: flex; align-items: center">{{ t.year }}</div>
+    </div>
+    <button onClick="{{ toggle }}" style="height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(241,235,223,0.1); font-family: {{ ui }}; font-size: 14px; font-weight: 600; color: #F1EBDF; cursor: pointer">{{ t.pill }}</button>
+  </div>
+
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 20px 12px 0">
+    <button aria-label="Previous māsam" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CFCADB" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <div style="text-align: center; color: #F1EBDF">
+      <div style="font-family: {{ sacred }}; font-size: 30px; font-weight: 650; line-height: 1.3">{{ t.masam }}</div>
+      <div style="font-size: 15px; color: #CFCADB">{{ t.masamSub }}</div>
+      <div style="font-size: 13px; color: #A9A6B8; margin-top: 2px">{{ t.greg }}</div>
+    </div>
+    <button aria-label="Next māsam" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: transparent; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CFCADB" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+
+  <svg width="390" height="150" viewBox="0 0 390 150" style="position: absolute; left: 0; top: 196px">
+    <defs><linearGradient id="tide" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CC5D1" stop-opacity="0.55"/><stop offset="1" stop-color="#2F7188" stop-opacity="0.05"/></linearGradient></defs>
+    <path d="{{ tideFill }}" fill="url(#tide)"/>
+    <path d="{{ tideLine }}" fill="none" stroke="#DCEBEF" stroke-width="1.6"/>
+    <path d="{{ tideWave }}" fill="none" stroke="#9CC5D1" stroke-width="1" opacity="0.5"/>
+    <line x1="195" y1="18" x2="195" y2="126" stroke="#CFCADB" stroke-width="0.8" stroke-dasharray="3 3" opacity="0.5"/>
+    <sc-for list="{{ tideMoons }}" as="tm" hint-placeholder-count="5">
+      <g><circle cx="{{ tm.cx }}" cy="{{ tm.cy }}" r="9" fill="#3A3F5C"/><path d="{{ tm.d }}" fill="#F4E6C8"/></g>
+    </sc-for>
+    <line x1="{{ selX }}" y1="14" x2="{{ selX }}" y2="126" stroke="#C79A3E" stroke-width="1.4"/>
+    <circle cx="{{ selX }}" cy="{{ selY }}" r="5" fill="#F4D39B" stroke="#141726" stroke-width="2"/>
+    <text x="20" y="144" font-family="{{ svgFont }}" font-size="12" fill="#CFCADB">{{ t.cap1 }}</text>
+    <text x="370" y="144" text-anchor="end" font-family="{{ svgFont }}" font-size="12" fill="#CFCADB">{{ t.cap2 }}</text>
+  </svg>
+
+  <div style="position: absolute; left: 0; top: 410px; width: 390px; height: 910px; background: #FBF4E9; border-radius: 30px 30px 0 0"></div>
+  <div style="position: absolute; left: 16px; top: 430px; width: 358px">
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center; font-size: 12px; font-weight: 600; color: #6B4A2E; padding-bottom: 8px">
+      <sc-for list="{{ wd }}" as="w" hint-placeholder-count="7"><div>{{ w }}</div></sc-for>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px">
+      <sc-for list="{{ cells }}" as="c" hint-placeholder-count="35">
+        <button onClick="{{ c.select }}" aria-label="{{ c.label }}" style="{{ c.style }}">
+          <div style="font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1; color: {{ c.numColor }}">{{ c.num }}</div>
+          <svg width="20" height="20" viewBox="0 0 20 20" style="display: {{ c.moonDisplay }}"><circle cx="10" cy="10" r="8" fill="#E4DCCD" stroke="#CDBFA8" stroke-width="0.8"/><path d="{{ c.d }}" fill="#C79A3E"/></svg>
+          <div style="font-family: {{ ui }}; font-size: 10px; line-height: 1.1; color: #6B5A4E; font-style: {{ c.fs }}">{{ c.tithi }}</div>
+          <div style="{{ c.dot }}"></div>
+        </button>
+      </sc-for>
+    </div>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; padding-top: 14px; font-size: 12px; color: #6B5A4E">
+      <div style="display: flex; align-items: center; gap: 6px"><div style="width: 8px; height: 8px; border-radius: 4px; background: #B23A48"></div>{{ t.lg1 }}</div>
+      <div style="display: flex; align-items: center; gap: 6px"><div style="width: 8px; height: 8px; border-radius: 4px; background: #E08BA0"></div>{{ t.lg2 }}</div>
+      <div style="display: flex; align-items: center; gap: 6px"><div style="width: 8px; height: 8px; border-radius: 4px; background: #2F7188"></div>{{ t.lg3 }}</div>
+      <div style="display: flex; align-items: center; gap: 6px"><div style="width: 16px; height: 3px; border-radius: 2px; background: #C9A67A"></div>{{ t.lg4 }}</div>
+    </div>
+
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #6B4A2E; padding-top: 24px">{{ t.thisMonth }}</div>
+    <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 10px">
+      <div style="border-radius: 22px; background: #F7E3E1; padding: 14px 16px; display: flex; align-items: center; gap: 14px">
+        <div style="width: 44px; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 650; color: #7A1F2B">14</div><div style="font-size: 11px; color: #7A1F2B">Sep</div></div>
+        <div style="flex-grow: 1"><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 17px; font-weight: 650; color: #5A1824">{{ t.e1 }}</div><div style="font-size: 13px; color: #7A4A50">{{ t.e1s }}</div></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A1F2B" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
+      </div>
+      <div style="border-radius: 22px; background: #F4EAD9; padding: 14px 16px; display: flex; align-items: center; gap: 14px">
+        <div style="width: 44px; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 20px; font-weight: 650; color: #6B4A2E">26</div><div style="font-size: 11px; color: #6B4A2E">Sep</div></div>
+        <div style="flex-grow: 1"><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 17px; font-weight: 650; color: #4A321E">{{ t.e2 }}</div><div style="font-size: 13px; color: #6B5A4E">{{ t.e2s }}</div></div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B4A2E" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <div style="{{ bubbleWrap }}">
+    <div style="position: relative; border-radius: 24px; background: #FFFDF8; box-shadow: 0 10px 30px rgba(20,23,38,0.25); padding: 16px 16px 14px">
+      <div style="display: flex; gap: 14px; align-items: center">
+        <svg width="56" height="56" viewBox="0 0 56 56" style="flex-shrink: 0"><circle cx="28" cy="28" r="26" fill="#1E2238"/><circle cx="28" cy="28" r="20" fill="#3A3F5C"/><path d="{{ sel.bigD }}" fill="#F4E6C8"/></svg>
+        <div style="flex-grow: 1">
+          <div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 19px; font-weight: 650; line-height: 1.3">{{ sel.title }}</div>
+          <div style="font-size: 13px; color: #6B5A4E">{{ sel.sub }}</div>
+          <div style="font-size: 12px; color: #2F7188; margin-top: 2px">{{ sel.light }}</div>
+        </div>
+        <button onClick="{{ close }}" aria-label="Close" style="width: 36px; height: 36px; border-radius: 18px; border: none; background: #F4EAD9; display: flex; align-items: center; justify-content: center; align-self: flex-start"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B4A2E" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <sc-for list="{{ sel.events }}" as="e" hint-placeholder-count="1">
+        <div style="margin-top: 10px; border-radius: 16px; background: {{ e.bg }}; padding: 10px 12px; display: flex; align-items: center; gap: 10px">
+          <div style="width: 8px; height: 8px; border-radius: 4px; background: {{ e.dot }}; flex-shrink: 0"></div>
+          <div style="flex-grow: 1; font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 15px; font-weight: 650; color: {{ e.fg }}">{{ e.name }}</div>
+          <div style="font-size: 13px; font-weight: 600; color: {{ e.fg }}">{{ e.action }}</div>
+        </div>
+      </sc-for>
+      <div style="margin-top: 12px; display: flex; gap: 8px">
+        <div style="flex-grow: 1; height: 44px; border-radius: 22px; background: #6B4A2E; color: #FBF4E9; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600">{{ t.details }}</div>
+      </div>
+      <div style="{{ arrow }}"></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1320}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { sel: 4, lang: 'en' }; }
+  moon(cx, cy, r, t) {
+    t = ((t % 1) + 1) % 1;
+    const p = 2 * Math.PI * t, k = Math.cos(p), illum = (1 - k) / 2;
+    if (illum < 0.02) return '';
+    const rx = Math.max(0.01, r * Math.abs(k)).toFixed(2);
+    const top = cx + ' ' + (cy - r), bot = cx + ' ' + (cy + r);
+    if (t < 0.5) {
+      const sw = illum < 0.5 ? 0 : 1;
+      return 'M' + top + ' A' + r + ' ' + r + ' 0 0 1 ' + bot + ' A' + rx + ' ' + r + ' 0 0 ' + sw + ' ' + top + 'Z';
+    }
+    const sw = illum > 0.5 ? 0 : 1;
+    return 'M' + top + ' A' + r + ' ' + r + ' 0 0 0 ' + bot + ' A' + rx + ' ' + r + ' 0 0 ' + sw + ' ' + top + 'Z';
+  }
+
+
+  langVals(S) {
+    const hi = this.state.lang === 'hi';
+    const t = {}; for (const k in S) t[k] = hi ? S[k][1] : S[k][0];
+    return Object.assign({ t, hi,
+      ui: hi ? "'Noto Sans Devanagari', sans-serif" : "'Instrument Sans', sans-serif",
+      sacred: hi ? "'Noto Serif Devanagari', serif" : "'Fraunces', serif",
+      sacredStyle: hi ? 'normal' : 'italic',
+      toggle: () => this.setState({ lang: hi ? 'en' : 'hi' }) });
+  }
+
+  renderVals() {
+    const S = { pill: ['English ▾','हिन्दी ▾'], month: ['Māsam','मास'], year: ['Year','वर्ष'], masam: ['Bhādrapada','भाद्रपद'],
+      masamSub: ['Parābhava · amānta (Telugu states)','पराभव · कृष्ण पक्ष = आश्विन (पूर्णिमांत)'], greg: ['Sep – Oct · sample dates','सितंबर – अक्टूबर · नमूना तिथियाँ'],
+      cap1: ['Śukla pakṣa · light grows','शुक्ल पक्ष · प्रकाश बढ़ता है'], cap2: ['Kṛṣṇa pakṣa · light ebbs','कृष्ण पक्ष · घटता है'],
+      lg1: ['Festival','त्योहार'], lg2: ['Vratam','व्रत'], lg3: ['Ekādaśī · Pradoṣa · Saṅkaṣṭī','एकादशी · प्रदोष · संकष्टी'], lg4: ['Period','अवधि'],
+      thisMonth: ['THIS MĀSAM','इस मास में'], e1: ['Vināyaka Chavithi','गणेश चतुर्थी'], e1s: ['Śukla caturthī · puja vidhi available','शुक्ल चतुर्थी · पूजा विधि उपलब्ध'],
+      e2: ['Pitṛ pakṣa (Mahālaya)','पितृ पक्ष (महालय)'], e2s: ['Whole kṛṣṇa pakṣa · ancestral offerings','पूरा कृष्ण पक्ष · पितरों का तर्पण'], details: ['Day details','दिन का विवरण'] };
+    const L = this.langVals(S), hi = L.hi;
+    const TI = ['Pratipadā','Dvitīyā','Tṛtīyā','Caturthī','Pañcamī','Ṣaṣṭhī','Saptamī','Aṣṭamī','Navamī','Daśamī','Ekādaśī','Dvādaśī','Trayodaśī','Caturdaśī'];
+    const TH = ['प्रतिपदा','द्वितीया','तृतीया','चतुर्थी','पंचमी','षष्ठी','सप्तमी','अष्टमी','नवमी','दशमी','एकादशी','द्वादशी','त्रयोदशी','चतुर्दशी'];
+    const tithiName = i => i === 15 ? (hi ? 'पूर्णिमा' : 'Pūrṇimā') : i === 30 ? (hi ? 'अमावस्या' : 'Amāvāsyā') : (hi ? TH : TI)[(i - 1) % 15];
+    const paksha = i => i <= 15 ? (hi ? 'शुक्ल' : 'Śukla') : (hi ? 'कृष्ण' : 'Kṛṣṇa');
+    const WD = hi ? ['रविवार','सोमवार','मंगलवार','बुधवार','गुरुवार','शुक्रवार','शनिवार'] : ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    L.wd = hi ? ['रवि','सोम','मंगल','बुध','गुरु','शुक्र','शनि'] : ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    L.svgFont = hi ? 'Noto Sans Devanagari' : 'Instrument Sans';
+    const EVx = {
+      3: [['Hartālikā Tīj','हरतालिका तीज','v']], 4: [['Vināyaka Chavithi','गणेश चतुर्थी','f']], 5: [['Ṛṣi Pañcamī','ऋषि पंचमी','f']], 11: [['Ekādaśī','एकादशी','r']], 13: [['Pradoṣa','प्रदोष','r']],
+      14: [['Ananta Padmanābha Vratam','अनंत चतुर्दशी','v']], 15: [['Pūrṇimā','पूर्णिमा','r']], 16: [['Pitṛ pakṣa begins','पितृ पक्ष आरंभ','p']], 18: [['Undralla Taddi','उंड्राल्ल तद्दि','v']],
+      19: [['Saṅkaṣṭī Chaturthī','संकष्टी चतुर्थी','r']], 26: [['Ekādaśī','एकादशी','r']], 28: [['Pradoṣa','प्रदोष','r']], 29: [['Māsa Śivarātri','मासिक शिवरात्रि','r']], 30: [['Mahālaya Amāvāsyā','सर्वपितृ अमावस्या','f'], ['Bathukamma begins','बतुकम्मा आरंभ','f']]
+    };
+    const EV = {}; for (const k in EVx) EV[k] = EVx[k].map(e => [hi ? e[1] : e[0], e[2]]);
+    const KIND = { f: ['#F7E3E1','#B23A48','#5A1824', hi ? 'पूजा विधि →' : 'Puja vidhi →'], v: ['#FBE4EA','#E08BA0','#6E2A40', hi ? 'व्रत →' : 'Vratam →'], r: ['#DCEBEF','#2F7188','#1B3A4B', hi ? 'विवरण →' : 'Details →'], p: ['#F4EAD9','#C9A67A','#4A321E', hi ? 'विवरण →' : 'Details →'] };
+    const offset = 5, startDay = 11;
+    const greg = i => { const d = startDay + i - 1; return d <= 30 ? d + (hi ? ' सितं' : ' Sep') : (d - 30) + (hi ? ' अक्टू' : ' Oct'); };
+    const gnum = i => { const d = startDay + i - 1; return d <= 30 ? d : d - 30; };
+    const sel = this.state.sel;
+    const cells = [];
+    for (let b = 0; b < offset; b++) cells.push({ fs: 'normal', select: () => {}, label: 'empty', style: 'height: 70px; border: none; background: transparent; visibility: hidden', num: '', numColor: '#2A1A14', d: '', moonDisplay: 'none', tithi: '', dot: 'display: none' });
+    for (let i = 1; i <= 30; i++) {
+      const ev = EV[i] || [];
+      const main = ev[0] ? ev[0][1] : null;
+      const isSel = i === sel;
+      const bg = main === 'f' ? '#F7E3E1' : main === 'v' ? '#FBE4EA' : '#FFFFFF';
+      const border = isSel ? '2px solid #7A1F2B' : (i === 15 || i === 30 ? '1px solid #C79A3E' : '1px solid #EFE4D2');
+      const period = i >= 16 ? 'box-shadow: inset 0 -3px 0 #C9A67A;' : '';
+      cells.push({
+        select: () => this.setState({ sel: i }),
+        label: paksha(i) + ' ' + tithiName(i) + ', ' + greg(i),
+        style: 'height: 70px; border-radius: 14px; border: ' + border + '; background: ' + bg + '; ' + period + ' display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; padding: 0; cursor: pointer; font-family: inherit',
+        num: gnum(i), numColor: main === 'f' ? '#7A1F2B' : '#2A1A14',
+        d: this.moon(10, 10, 8, i / 30), moonDisplay: 'block',
+        tithi: tithiName(i), fs: hi ? 'normal' : 'italic',
+        dot: main && main !== 'p' ? 'width: 5px; height: 5px; border-radius: 3px; background: ' + KIND[main][1] : 'display: none'
+      });
+    }
+    const W = 350, X0 = 20, base = 118, amp = 86;
+    const xAt = i => X0 + (i / 30) * W;
+    const yAt = i => base - amp * (1 - Math.cos(2 * Math.PI * i / 30)) / 2;
+    let line = '', wave = '';
+    for (let s = 0; s <= 120; s++) { const i = s / 4; line += (s ? ' L' : 'M') + xAt(i).toFixed(1) + ' ' + yAt(i).toFixed(1); wave += (s ? ' L' : 'M') + xAt(i).toFixed(1) + ' ' + (yAt(i) + 8 + 2.5 * Math.sin(s * 0.9)).toFixed(1); }
+    const fill = line + ' L' + xAt(30) + ' 130 L' + xAt(0) + ' 130 Z';
+    const tideMoons = [0, 7.5, 15, 22.5, 30].map(i => ({ cx: xAt(i).toFixed(1), cy: (yAt(i) - 16).toFixed(1), d: this.moon(xAt(i), yAt(i) - 16, 9, (i % 30) / 30 || (i === 30 ? 0 : 0)) }));
+    tideMoons[2].d = this.moon(xAt(15), yAt(15) - 16, 9, 0.5);
+    tideMoons[1].d = this.moon(xAt(7.5), yAt(7.5) - 16, 9, 0.25);
+    tideMoons[3].d = this.moon(xAt(22.5), yAt(22.5) - 16, 9, 0.75);
+    const illum = Math.round(100 * (1 - Math.cos(2 * Math.PI * sel / 30)) / 2);
+    const ev = (EV[sel] || []).map(e => { const k = KIND[e[1]]; return { name: e[0], bg: k[0], dot: k[1], fg: k[2], action: k[3] }; });
+    const idx = offset + sel - 1, col = idx % 7, row = Math.floor(idx / 7);
+    const cw = (358 - 24) / 7, cellCx = 16 + col * (cw + 4) + cw / 2;
+    const cellTop = 430 + 26 + row * 74;
+    const bw = 318, bx = Math.min(Math.max(cellCx - bw / 2, 16), 390 - 16 - bw);
+    const bh = 176 + ev.length * 52;
+    const by = cellTop - bh - 12;
+    return Object.assign(L, {
+      cells, tideLine: line, tideWave: wave, tideFill: fill, tideMoons,
+      selX: xAt(sel).toFixed(1), selY: yAt(sel).toFixed(1),
+      sel: {
+        title: paksha(sel) + ' ' + tithiName(sel),
+        sub: (hi ? (sel > 15 ? 'आश्विन (पूर्णिमांत)' : 'भाद्रपद') : 'Bhādrapada') + ' · ' + WD[(offset + sel - 1) % 7] + ' · ' + greg(sel),
+        light: hi ? ('प्रकाश ' + illum + '% · ' + (sel < 15 ? 'बढ़ रहा है' : sel === 15 ? 'पूर्ण चंद्र' : sel === 30 ? 'चंद्र दिखाई नहीं देता' : 'घट रहा है')) : ('Moon ' + illum + '% lit · ' + (sel < 15 ? 'waxing' : sel === 15 ? 'full moon' : sel === 30 ? 'new moon' : 'waning')),
+        bigD: this.moon(28, 28, 20, sel / 30),
+        events: ev
+      },
+      bubbleWrap: sel ? 'position: absolute; left: ' + bx.toFixed(1) + 'px; top: ' + by.toFixed(1) + 'px; width: ' + bw + 'px' : 'display: none',
+      arrow: 'position: absolute; left: ' + (cellCx - bx - 9).toFixed(1) + 'px; bottom: -8px; width: 18px; height: 18px; background: #FFFDF8; transform: rotate(45deg); border-radius: 3px',
+      close: () => this.setState({ sel: 0 })
+    });
+  }
+}
+</script>
+</body>
+</html>

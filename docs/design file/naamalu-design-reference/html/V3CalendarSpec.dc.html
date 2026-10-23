@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<title>v3 · Calendar — moon, tide and day cells</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Telugu:wght@500;700&amp;family=Noto+Sans+Telugu:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#7A1F2B}a:hover{color:#5A1520}
+</style>
+</helmet>
+<div style="width: 820px; height: 1080px; box-sizing: border-box; background: #FBF4E9; color: #2A1A14; font-family: 'Instrument Sans', sans-serif; padding: 44px; display: flex; flex-direction: column; gap: 30px">
+  <div>
+    <div style="font-family: 'Fraunces', serif; font-size: 32px; font-weight: 650">The moon carries the calendar</div>
+    <div style="font-size: 15px; color: #6B5A4E; margin-top: 6px">A māsam is one breath of the moon: light rises through śuddha pakṣa to pūrṇimā, ebbs through bahuḷa pakṣa to amāvāsya — drawn as a tide.</div>
+  </div>
+
+  <div style="border-radius: 26px; background: #1E2238; padding: 22px 24px; color: #F1EBDF">
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #F4D39B">Moon phases · drawn from the tithi</div>
+    <div style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; margin-top: 16px; text-align: center">
+      <sc-for list="{{ phases }}" as="ph" hint-placeholder-count="8">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+          <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="22" fill="#3A3F5C"/><path d="{{ ph.d }}" fill="#F4E6C8"/></svg>
+          <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 13px; font-weight: 600">{{ ph.te }}</div>
+          <div style="font-size: 11px; color: #A9A6B8; line-height: 1.3">{{ ph.en }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="font-size: 12px; color: #A9A6B8; margin-top: 14px">Lit fraction = (1 − cos(2π·tithi/30)) / 2 · waxing lit on the right, waning on the left · in-cell size 20dp (gold on sand), bubble 56dp (cream on night).</div>
+  </div>
+
+  <div style="border-radius: 26px; background: #141726; padding: 22px 24px; color: #F1EBDF">
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #F4D39B">The tide band · one māsam</div>
+    <svg width="724" height="170" viewBox="0 0 724 170" style="margin-top: 10px">
+      <defs><linearGradient id="tide2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CC5D1" stop-opacity="0.55"/><stop offset="1" stop-color="#2F7188" stop-opacity="0.05"/></linearGradient></defs>
+      <path d="{{ fill }}" fill="url(#tide2)"/>
+      <path d="{{ line }}" fill="none" stroke="#DCEBEF" stroke-width="2"/>
+      <line x1="362" y1="20" x2="362" y2="140" stroke="#CFCADB" stroke-dasharray="3 3" opacity="0.5"/>
+      <line x1="{{ tx }}" y1="16" x2="{{ tx }}" y2="140" stroke="#C79A3E" stroke-width="1.5"/>
+      <circle cx="{{ tx }}" cy="{{ ty }}" r="6" fill="#F4D39B" stroke="#141726" stroke-width="2"/>
+      <text x="{{ tx }}" y="12" text-anchor="middle" font-family="Instrument Sans" font-size="12" fill="#F4D39B">today</text>
+      <text x="30" y="160" font-family="Noto Sans Telugu" font-size="13" fill="#CFCADB">అమావాస్య · low tide</text>
+      <text x="362" y="160" text-anchor="middle" font-family="Noto Sans Telugu" font-size="13" fill="#CFCADB">పూర్ణిమ · high tide</text>
+      <text x="694" y="160" text-anchor="end" font-family="Noto Sans Telugu" font-size="13" fill="#CFCADB">అమావాస్య</text>
+    </svg>
+    <div style="font-size: 12px; color: #A9A6B8; margin-top: 6px">Curve height = moon's lit fraction · neela water fill · gold line = today (or the tapped day) · dashed line splits the two pakṣas.</div>
+  </div>
+
+  <div>
+    <div style="font-family: 'Fraunces', serif; font-size: 22px; font-weight: 650">Day cell states</div>
+    <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 12px; margin-top: 14px">
+      <sc-for list="{{ states }}" as="st" hint-placeholder-count="7">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+          <div style="{{ st.style }}">
+            <div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; color: {{ st.num }}">{{ st.n }}</div>
+            <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="#E4DCCD" stroke="#CDBFA8" stroke-width="0.8"/><path d="{{ st.d }}" fill="#C79A3E"/></svg>
+            <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 10px; color: #6B5A4E">{{ st.t }}</div>
+            <div style="{{ st.dot }}"></div>
+          </div>
+          <div style="font-size: 12px; font-weight: 600; text-align: center">{{ st.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+    <div style="border-radius: 22px; background: #FFFFFF; border: 1px solid #E8DCC8; padding: 18px">
+      <div style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 650">Tap a day → bubble</div>
+      <div style="font-size: 14px; line-height: 1.55; color: #4A3A30; margin-top: 6px">Anchored above the cell with a pointer. Moon (56dp) · pakṣa + tithi in the user's language · māsam, weekday, date · moon light % and rising/ebbing · each observance as a colour-coded row with its action · "Day details" button. Tap outside or ✕ to close.</div>
+    </div>
+    <div style="border-radius: 22px; background: #FFFFFF; border: 1px solid #E8DCC8; padding: 18px">
+      <div style="font-family: 'Fraunces', serif; font-size: 18px; font-weight: 650">Grid rules</div>
+      <div style="font-size: 14px; line-height: 1.55; color: #4A3A30; margin-top: 6px">One screen = one māsam (śuddha pāḍyami → amāvāsya), laid on weekday columns. Cell shows the Gregorian date, moon, tithi. Kṣaya/adhika tithis follow the pipeline. Toggle to Year for the 12 māsams.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":820,"height":1080}}'>
+class Component extends DCLogic {
+  moon(cx, cy, r, t) {
+    t = ((t % 1) + 1) % 1;
+    const p = 2 * Math.PI * t, k = Math.cos(p), illum = (1 - k) / 2;
+    if (illum < 0.02) return '';
+    const rx = Math.max(0.01, r * Math.abs(k)).toFixed(2);
+    const top = cx + ' ' + (cy - r), bot = cx + ' ' + (cy + r);
+    if (t < 0.5) return 'M' + top + ' A' + r + ' ' + r + ' 0 0 1 ' + bot + ' A' + rx + ' ' + r + ' 0 0 ' + (illum < 0.5 ? 0 : 1) + ' ' + top + 'Z';
+    return 'M' + top + ' A' + r + ' ' + r + ' 0 0 0 ' + bot + ' A' + rx + ' ' + r + ' 0 0 ' + (illum > 0.5 ? 0 : 1) + ' ' + top + 'Z';
+  }
+  renderVals() {
+    const P = [[0,'అమావాస్య','New moon'],[0.125,'నెలవంక','Waxing crescent'],[0.25,'శుద్ధ అష్టమి','First quarter'],[0.375,'పెరుగుతూ','Waxing gibbous'],
+               [0.5,'పూర్ణిమ','Full moon'],[0.625,'తగ్గుతూ','Waning gibbous'],[0.75,'బహుళ అష్టమి','Last quarter'],[0.875,'క్షీణ చంద్రుడు','Waning crescent']];
+    const phases = P.map(p => ({ d: this.moon(28, 28, 22, p[0]), te: p[1], en: p[2] }));
+    const W = 664, X0 = 30, base = 136, amp = 104;
+    const xAt = i => X0 + (i / 30) * W, yAt = i => base - amp * (1 - Math.cos(2 * Math.PI * i / 30)) / 2;
+    let line = '';
+    for (let s = 0; s <= 120; s++) { const i = s / 4; line += (s ? ' L' : 'M') + xAt(i).toFixed(1) + ' ' + yAt(i).toFixed(1); }
+    const fill = line + ' L' + xAt(30) + ' 146 L' + xAt(0) + ' 146 Z';
+    const base_ = 'width: 78px; height: 82px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; ';
+    const dot = c => 'width: 5px; height: 5px; border-radius: 3px; background: ' + c;
+    const states = [
+      { label: 'Ordinary', style: base_ + 'background: #FFFFFF; border: 1px solid #EFE4D2', n: '12', num: '#2A1A14', d: this.moon(10,10,8,2/30), t: 'విదియ', dot: 'display: none' },
+      { label: 'Festival', style: base_ + 'background: #F7E3E1; border: 1px solid #EFE4D2', n: '14', num: '#7A1F2B', d: this.moon(10,10,8,4/30), t: 'చవితి', dot: dot('#B23A48') },
+      { label: 'Vratam', style: base_ + 'background: #FBE4EA; border: 1px solid #EFE4D2', n: '24', num: '#2A1A14', d: this.moon(10,10,8,14/30), t: 'చతుర్దశి', dot: dot('#E08BA0') },
+      { label: 'Ekādaśī / recurring', style: base_ + 'background: #FFFFFF; border: 1px solid #EFE4D2', n: '21', num: '#2A1A14', d: this.moon(10,10,8,11/30), t: 'ఏకాదశి', dot: dot('#2F7188') },
+      { label: 'Pūrṇimā / amāvāsyā', style: base_ + 'background: #FFFFFF; border: 1px solid #C79A3E', n: '25', num: '#2A1A14', d: this.moon(10,10,8,0.5), t: 'పూర్ణిమ', dot: 'display: none' },
+      { label: 'In a period', style: base_ + 'background: #FFFFFF; border: 1px solid #EFE4D2; box-shadow: inset 0 -3px 0 #C9A67A', n: '28', num: '#2A1A14', d: this.moon(10,10,8,18/30), t: 'తదియ', dot: 'display: none' },
+      { label: 'Today / selected', style: base_ + 'background: #F7E3E1; border: 2px solid #7A1F2B', n: '14', num: '#7A1F2B', d: this.moon(10,10,8,4/30), t: 'చవితి', dot: dot('#B23A48') }
+    ];
+    return { phases, line, fill, tx: xAt(4).toFixed(1), ty: yAt(4).toFixed(1), states };
+  }
+}
+</script>
+</body>
+</html>

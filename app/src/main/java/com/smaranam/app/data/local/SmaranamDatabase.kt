@@ -4,26 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.smaranam.app.data.local.dao.RecitationDao
-import com.smaranam.app.data.local.entity.RecitationEntity
+import com.smaranam.app.practice.PracticeDao
+import com.smaranam.app.practice.PracticeEntry
+import com.smaranam.app.practice.Sankalpam
 
 @Database(
-    entities = [RecitationEntity::class],
-    version = 1,
+    entities = [Sankalpam::class, PracticeEntry::class],
+    version = 7,
     exportSchema = false,
 )
 abstract class SmaranamDatabase : RoomDatabase() {
-    abstract fun recitationDao(): RecitationDao
+    abstract fun practiceDao(): PracticeDao
 
     companion object {
-        private const val DATABASE_NAME = "smaranam.db"
-
-        fun create(context: Context): SmaranamDatabase {
-            return Room.databaseBuilder(
-                context.applicationContext,
-                SmaranamDatabase::class.java,
-                DATABASE_NAME,
-            ).build()
-        }
+        fun create(context: Context): SmaranamDatabase =
+            Room.databaseBuilder(context, SmaranamDatabase::class.java, "smaranam.db")
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }

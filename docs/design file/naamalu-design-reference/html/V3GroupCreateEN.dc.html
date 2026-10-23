@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>v3 · Start a pārāyaṇam (EN / हिं)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Devanagari:wght@500;700&amp;family=Noto+Sans+Devanagari:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#8C3B55}a:hover{color:#8C3B55}
+
+</style>
+</helmet>
+<div style="width: 390px; height: 1330px; position: relative; overflow: hidden; background: #FBF4E9; color: #2A1A14; font-family: {{ ui }}">
+  <div style="position: absolute; left: 0; top: 0; width: 390px; height: 220px; background: linear-gradient(180deg, #F6D3DC 0%, #F8E6E4 60%, #FBF4E9 100%)"></div>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3GlobeEN.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(251,244,233,0.8); display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A1A14" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <div style="font-size: 14px; color: #6E2A40">{{ t.head }}</div>
+    <button onClick="{{ toggle }}" style="height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(251,244,233,0.8); font-family: {{ ui }}; font-size: 14px; font-weight: 600; color: #2A1A14; cursor: pointer">{{ t.pill }}</button>
+  </div>
+  <div style="position: relative; padding: 16px 20px 0">
+    <div style="font-family: {{ h1Font }}; font-size: 28px; font-weight: 650; line-height: 1.3; color: #5A1F35">{{ t.h1 }}</div>
+  </div>
+  <div style="position: relative; padding: 18px 20px 0; display: flex; flex-direction: column; gap: 20px">
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">{{ t.q1 }}</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #DCEBEF; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+        <svg width="40" height="40" viewBox="0 0 48 48"><rect x="7" y="13" width="34" height="7" rx="3.5" fill="#2F7188"/><rect x="7" y="21" width="34" height="7" rx="3.5" fill="#9CC5D1"/><rect x="7" y="29" width="34" height="7" rx="3.5" fill="#2F7188"/><path d="M24 9V41" stroke="#E0A93B" stroke-width="2"/></svg>
+        <div style="flex-grow: 1"><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 17px; font-weight: 650; color: #1B3A4B">{{ t.text }}</div><div style="font-size: 13px; color: #2F7188">{{ t.textMeta }}</div></div>
+        <div style="font-size: 13px; font-weight: 600; color: #1B3A4B">{{ t.change }}</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">{{ t.q2 }}</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #E08BA0; padding: 14px 16px; min-height: 76px; box-sizing: border-box">
+        <div style="font-size: 16px">{{ t.purpose }}</div>
+        <div style="font-size: 12px; color: #6B5A4E; text-align: right; margin-top: 20px">{{ t.count }}</div>
+      </div>
+      <div style="font-size: 12px; color: #6B5A4E; margin-top: 6px">{{ t.noLinks }}</div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">{{ t.q3 }}</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #F4EAD9; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+        <svg width="32" height="32" viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="32" rx="7" fill="#FFFFFF"/><path d="M7 17a7 7 0 0 1 7-7h20a7 7 0 0 1 7 7v3H7z" fill="#C9A67A"/><circle cx="24" cy="31" r="7.5" fill="#E0A93B"/><circle cx="27.5" cy="28.5" r="6.5" fill="#FFFFFF"/></svg>
+        <div style="flex-grow: 1"><div style="font-size: 16px; font-weight: 600; color: #4A321E">{{ t.start }}</div><div style="font-size: 13px; color: #6B4A2E">{{ t.startSub }}</div></div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px">
+        <sc-for list="{{ durs }}" as="d" hint-placeholder-count="5">
+          <button onClick="{{ d.pick }}" style="{{ d.style }}">{{ d.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-size: 13px; color: #6B5A4E; margin-top: 8px">{{ endNote }}</div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">{{ t.q4 }}</div>
+      <div style="margin-top: 8px; display: flex; align-items: center; gap: 12px">
+        <div style="width: 48px; height: 48px; border-radius: 24px; border: 1.5px solid #E7C3CE; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #8C3B55">−</div>
+        <div style="flex-grow: 1; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 30px; font-weight: 650; color: #5A1F35">1,008</div><div style="font-size: 13px; color: #6B5A4E">{{ t.readings }}</div></div>
+        <div style="width: 48px; height: 48px; border-radius: 24px; border: 1.5px solid #E7C3CE; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #8C3B55">+</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">{{ t.q5 }}</div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px">
+        <button onClick="{{ pickOpen }}" style="{{ openStyle }}"><div style="{{ openDot }}"></div><div style="text-align: left"><div style="font-size: 16px; font-weight: 600">{{ t.open }}</div><div style="font-size: 13px; color: #6B5A4E">{{ t.openSub }}</div></div></button>
+        <button onClick="{{ pickCode }}" style="{{ codeStyle }}"><div style="{{ codeDot }}"></div><div style="text-align: left"><div style="font-size: 16px; font-weight: 600">{{ t.code }}</div><div style="font-size: 13px; color: #6B5A4E">{{ t.codeSub }}</div></div></button>
+      </div>
+    </div>
+    <div style="border-radius: 22px; background: #FFFFFF; border: 1px solid #E8DCC8; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8C3B55" stroke-width="1.8"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <div style="flex-grow: 1"><div style="font-size: 16px; font-weight: 600">{{ t.city }}</div><div style="font-size: 12px; color: #6B5A4E">{{ t.cityNote }}</div></div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; bottom: 0; width: 390px; padding: 16px 20px 24px; box-sizing: border-box; background: linear-gradient(180deg, rgba(251,244,233,0) 0%, #FBF4E9 30%)">
+    <a href="V3GroupEN.dc.html" style="height: 60px; border-radius: 30px; background: #8C3B55; color: #FBF4E9; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; text-decoration: none">{{ t.cta }}</a>
+    <div style="font-size: 12px; color: #6B5A4E; text-align: center; margin-top: 8px">{{ t.signin }}</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1330}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { lang: 'en', dur: 'month', open: true }; }
+
+  langVals(S) {
+    const hi = this.state.lang === 'hi';
+    const t = {}; for (const k in S) t[k] = hi ? S[k][1] : S[k][0];
+    return Object.assign({ t, hi,
+      ui: hi ? "'Noto Sans Devanagari', sans-serif" : "'Instrument Sans', sans-serif",
+      sacred: hi ? "'Noto Serif Devanagari', serif" : "'Fraunces', serif",
+      sacredStyle: hi ? 'normal' : 'italic',
+      toggle: () => this.setState({ lang: hi ? 'en' : 'hi' }) });
+  }
+
+  renderVals() {
+    const S = {
+      pill: ['English ▾', 'हिन्दी ▾'], head: ['New group pārāyaṇam', 'नया सामूहिक पारायण'], h1: ['Let us read together', 'आइए, साथ मिलकर पढ़ें'],
+      q1: ['1. What shall we read?', '1. क्या पढ़ेंगे?'], text: ['Śrī Lalitā Sahasranāma', 'श्री ललिता सहस्रनाम'],
+      textMeta: ['1000 names · one full reading = 1', '1000 नाम · एक पूरा पाठ = 1'], change: ['Change', 'बदलें'],
+      q2: ['2. Why? (your sankalpa)', '2. क्यों? (आपका संकल्प)'], purpose: ["For my mother's health", 'माँ के स्वास्थ्य के लिए'], count: ['23 / 140', '24 / 140'],
+      noLinks: ['No links or phone numbers · visible to everyone', 'लिंक या फ़ोन नंबर नहीं · सबको दिखेगा'],
+      q3: ['3. When?', '3. कब?'], start: ['From Kārtika śukla pratipadā', 'कार्तिक शुक्ल प्रतिपदा से'], startSub: ['[date] · pick from the calendar', '[तारीख] · कैलेंडर से चुनें'],
+      q4: ['4. Target (optional)', '4. लक्ष्य (वैकल्पिक)'], readings: ['readings', 'पाठ'],
+      q5: ['5. Who can join?', '5. कौन जुड़ सकता है?'], open: ['Everyone', 'सभी'], openSub: ['Shown on the globe · anyone can join', 'ग्लोब पर दिखेगा · कोई भी जुड़ सकता है'],
+      code: ['Invite only', 'केवल आमंत्रित'], codeSub: ['With a 6-letter code or link', '6 अक्षरों के कोड या लिंक से'],
+      city: ['Hyderabad', 'हैदराबाद'], cityNote: ['Only the city is shown — never your address', 'केवल शहर दिखेगा — आपका पता नहीं'],
+      cta: ['Start', 'शुरू करें'], signin: ['First time: one tap with Google · no OTP, no password', 'पहली बार: Google से एक टैप · कोई OTP नहीं, कोई पासवर्ड नहीं']
+    };
+    const L = this.langVals(S), hi = L.hi;
+    const D = [['11',['11 days','11 दिन']],['21',['21 days','21 दिन']],['41',['41 days (maṇḍalam)','41 दिन (मंडल)']],['month',['Whole month','पूरा महीना']],['open',['No end','निरंतर']]];
+    const NOTE = { '11': ['Ends on day 11','11वें दिन समाप्त'], '21': ['Ends on day 21','21वें दिन समाप्त'], '41': ['Ends on day 41','41वें दिन समाप्त'], month: ['Ends on Kārtika amāvāsyā','कार्तिक अमावस्या को समाप्त'], open: ['No end date — until you stop it','कोई अंतिम तिथि नहीं — जब तक आप न रोकें'] };
+    const dur = this.state.dur, open = this.state.open, i = hi ? 1 : 0;
+    const chip = on => 'height: 44px; padding: 0 16px; border-radius: 22px; font-family: ' + L.ui + '; font-size: 14px; font-weight: 600; cursor: pointer; ' + (on ? 'border: none; background: #8C3B55; color: #FBF4E9' : 'border: 1.5px solid #E7C3CE; background: #FFFFFF; color: #6E2A40');
+    const opt = on => 'display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 22px; cursor: pointer; font-family: ' + L.ui + '; color: #2A1A14; ' + (on ? 'border: 2px solid #8C3B55; background: #FBE4EA' : 'border: 1.5px solid #E8DCC8; background: #FFFFFF');
+    const dot = on => 'width: 22px; height: 22px; border-radius: 11px; flex-shrink: 0; box-sizing: border-box; ' + (on ? 'border: 7px solid #8C3B55; background: #FFFFFF' : 'border: 2px solid #C9A67A');
+    Object.assign(L, { durs: D.map(d => ({ label: d[1][i], style: chip(d[0] === dur), pick: () => this.setState({ dur: d[0] }) })), endNote: NOTE[dur][i],
+      openStyle: opt(open), codeStyle: opt(!open), openDot: dot(open), codeDot: dot(!open),
+      pickOpen: () => this.setState({ open: true }), pickCode: () => this.setState({ open: false }) });
+    L.h1Font = hi ? "'Noto Serif Devanagari', serif" : "'Fraunces', serif";
+    return L;
+  }
+}
+</script>
+</body>
+</html>

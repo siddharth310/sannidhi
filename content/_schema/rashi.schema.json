@@ -1,0 +1,127 @@
+{
+ "type": "object",
+ "required": [
+  "status",
+  "profiles",
+  "gochara"
+ ],
+ "properties": {
+  "status": {
+   "enum": [
+    "draft",
+    "reviewed",
+    "published",
+    "retired"
+   ]
+  },
+  "profiles": {
+   "type": "object",
+   "additionalProperties": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   }
+  },
+  "gochara": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "house",
+     "tone",
+     "variants"
+    ],
+    "properties": {
+     "house": {
+      "type": "integer"
+     },
+     "tone": {
+      "enum": [
+       "open",
+       "steady",
+       "gentle"
+      ]
+     },
+     "suggest_text": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "variants": {
+      "type": "object",
+      "required": [],
+      "properties": {
+       "te": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "hi": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       },
+       "en": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        }
+       }
+      },
+      "additionalProperties": false
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "rashi.json",
+ "description": "house = (moon_rashi - my_rashi) mod 12 + 1. Pick variant index = day-of-year mod variants.size.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

@@ -1,0 +1,187 @@
+{
+ "type": "object",
+ "required": [
+  "id",
+  "deity",
+  "title",
+  "ages",
+  "feeling",
+  "cover",
+  "status",
+  "beats"
+ ],
+ "properties": {
+  "id": {
+   "type": "string"
+  },
+  "deity": {
+   "type": "string"
+  },
+  "title": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/L"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "ages": {
+   "type": "string"
+  },
+  "minutes": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  },
+  "feeling": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "source": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "observances": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "cover": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "status": {
+   "enum": [
+    "draft",
+    "reviewed",
+    "published",
+    "retired"
+   ]
+  },
+  "beats": {
+   "type": "array",
+   "minItems": 4,
+   "maxItems": 8,
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "image",
+     "short"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "image": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "touch": {
+      "anyOf": [
+       {
+        "type": "null"
+       },
+       {
+        "type": "object",
+        "required": [
+         "target",
+         "effect"
+        ],
+        "properties": {
+         "target": {
+          "type": "string"
+         },
+         "effect": {
+          "enum": [
+           "glow",
+           "wiggle",
+           "hide",
+           "appear",
+           "bounce"
+          ]
+         }
+        },
+        "additionalProperties": false
+       }
+      ]
+     },
+     "short": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "more": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "stories/<id>.json",
+ "description": "One story as beats; one beat per screen.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

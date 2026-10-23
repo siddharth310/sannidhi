@@ -1,0 +1,31 @@
+{
+  "voice": "Rishi",
+  "start_times_ms": [
+    0,
+    1804,
+    3585,
+    6097,
+    8052,
+    9717,
+    11417,
+    13360,
+    15234,
+    17108,
+    19121,
+    21111
+  ],
+  "lines": [
+    "Om sumukha namaha",
+    "Om durmodara namaha",
+    "Om jnanin ishvara namaha",
+    "Om bala prabhu namaha",
+    "Om poorna namaha",
+    "Om varada namaha",
+    "Om ekadanta namaha",
+    "Om heramba namaha",
+    "Om lambodara namaha",
+    "Om sura graja namaha",
+    "Om vighna raja namaha",
+    "Om vighna harta namaha"
+  ]
+}

@@ -1,0 +1,160 @@
+{
+ "type": "object",
+ "required": [
+  "id",
+  "deity",
+  "type",
+  "unit",
+  "status",
+  "title",
+  "names"
+ ],
+ "properties": {
+  "id": {
+   "type": "string"
+  },
+  "deity": {
+   "type": "string"
+  },
+  "type": {
+   "type": "string"
+  },
+  "unit": {
+   "enum": [
+    "reading",
+    "repetition"
+   ]
+  },
+  "status": {
+   "enum": [
+    "draft",
+    "reviewed",
+    "published",
+    "retired"
+   ]
+  },
+  "title": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/L"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "audio": {
+   "anyOf": [
+    { "type": "null" },
+    {
+     "type": "object",
+     "required": ["file", "intro_ms", "slot_ms"],
+     "additionalProperties": false,
+     "properties": {
+      "file": { "type": "string" },
+      "intro_ms": { "type": "integer", "minimum": 0 },
+      "slot_ms": { "type": "integer", "minimum": 1 }
+     }
+    },
+    {
+     "type": "object",
+     "required": ["file", "names_ms"],
+     "additionalProperties": false,
+     "properties": {
+      "file": { "type": "string" },
+      "names_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+     }
+    }
+   ]
+  },
+  "round": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  },
+  "mantra": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "names": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "n",
+     "text"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "n": {
+      "type": "integer"
+     },
+     "text": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/S"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "flag": {
+      "type": [
+       "string",
+       "null"
+      ]
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "texts/<id>.json",
+ "description": "A nāmalu text for Sankalpam. type=mantra texts have no names and point to a mantra.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

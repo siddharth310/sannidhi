@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<title>Sandhya — Guided puja (night)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Telugu:wght@500;700&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#141726}
+a{color:#F4D39B}a:hover{color:#FFE2B0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: linear-gradient(180deg, #141726 0%, #1E2238 55%, #2B2338 100%); color: #F1EBDF; font-family: 'Instrument Sans', sans-serif">
+  <svg width="390" height="844" viewBox="0 0 390 844" style="position: absolute; left: 0; top: 0">
+    <g fill="#F1EBDF"><circle cx="40" cy="120" r="1.2"/><circle cx="92" cy="80" r="1"/><circle cx="150" cy="140" r="1.4"/><circle cx="210" cy="96" r="1"/><circle cx="262" cy="160" r="1.2"/><circle cx="350" cy="110" r="1.4"/><circle cx="30" cy="220" r="1"/><circle cx="360" cy="230" r="1"/><circle cx="120" cy="200" r="0.9"/></g>
+    <circle cx="318" cy="170" r="22" fill="#EFE3C8"/><circle cx="328" cy="164" r="20" fill="#1C2034"/>
+    <path d="M0 690 C70 664 140 680 210 662 C280 646 330 668 390 656 L390 844 L0 844Z" fill="#262A3F"/>
+    <path d="M226 668 L229 654 L271 654 L274 668Z M232 654 L235 642 L265 642 L268 654Z M238 642 L241 631 L259 631 L262 642Z M243 631 L245 621 L255 621 L257 631Z M242 621 L242 616 Q250 610 258 616 L258 621Z" fill="#262A3F"/>
+    <path d="M0 730 C90 712 180 734 260 720 C320 710 360 722 390 716 L390 844 L0 844Z" fill="#1B1D2C"/>
+    <g stroke="#1B1D2C" stroke-width="3" fill="none" stroke-linecap="round"><path d="M50 730 Q54 694 48 658"/><path d="M48 658 Q30 650 18 662"/><path d="M48 658 Q34 640 24 638"/><path d="M48 658 Q58 638 72 636"/><path d="M48 658 Q68 650 80 664"/></g>
+    <path d="M0 770 C100 760 220 776 390 764 L390 844 L0 844Z" fill="#12131D"/>
+    <circle cx="195" cy="768" r="40" fill="#E8913A" opacity="0.12"/>
+    <path d="M186 772 Q195 780 204 772 L202 776 Q195 782 188 776Z" fill="#C79A3E"/>
+    <path d="M195 770 Q190 762 195 754 Q200 762 195 770Z" fill="#F6B25C"/>
+  </svg>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3Puja.dc.html" aria-label="Close guided puja" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(241,235,223,0.08); display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F1EBDF" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <div style="text-align: center"><div style="font-size: 12px; color: #A9A6B8">Step [9] of [N]</div><div style="font-family: 'Fraunces', serif; font-size: 16px; font-weight: 650">Patri pūja</div></div>
+    <button style="height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(241,235,223,0.08); font-family: 'Instrument Sans', sans-serif; font-size: 13px; color: #F1EBDF">తె ▾</button>
+  </div>
+  <div style="position: relative; margin: 12px 20px 0; height: 3px; border-radius: 2px; background: rgba(241,235,223,0.12)"><div style="width: 42%; height: 3px; border-radius: 2px; background: #C79A3E"></div></div>
+  <div style="position: relative; padding: 22px 28px 0; text-align: center; font-size: 15px; line-height: 1.5; color: #CFCADB">Offer one leaf with each name.<br><span style="color: #F4D39B">Any leaf, or a few akṣatas, is a full offering.</span></div>
+  <div style="position: absolute; left: 36px; top: 262px; width: 318px; height: 330px; border-radius: 30px; background: #3A3346; transform: rotate(4deg)"></div>
+  <div style="position: absolute; left: 30px; top: 256px; width: 330px; height: 330px; border-radius: 30px; background: #D8C9AE; transform: rotate(-2deg)"></div>
+  <button onClick="{{ next }}" aria-label="Next name" style="position: absolute; left: 24px; top: 250px; width: 342px; height: 340px; border: none; font-family: inherit; border-radius: 30px; background: #FBF4E9; color: #2A1A14; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 28px; box-sizing: border-box; cursor: pointer">
+    <div style="font-size: 12px; font-weight: 600; letter-spacing: 1.5px; color: #8A6A2E">{{ counter }}</div>
+    <div style="font-family: 'Noto Serif Telugu', serif; font-size: 32px; font-weight: 700; color: #7A1F2B; line-height: 1.45; margin-top: 12px">{{ name.te1 }}</div>
+    <div style="font-family: 'Noto Serif Telugu', serif; font-size: 22px; font-weight: 500; line-height: 1.5">{{ name.te2 }}</div>
+    <div style="width: 40px; height: 1px; background: #C79A3E; margin: 16px 0"></div>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: #6B5A4E; line-height: 1.4">{{ name.iast }}</div>
+    <div style="font-size: 12px; color: #6B5A4E; margin-top: 12px">Leaf: {{ name.leaf }}</div>
+  </button>
+  <div style="position: absolute; left: 0; top: 612px; width: 390px; display: flex; justify-content: center; align-items: center; gap: 22px">
+    <button onClick="{{ prev }}" aria-label="Previous name" style="width: 48px; height: 48px; border-radius: 24px; border: 1px solid rgba(241,235,223,0.2); background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F1EBDF" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <button aria-label="Play recitation" style="width: 60px; height: 60px; border-radius: 30px; border: none; background: #F4D39B; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#2A1A14"><path d="M7 4l13 8-13 8z"/></svg></button>
+    <button onClick="{{ next }}" aria-label="Next name" style="width: 48px; height: 48px; border-radius: 24px; border: 1px solid rgba(241,235,223,0.2); background: transparent; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F1EBDF" stroke-width="1.8" stroke-linecap="round"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+  <div style="position: absolute; left: 0; top: 684px; width: 390px; text-align: center; font-size: 12px; color: #A9A6B8">Tap the card or swipe · 0.75×</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { i: 0 }; }
+  renderVals() {
+    const names = [
+      { te1: 'సుముఖాయ నమః', te2: 'మాచీపత్రం పూజయామి', iast: 'sumukhāya namaḥ · mācīpatraṁ pūjayāmi', leaf: 'māchī (or any leaf)' },
+      { te1: 'గణాధిపాయ నమః', te2: 'బృహతీపత్రం పూజయామి', iast: 'gaṇādhipāya namaḥ · bṛhatīpatraṁ pūjayāmi', leaf: 'bṛhatī (or any leaf)' },
+      { te1: 'ఉమాపుత్రాయ నమః', te2: 'బిల్వపత్రం పూజయామి', iast: 'umāputrāya namaḥ · bilvapatraṁ pūjayāmi', leaf: 'bilva (or any leaf)' }
+    ];
+    const i = this.state.i;
+    return {
+      name: names[i],
+      counter: (i + 1) + ' OF 21',
+      next: () => this.setState({ i: Math.min(i + 1, names.length - 1) }),
+      prev: () => this.setState({ i: Math.max(i - 1, 0) })
+    };
+  }
+}
+</script>
+</body>
+</html>

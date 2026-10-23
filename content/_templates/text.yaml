@@ -1,0 +1,11 @@
+id: <deity>.<type>                # ashtottara | sahasranama | stotram | mantra
+deity: <deity>
+type: ashtottara
+unit: reading                     # reading (one full text = 1) | repetition
+title: { te: <>, hi: <>, en: <> }
+status: draft
+reviewed_by:
+audio: { file: <id>.mp3, intro_ms: 0, slot_ms: 0 }   # optional
+# For type: mantra, set `mantra: <deity>.mantra.<slug>` and `round: 108` instead of names.
+names:
+  - { n: 1, sa: "<Devanagari>" }

@@ -1,0 +1,99 @@
+{
+ "type": "object",
+ "required": [
+  "version",
+  "built_at",
+  "mode",
+  "samvatsaras",
+  "counts",
+  "files"
+ ],
+ "properties": {
+  "version": {
+   "type": "string"
+  },
+  "built_at": {
+   "type": "string"
+  },
+  "mode": {
+   "enum": [
+    "dev",
+    "release"
+   ]
+  },
+  "samvatsaras": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "year",
+     "id",
+     "start",
+     "end"
+    ],
+    "properties": {
+     "year": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "start": {
+      "type": "string"
+     },
+     "end": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "counts": {
+   "type": "object"
+  },
+  "files": {
+   "type": "object"
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "manifest.json",
+ "description": "Build info. The app reads this first.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

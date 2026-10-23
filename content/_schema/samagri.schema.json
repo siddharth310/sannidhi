@@ -1,0 +1,89 @@
+{
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "name",
+   "alternatives"
+  ],
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "name": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "image": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "alternatives": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "note": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "samagri.json",
+ "description": "Puja items.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

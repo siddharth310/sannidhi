@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<title>v3 · Start a pārāyaṇam</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Telugu:wght@500;700&amp;family=Noto+Sans+Telugu:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#8C3B55}a:hover{color:#6E2A40}
+</style>
+</helmet>
+<div style="width: 390px; height: 1330px; position: relative; overflow: hidden; background: #FBF4E9; color: #2A1A14; font-family: 'Noto Sans Telugu', sans-serif">
+  <div style="position: absolute; left: 0; top: 0; width: 390px; height: 220px; background: linear-gradient(180deg, #F6D3DC 0%, #F8E6E4 60%, #FBF4E9 100%)"></div>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3Globe.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(251,244,233,0.8); display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2A1A14" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></a>
+    <div style="font-size: 14px; color: #6E2A40">కొత్త సామూహిక పారాయణం</div>
+    <div style="width: 44px"></div>
+  </div>
+  <div style="position: relative; padding: 16px 20px 0">
+    <div style="font-family: 'Noto Serif Telugu', serif; font-size: 28px; font-weight: 700; line-height: 1.3; color: #5A1F35">అందరం కలిసి చదువుదాం</div>
+  </div>
+  <div style="position: relative; padding: 18px 20px 0; display: flex; flex-direction: column; gap: 20px">
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">1. ఏమి చదువుదాం?</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #DCEBEF; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+        <svg width="40" height="40" viewBox="0 0 48 48"><rect x="7" y="13" width="34" height="7" rx="3.5" fill="#2F7188"/><rect x="7" y="21" width="34" height="7" rx="3.5" fill="#9CC5D1"/><rect x="7" y="29" width="34" height="7" rx="3.5" fill="#2F7188"/><path d="M24 9V41" stroke="#E0A93B" stroke-width="2"/></svg>
+        <div style="flex-grow: 1"><div style="font-family: 'Noto Serif Telugu', serif; font-size: 17px; font-weight: 700; color: #1B3A4B">శ్రీ లలితా సహస్రనామం</div><div style="font-size: 13px; color: #2F7188">1000 నామాలు · ఒక పూర్తి పఠనం = 1</div></div>
+        <div style="font-size: 13px; font-weight: 600; color: #1B3A4B">మార్చు</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">2. ఎందుకు? (మీ సంకల్పం)</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #FFFFFF; border: 1.5px solid #E08BA0; padding: 14px 16px; min-height: 76px; box-sizing: border-box">
+        <div style="font-size: 16px">అమ్మ ఆరోగ్యం కోసం</div>
+        <div style="font-size: 12px; color: #6B5A4E; text-align: right; margin-top: 20px">18 / 140</div>
+      </div>
+      <div style="font-size: 12px; color: #6B5A4E; margin-top: 6px">లింకులు, ఫోన్ నంబర్లు రాయలేరు · అందరికీ కనిపిస్తుంది</div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">3. ఎప్పుడు?</div>
+      <div style="margin-top: 8px; border-radius: 22px; background: #F4EAD9; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+        <svg width="32" height="32" viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="32" rx="7" fill="#FFFFFF"/><path d="M7 17a7 7 0 0 1 7-7h20a7 7 0 0 1 7 7v3H7z" fill="#C9A67A"/><circle cx="24" cy="31" r="7.5" fill="#E0A93B"/><circle cx="27.5" cy="28.5" r="6.5" fill="#FFFFFF"/></svg>
+        <div style="flex-grow: 1"><div style="font-size: 16px; font-weight: 600; color: #4A321E">కార్తీక శుద్ధ పాడ్యమి నుండి</div><div style="font-size: 13px; color: #6B4A2E">[date] · క్యాలెండర్ నుండి ఎంచుకోండి</div></div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px">
+        <sc-for list="{{ durs }}" as="d" hint-placeholder-count="5">
+          <button onClick="{{ d.pick }}" style="{{ d.style }}">{{ d.label }}</button>
+        </sc-for>
+      </div>
+      <div style="font-size: 13px; color: #6B5A4E; margin-top: 8px">{{ endNote }}</div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">4. లక్ష్యం (ఐచ్ఛికం)</div>
+      <div style="margin-top: 8px; display: flex; align-items: center; gap: 12px">
+        <div style="width: 48px; height: 48px; border-radius: 24px; border: 1.5px solid #E7C3CE; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #8C3B55">−</div>
+        <div style="flex-grow: 1; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 30px; font-weight: 650; color: #5A1F35">1,008</div><div style="font-size: 13px; color: #6B5A4E">పారాయణాలు</div></div>
+        <div style="width: 48px; height: 48px; border-radius: 24px; border: 1.5px solid #E7C3CE; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #8C3B55">+</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size: 15px; font-weight: 600; color: #6E2A40">5. ఎవరు చేరవచ్చు?</div>
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px">
+        <button onClick="{{ pickOpen }}" style="{{ openStyle }}">
+          <div style="{{ openDot }}"></div>
+          <div style="text-align: left"><div style="font-size: 16px; font-weight: 600">అందరూ</div><div style="font-size: 13px; color: #6B5A4E">గ్లోబ్‌పై కనిపిస్తుంది · ఎవరైనా చేరవచ్చు</div></div>
+        </button>
+        <button onClick="{{ pickCode }}" style="{{ codeStyle }}">
+          <div style="{{ codeDot }}"></div>
+          <div style="text-align: left"><div style="font-size: 16px; font-weight: 600">ఆహ్వానం ఉన్నవారు మాత్రమే</div><div style="font-size: 13px; color: #6B5A4E">6 అక్షరాల కోడ్ లేదా లింక్‌తో</div></div>
+        </button>
+      </div>
+    </div>
+    <div style="border-radius: 22px; background: #FFFFFF; border: 1px solid #E8DCC8; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8C3B55" stroke-width="1.8"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <div style="flex-grow: 1"><div style="font-size: 16px; font-weight: 600">హైదరాబాద్</div><div style="font-size: 12px; color: #6B5A4E">నగరం మాత్రమే చూపిస్తాం — మీ చిరునామా కాదు</div></div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; bottom: 0; width: 390px; padding: 16px 20px 24px; box-sizing: border-box; background: linear-gradient(180deg, rgba(251,244,233,0) 0%, #FBF4E9 30%)">
+    <a href="V3Group.dc.html" style="height: 60px; border-radius: 30px; background: #8C3B55; color: #FBF4E9; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 600; text-decoration: none">ప్రారంభించండి</a>
+    <div style="font-size: 12px; color: #6B5A4E; text-align: center; margin-top: 8px">మొదటిసారి Google ఖాతాతో ఒక్క టచ్ · OTP లేదు, పాస్‌వర్డ్ లేదు</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1330}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { dur: 'month', open: true }; }
+  renderVals() {
+    const D = [['11','11 రోజులు'],['21','21 రోజులు'],['41','41 రోజులు (మండలం)'],['month','మాసమంతా'],['open','నిరంతరం']];
+    const NOTE = { '11': '11వ రోజున ముగుస్తుంది', '21': '21వ రోజున ముగుస్తుంది', '41': '41వ రోజున ముగుస్తుంది', month: 'కార్తీక అమావాస్య నాడు ముగుస్తుంది', open: 'ముగింపు తేదీ లేదు — మీరు ఆపే వరకు' };
+    const dur = this.state.dur, open = this.state.open;
+    const chip = on => 'height: 44px; padding: 0 16px; border-radius: 22px; font-family: \'Noto Sans Telugu\', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; ' + (on ? 'border: none; background: #8C3B55; color: #FBF4E9' : 'border: 1.5px solid #E7C3CE; background: #FFFFFF; color: #6E2A40');
+    const opt = on => 'display: flex; align-items: center; gap: 14px; padding: 14px 16px; border-radius: 22px; cursor: pointer; font-family: \'Noto Sans Telugu\', sans-serif; color: #2A1A14; ' + (on ? 'border: 2px solid #8C3B55; background: #FBE4EA' : 'border: 1.5px solid #E8DCC8; background: #FFFFFF');
+    const dot = on => 'width: 22px; height: 22px; border-radius: 11px; flex-shrink: 0; box-sizing: border-box; ' + (on ? 'border: 7px solid #8C3B55; background: #FFFFFF' : 'border: 2px solid #C9A67A');
+    return {
+      durs: D.map(d => ({ label: d[1], style: chip(d[0] === dur), pick: () => this.setState({ dur: d[0] }) })),
+      endNote: NOTE[dur],
+      openStyle: opt(open), codeStyle: opt(!open), openDot: dot(open), codeDot: dot(!open),
+      pickOpen: () => this.setState({ open: true }), pickCode: () => this.setState({ open: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

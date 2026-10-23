@@ -1,0 +1,198 @@
+{
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "kind",
+   "title",
+   "rule",
+   "regions",
+   "links",
+   "status",
+   "sections"
+  ],
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "kind": {
+    "enum": [
+     "festival",
+     "vratam",
+     "period",
+     "weekly",
+     "monthly"
+    ]
+   },
+   "title": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "rule": {
+    "type": "object",
+    "required": [
+     "paksha",
+     "tithi",
+     "prevails_at"
+    ],
+    "properties": {
+     "masam": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "masa_n": {
+      "type": [
+       "integer",
+       "null"
+      ]
+     },
+     "paksha": {
+      "enum": [
+       "shukla",
+       "krishna"
+      ]
+     },
+     "tithi": {
+      "type": "integer"
+     },
+     "prevails_at": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   },
+   "regions": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "deity": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "links": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "array",
+     "items": {
+      "type": "string"
+     }
+    }
+   },
+   "image": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "status": {
+    "enum": [
+     "draft",
+     "reviewed",
+     "published",
+     "retired"
+    ]
+   },
+   "sections": {
+    "type": "object",
+    "required": [],
+    "properties": {
+     "special": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "families_do": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "history": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "regional_notes": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/L"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "observances.json",
+ "description": "Festivals and observances. Dates are in calendar files, not here.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

@@ -1,0 +1,13 @@
+lang,word,should_sound_like,respelling,use_respelling,note
+en,Parvati,Pārvatī,Paarvathi,no,"Long first 'aa', soft 'th'"
+en,Shiva,Śiva,Shiva,no,"Short 'i': SHI-va, not SHEE-va"
+en,Ganesha,Gaṇeśa,Ganesha,no,"guh-NAY-sha"
+en,Ganapati,Gaṇapati,Ganapathi,no,"guh-NUH-puh-thi, soft 'th'"
+en,Kailasa,Kailāsa,Kailaasa,no,"long middle 'aa'"
+en,Narada,Nārada,Naarada,no,"long first 'aa'"
+en,Kartikeya,Kārtikeya,Kaartikeya,no,"long first 'aa', soft 't'"
+en,modakas,modakas,modakaas,no,"MO-da-kas, not mo-DA-kas"
+en,Palani,Paḻani,Pazhani,no,"Tamil 'zh'; 'Palani' is acceptable"
+en,Pazham nee,Paḻam nī,Pazham nee,no,"Tamil words inside the English story; keep as is unless the voice stumbles"
+te,ఉండ్రాళ్ళు,uṇḍrāḷḷu,ఉండ్రాళ్ళు,no,"Check the double 'ḷḷ' is clear"
+hi,उबटन,ubṭan,उबटन,no,"Check it isn't read as 'ubtun'"

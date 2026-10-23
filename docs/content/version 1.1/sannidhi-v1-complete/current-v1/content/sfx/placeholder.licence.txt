@@ -1,0 +1,2 @@
+Placeholder audio synthesised for Sannidhi by tools/make_placeholder_music.py on 23 Oct 2026.
+No third-party material. For testing the story player; replace with commissioned or licensed music before release.

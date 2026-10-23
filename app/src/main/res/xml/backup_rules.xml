@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <include domain="sharedpref" path="naamalu_preferences.preferences_pb" />
+    <include domain="database" path="smaranam.db" />
+</full-backup-content>

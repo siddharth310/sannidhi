@@ -1,0 +1,266 @@
+{
+ "type": "object",
+ "required": [
+  "masams",
+  "tithis",
+  "nakshatras",
+  "rashis",
+  "samvatsaras",
+  "states",
+  "cities"
+ ],
+ "properties": {
+  "masams": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "id",
+     "name",
+     "en",
+     "ritu"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/S"
+     },
+     "en": {
+      "type": "string"
+     },
+     "ritu": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "tithis": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "id",
+     "name",
+     "en"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/S"
+     },
+     "en": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "nakshatras": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "id",
+     "name",
+     "en"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/S"
+     },
+     "en": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "rashis": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "id",
+     "name",
+     "en",
+     "symbol_en"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/S"
+     },
+     "en": {
+      "type": "string"
+     },
+     "symbol_en": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "samvatsaras": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "n",
+     "id",
+     "name",
+     "cycle_year"
+    ],
+    "properties": {
+     "n": {
+      "type": "integer"
+     },
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/S"
+     },
+     "cycle_year": {
+      "type": "integer"
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "states": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "code",
+     "name",
+     "month_system"
+    ],
+    "properties": {
+     "code": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/L"
+     },
+     "month_system": {
+      "enum": [
+       "amanta",
+       "purnimanta",
+       "solar"
+      ]
+     },
+     "desha_clause": {
+      "anyOf": [
+       {
+        "$ref": "#/$defs/S"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     }
+    },
+    "additionalProperties": false
+   }
+  },
+  "cities": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "id",
+     "name",
+     "state",
+     "lat",
+     "lon"
+    ],
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "name": {
+      "$ref": "#/$defs/L"
+     },
+     "state": {
+      "type": "string"
+     },
+     "lat": {
+      "type": "number"
+     },
+     "lon": {
+      "type": "number"
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "master.json",
+ "description": "Lookup tables: māsams (1 = Chaitra), tithis (1–15, 30 = amāvāsyā), nakṣatras (1–27), rāśis (1 = Meṣa), 60 samvatsaras, states, cities.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

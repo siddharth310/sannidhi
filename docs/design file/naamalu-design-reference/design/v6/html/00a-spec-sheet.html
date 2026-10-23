@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spec sheet</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+body{margin:0}
+a{color:#1B3A4B}a:hover{color:#7A1F2B}
+</style>
+</head>
+<body>
+<div style="width: 1360px; height: 844px; box-sizing: border-box; padding: 36px 40px; background: #FBF4E9; font-family: Inter, sans-serif; color: #2B1A1C; display: flex; flex-direction: column; gap: 24px;">
+  <div style="display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid #C79A3E; padding-bottom: 12px;">
+    <h1 style="margin: 0; font: 700 34px/40px 'Cormorant Garamond', serif; color: #7A1F2B;">Sannidhi v6 · design spec</h1>
+    <div style="font: 400 14px/20px Inter, sans-serif; color: #6B5559;">Units in dp / sp · Android, Jetpack Compose · light theme shown</div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; flex: 1; min-height: 0;">
+
+    <section style="display: flex; flex-direction: column; gap: 14px;">
+      <h2 style="margin: 0; font: 600 22px/28px 'Cormorant Garamond', serif;">Frame and grid</h2>
+      <div style="display: flex; gap: 14px;">
+        <div style="width: 130px; height: 281px; border: 2px solid #2B1A1C; border-radius: 22px; position: relative; overflow: hidden; flex-shrink: 0; background: #FFFDF8;">
+          <div style="height: 70px; background: #F0C9B4; border-bottom: 2px solid #8E2430;"></div>
+          <div style="position: absolute; left: 0; top: 0; width: 5px; bottom: 0; background: rgba(27,58,75,0.18);"></div>
+          <div style="position: absolute; right: 0; top: 0; width: 5px; bottom: 0; background: rgba(27,58,75,0.18);"></div>
+          <div style="margin: 6px 6px 0; height: 44px; border-radius: 8px; background: #7A1F2B;"></div>
+          <div style="margin: 5px 6px 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px;">
+            <div style="height: 52px; border-radius: 8px; background: #F3E1DF;"></div>
+            <div style="height: 52px; border-radius: 8px; background: #EFE6D8;"></div>
+            <div style="height: 52px; border-radius: 8px; background: #E3EEDB;"></div>
+            <div style="height: 52px; border-radius: 8px; background: #DCE7EE;"></div>
+          </div>
+          <div style="position: absolute; left: 6px; right: 6px; bottom: 6px; height: 21px; border-radius: 7px; background: #FFFDF8; border-top: 1px solid #C79A3E;"></div>
+        </div>
+        <ul style="margin: 0; padding: 0 0 0 16px; font: 400 14px/21px Inter, sans-serif; color: #2B1A1C;">
+          <li>Design frame <b>390 × 844</b></li>
+          <li>Support <b>360–430</b> wide; reflow, never scale</li>
+          <li>Side margin <b>16</b></li>
+          <li>Sky header <b>≤ 25%</b> (211), collapsed <b>72</b></li>
+          <li>Content columns: 1, or 2 with gap <b>12</b></li>
+          <li>Respect system insets; no drawn status bar</li>
+        </ul>
+      </div>
+      <div style="font: 600 14px/18px Inter, sans-serif; margin-top: 4px;">Spacing scale</div>
+      <div style="display: flex; align-items: flex-end; gap: 10px;">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 4px; height: 4px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">4</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 8px; height: 8px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">8</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 12px; height: 12px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">12</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 16px; height: 16px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">16</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 24px; height: 24px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">24</span></div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 4px;"><div style="width: 32px; height: 32px; background: #7A1F2B;"></div><span style="font: 500 12px Inter, sans-serif;">32</span></div>
+      </div>
+      <div style="font: 600 14px/18px Inter, sans-serif; margin-top: 4px;">Touch and shape</div>
+      <ul style="margin: 0; padding: 0 0 0 16px; font: 400 14px/21px Inter, sans-serif;">
+        <li>Every target <b>≥ 56</b> (chips 44 visual, 56 hit area)</li>
+        <li>Cards radius <b>24</b> · buttons <b>16</b> · chips pill</li>
+        <li>Font scale up to <b>200%</b>: wrap, never truncate sacred text</li>
+        <li>No gestures without a visible button too</li>
+      </ul>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0; font: 600 22px/28px 'Cormorant Garamond', serif;">Colour</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;">
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #7A1F2B;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>maroon</b><br>#7A1F2B · primary</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #5E1620;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>maroonDeep</b><br>#5E1620 · pressed</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #FBF4E9; border: 1px solid #D8C9B4;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>ivory</b><br>#FBF4E9 · page</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #FFFDF8; border: 1px solid #D8C9B4;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>surface</b><br>#FFFDF8 · cards</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #2B1A1C;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>ink</b><br>#2B1A1C · text</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #6B5559;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>inkSoft</b><br>#6B5559 · secondary</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #1B3A4B;"></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>peacock</b><br>#1B3A4B · links</div></div>
+        <div style="display: flex; gap: 8px; align-items: center;"><div style="width: 40px; height: 40px; border-radius: 10px; background: #FFFDF8; border: 1px solid #D8C9B4; display: flex; align-items: center; justify-content: center;"><div style="width: 30px; height: 2px; background: #C79A3E;"></div></div><div style="font: 400 12px/15px Inter, sans-serif;"><b>gold</b><br>#C79A3E · hairline only</div></div>
+      </div>
+      <div style="font: 600 14px/18px Inter, sans-serif; margin-top: 6px;">Module tints (one per module, always)</div>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;">
+        <div style="height: 56px; border-radius: 12px; background: #F3E1DF; font: 500 12px/14px Inter, sans-serif; padding: 6px; box-sizing: border-box;">Puja<br>#F3E1DF</div>
+        <div style="height: 56px; border-radius: 12px; background: #EFE6D8; font: 500 12px/14px Inter, sans-serif; padding: 6px; box-sizing: border-box;">Calendar<br>#EFE6D8</div>
+        <div style="height: 56px; border-radius: 12px; background: #E3EEDB; font: 500 12px/14px Inter, sans-serif; padding: 6px; box-sizing: border-box;">Sankalpam<br>#E3EEDB</div>
+        <div style="height: 56px; border-radius: 12px; background: #DCE7EE; font: 500 12px/14px Inter, sans-serif; padding: 6px; box-sizing: border-box;">Stories<br>#DCE7EE</div>
+      </div>
+      <div style="font: 600 14px/18px Inter, sans-serif; margin-top: 6px;">Sky and hills (Home, Count)</div>
+      <div style="height: 64px; border-radius: 12px; overflow: hidden; display: flex;">
+        <div style="flex: 2; background: linear-gradient(180deg, #F0C9B4, #F8E2C6);"></div>
+        <div style="flex: 1; background: #E7C2A6;"></div>
+        <div style="flex: 1; background: #D9A58E;"></div>
+        <div style="flex: 1; background: #B97A72;"></div>
+        <div style="flex: 1; background: #8E2430;"></div>
+      </div>
+      <p style="margin: 6px 0 0; font: 400 13px/19px Inter, sans-serif; color: #4A2E32;">Rātri (dark): page #1A1214, surface #2A1D20, text #F3E6D8, gold unchanged. No red or "error" colour anywhere in practice or sādhana. Text on maroon uses ivory #FBF4E9 or label #F3D9A4.</p>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 10px;">
+      <h2 style="margin: 0; font: 600 22px/28px 'Cormorant Garamond', serif;">Type</h2>
+      <div style="border-bottom: 1px solid #E6D6BF; padding-bottom: 8px;"><div style="font: 600 32px/38px 'Cormorant Garamond', serif;">Good evening</div><div style="font: 400 12px Inter, sans-serif; color: #6B5559;">Display · Cormorant SemiBold 32/38</div></div>
+      <div style="border-bottom: 1px solid #E6D6BF; padding-bottom: 8px;"><div style="font: 600 22px/28px 'Cormorant Garamond', serif;">Vināyaka Chavithi</div><div style="font: 400 12px Inter, sans-serif; color: #6B5559;">Title · Cormorant SemiBold 22/28</div></div>
+      <div style="border-bottom: 1px solid #E6D6BF; padding-bottom: 8px;"><div style="font: 400 18px/26px Inter, sans-serif;">Place a low stool facing east.</div><div style="font: 400 12px Inter, sans-serif; color: #6B5559;">Body · Inter 18/26 (never below 16)</div></div>
+      <div style="border-bottom: 1px solid #E6D6BF; padding-bottom: 8px;"><div style="font: 500 15px/20px Inter, sans-serif;">Prepare the puja →</div><div style="font: 400 12px Inter, sans-serif; color: #6B5559;">Label · Inter Medium 15/20</div></div>
+      <div style="border-bottom: 1px solid #E6D6BF; padding-bottom: 8px;"><div style="font: 500 24px/36px 'Noto Serif Telugu', serif;">ఓం గం గణపతయే నమః</div><div style="font: 500 24px/36px 'Noto Serif Devanagari', serif;">ॐ गं गणपतये नमः</div><div style="font: 500 24px/32px 'Cormorant Garamond', serif;">oṃ gaṃ gaṇapataye namaḥ</div><div style="font: 400 12px Inter, sans-serif; color: #6B5559;">Sacred · Noto Serif Telugu / Devanagari, Cormorant for IAST · 24/36 (Read 28/42, Guided 30)</div></div>
+      <p style="margin: 0; font: 400 13px/19px Inter, sans-serif; color: #4A2E32;">All fonts bundled in the app (OFL). Sacred text never set below 20 sp and never truncated.</p>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 12px;">
+      <h2 style="margin: 0; font: 600 22px/28px 'Cormorant Garamond', serif;">Components</h2>
+      <div>
+        <div style="height: 64px; display: flex; align-items: center; justify-content: space-between; background: #FFFDF8; border: 1px solid #E6D6BF; border-radius: 12px; padding: 0 6px;">
+          <span style="display: flex; align-items: center; gap: 4px; height: 56px; padding: 0 8px; font: 500 15px Inter, sans-serif;"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#2B1A1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>Back</span>
+          <span style="font: 600 20px 'Cormorant Garamond', serif;">Title</span>
+          <span style="display: flex; align-items: center; gap: 4px; height: 56px; padding: 0 8px; font: 500 15px Inter, sans-serif;"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="#2B1A1C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7"></path><path d="M5 10v10h14V10"></path></svg>Home</span>
+        </div>
+        <div style="font: 400 12px/16px Inter, sans-serif; color: #6B5559; margin-top: 4px;">TopBar 64 · Back and Home 56 hit · no bottom bar anywhere</div>
+      </div>
+      <div>
+        <button type="button" style="width: 100%; height: 56px; border: 0; border-radius: 16px; background: #7A1F2B; color: #FBF4E9; font: 600 17px Inter, sans-serif;">Start the puja</button>
+        <button type="button" style="width: 100%; height: 56px; margin-top: 8px; border: 1.5px solid #7A1F2B; border-radius: 16px; background: transparent; color: #7A1F2B; font: 600 17px Inter, sans-serif;">Guided mode</button>
+        <div style="font: 400 12px/16px Inter, sans-serif; color: #6B5559; margin-top: 4px;">Primary and outlined buttons · 56 tall · full width</div>
+      </div>
+      <div>
+        <div style="display: flex; gap: 8px;">
+          <span style="height: 44px; padding: 0 16px; border-radius: 999px; background: #7A1F2B; color: #FBF4E9; font: 500 15px/44px Inter, sans-serif;">తెలుగు</span>
+          <span style="height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #D8C9B4; font: 500 15px/42px 'Noto Serif Devanagari', serif; box-sizing: border-box;">संस्कृतम्</span>
+          <span style="height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #D8C9B4; font: 500 15px/42px Inter, sans-serif; box-sizing: border-box;">IAST</span>
+        </div>
+        <div style="font: 400 12px/16px Inter, sans-serif; color: #6B5559; margin-top: 4px;">Text-view chips · 44 visual, 56 hit · selection persists</div>
+      </div>
+      <div>
+        <div style="height: 48px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: #FFFDF8; border-radius: 12px; border: 1px solid #E6D6BF;">
+          <span style="display: flex; align-items: center; justify-content: center; font: 500 15px Inter, sans-serif; color: #6B5559;">Pre</span>
+          <span style="display: flex; align-items: center; justify-content: center; font: 600 15px Inter, sans-serif; color: #7A1F2B; border-bottom: 2px solid #C79A3E;">During</span>
+          <span style="display: flex; align-items: center; justify-content: center; font: 500 15px Inter, sans-serif; color: #6B5559;">Post</span>
+        </div>
+        <div style="font: 400 12px/16px Inter, sans-serif; color: #6B5559; margin-top: 4px;">Stage bar 48, sticky under TopBar; gold hairline marks the section in view</div>
+      </div>
+      <div style="border-top: 1px solid #C79A3E; padding-top: 10px; font: 400 13px/19px Inter, sans-serif; color: #4A2E32;">Never in UI: missed · streak · behind · incomplete · you haven't · 0 today · overdue · reminder · bad day · dosha · remedy.</div>
+    </section>
+  </div>
+</div>
+</body>
+</html>

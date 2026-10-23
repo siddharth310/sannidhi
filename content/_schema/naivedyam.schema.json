@@ -1,0 +1,135 @@
+{
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "offered_to",
+   "occasions",
+   "status",
+   "why",
+   "regional_forms"
+  ],
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "offered_to": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "occasions": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "image": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "status": {
+    "enum": [
+     "draft",
+     "reviewed",
+     "published",
+     "retired"
+    ]
+   },
+   "why": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "regional_forms": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "required": [
+      "name",
+      "region"
+     ],
+     "properties": {
+      "name": {
+       "anyOf": [
+        {
+         "$ref": "#/$defs/L"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      },
+      "region": {
+       "type": "array",
+       "items": {
+        "type": "string"
+       }
+      },
+      "note": {
+       "anyOf": [
+        {
+         "$ref": "#/$defs/L"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      }
+     },
+     "additionalProperties": false
+    }
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "naivedyam.json",
+ "description": "Offerings: meaning, not recipes.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

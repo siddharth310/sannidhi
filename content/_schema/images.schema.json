@@ -1,0 +1,73 @@
+{
+ "type": "object",
+ "additionalProperties": {
+  "type": "object",
+  "required": [
+   "kind",
+   "status",
+   "file"
+  ],
+  "properties": {
+   "kind": {
+    "type": "string"
+   },
+   "status": {
+    "enum": [
+     "missing",
+     "supplied",
+     "approved"
+    ]
+   },
+   "alt": {
+    "type": "object"
+   },
+   "file": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "images.json",
+ "description": "Image id → asset path (null when missing; app shows the fallback).",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

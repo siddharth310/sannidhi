@@ -1,0 +1,6 @@
+pyyaml>=6
+jsonschema>=4
+indic-transliteration>=2.3
+ephem>=4.1
+pillow>=10
+cairosvg>=2.7

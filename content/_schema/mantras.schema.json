@@ -1,0 +1,145 @@
+{
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "deity",
+   "status",
+   "kind",
+   "text",
+   "lines",
+   "use",
+   "meaning",
+   "needs_review"
+  ],
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "deity": {
+    "type": "string"
+   },
+   "status": {
+    "enum": [
+     "draft",
+     "reviewed",
+     "published",
+     "retired"
+    ]
+   },
+   "kind": {
+    "enum": [
+     "mantra",
+     "upachara"
+    ]
+   },
+   "text": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/S"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "lines": {
+    "type": "array",
+    "items": {
+     "$ref": "#/$defs/S"
+    }
+   },
+   "use": {
+    "type": "array",
+    "items": {
+     "enum": [
+      "japa",
+      "puja"
+     ]
+    }
+   },
+   "count_default": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "audio": {
+    "anyOf": [
+     { "type": "null" },
+     {
+      "type": "object",
+      "required": ["file", "length_ms"],
+      "additionalProperties": false,
+      "properties": {
+       "file": { "type": "string" },
+       "length_ms": { "type": "integer", "minimum": 1 },
+       "words_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } }
+      }
+     }
+    ]
+   },
+   "meaning": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "fills": {
+    "type": [
+     "object",
+     "null"
+    ]
+   },
+   "needs_review": {
+    "type": "boolean"
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "mantras.json",
+ "description": "All mantras. text may contain {placeholders} (saṅkalpam) filled on device from fills.computed / fills.user / fills.region.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

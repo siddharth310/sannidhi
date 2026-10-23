@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<title>v3 · Group pārāyaṇams — globe</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Telugu:wght@500;700&amp;family=Noto+Sans+Telugu:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#141726}
+a{color:#F4D39B}a:hover{color:#FFE2B0}
+</style>
+</helmet>
+<div style="width: 390px; height: 1240px; position: relative; overflow: hidden; background: linear-gradient(180deg, #141726 0%, #1E2238 45%, #2B2338 60%); color: #F1EBDF; font-family: 'Instrument Sans', sans-serif">
+  <svg width="390" height="600" viewBox="0 0 390 600" style="position: absolute; left: 0; top: 0">
+    <g fill="#F1EBDF" opacity="0.7"><circle cx="24" cy="130" r="1"/><circle cx="360" cy="120" r="1.2"/><circle cx="60" cy="520" r="0.9"/><circle cx="340" cy="540" r="1"/><circle cx="200" cy="112" r="0.8"/><circle cx="30" cy="330" r="0.9"/><circle cx="372" cy="340" r="0.9"/></g>
+    <defs>
+      <radialGradient id="glb" cx="0.42" cy="0.38" r="0.7"><stop offset="0" stop-color="#2F7188"/><stop offset="0.7" stop-color="#1B3A4B"/><stop offset="1" stop-color="#12202A"/></radialGradient>
+      <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5"><stop offset="0.7" stop-color="#9CC5D1" stop-opacity="0.18"/><stop offset="1" stop-color="#9CC5D1" stop-opacity="0"/></radialGradient>
+    </defs>
+    <circle cx="195" cy="345" r="185" fill="url(#glow)"/>
+    <circle cx="195" cy="345" r="155" fill="url(#glb)"/>
+    <sc-for list="{{ grat }}" as="g" hint-placeholder-count="14"><path d="{{ g }}" fill="none" stroke="#9CC5D1" stroke-width="0.6" opacity="0.28"/></sc-for>
+    <sc-for list="{{ dots }}" as="d" hint-placeholder-count="10">
+      <g><circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.halo }}" fill="#F4D39B" opacity="0.18"/><circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.r }}" fill="#F4D39B"/><circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.ring }}" fill="none" stroke="#FBF4E9" stroke-width="1.5" opacity="{{ d.ringOp }}"/></g>
+    </sc-for>
+  </svg>
+  <sc-for list="{{ dots }}" as="d" hint-placeholder-count="10">
+    <button onClick="{{ d.tap }}" aria-label="{{ d.label }}" style="{{ d.hit }}"></button>
+  </sc-for>
+
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3Home.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(241,235,223,0.1); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F1EBDF" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <button style="height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(241,235,223,0.1); font-family: 'Instrument Sans', sans-serif; font-size: 14px; font-weight: 600; color: #F1EBDF">తెలుగు ▾</button>
+  </div>
+  <div style="position: relative; padding: 14px 20px 0">
+    <div style="font-family: 'Noto Serif Telugu', serif; font-size: 26px; font-weight: 700">సామూహిక పారాయణాలు</div>
+    <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 14px; color: #CFCADB">ప్రపంచమంతా ఒకే సమయంలో చదువుతున్నారు · 10 నగరాలు</div>
+  </div>
+
+  <div style="{{ pop }}">
+    <div style="border-radius: 24px; background: #FFFDF8; color: #2A1A14; padding: 16px; box-shadow: 0 12px 30px rgba(0,0,0,0.35)">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+        <div>
+          <div style="font-size: 12px; font-weight: 600; color: #8C3B55">{{ sel.city }} · {{ sel.count }} పారాయణాలు</div>
+          <div style="font-family: 'Noto Serif Telugu', serif; font-size: 18px; font-weight: 700; line-height: 1.35">{{ sel.title }}</div>
+        </div>
+        <button onClick="{{ close }}" aria-label="Close" style="width: 36px; height: 36px; border-radius: 18px; border: none; background: #FBE4EA; flex-shrink: 0; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C3B55" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 14px; color: #4A3A30; margin-top: 4px">“{{ sel.purpose }}”</div>
+      <div style="display: flex; gap: 8px; margin-top: 10px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px">
+        <div style="padding: 6px 10px; border-radius: 12px; background: #F4EAD9; color: #5A3E26">{{ sel.dates }}</div>
+        <div style="padding: 6px 10px; border-radius: 12px; background: #FBE4EA; color: #6E2A40">{{ sel.joined }} మంది చేరారు</div>
+      </div>
+      <a href="V3Group.dc.html" style="margin-top: 12px; height: 48px; border-radius: 24px; background: #8C3B55; color: #FBF4E9; display: flex; align-items: center; justify-content: center; font-family: 'Noto Sans Telugu', sans-serif; font-size: 15px; font-weight: 600; text-decoration: none">చూడండి, చేరండి</a>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 0; top: 540px; width: 390px; height: 700px; background: #FBF4E9; border-radius: 30px 30px 0 0; color: #2A1A14"></div>
+  <div style="position: absolute; left: 20px; top: 560px; width: 350px; color: #2A1A14; display: flex; flex-direction: column; gap: 12px">
+    <a href="V3GroupCreate.dc.html" style="height: 60px; border-radius: 30px; background: #8C3B55; color: #FBF4E9; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 16px; font-weight: 600; text-decoration: none">
+      <svg width="26" height="26" viewBox="0 0 48 48"><path d="M24 26C21 22 24 17 24 14C24 17 27 22 24 26Z" fill="#F4D39B"/><path d="M16 28C16 36 32 36 32 28Z" fill="#E08BA0"/></svg>పారాయణం ప్రారంభించండి</a>
+    <div style="display: flex; gap: 8px; font-family: 'Noto Sans Telugu', sans-serif; font-size: 13px; font-weight: 600">
+      <div style="padding: 8px 14px; border-radius: 16px; background: #8C3B55; color: #FBF4E9">త్వరలో మొదలయ్యేవి</div>
+      <div style="padding: 8px 14px; border-radius: 16px; background: #FBE4EA; color: #6E2A40">మీ నగరానికి దగ్గరగా</div>
+      <div style="padding: 8px 14px; border-radius: 16px; background: #FBE4EA; color: #6E2A40">నడుస్తున్నవి</div>
+    </div>
+    <sc-for list="{{ list }}" as="g" hint-placeholder-count="3">
+      <a href="V3Group.dc.html" style="border-radius: 24px; background: #FFFFFF; border: 1px solid #F3D2DB; padding: 16px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: #2A1A14">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: #8C3B55"><span>{{ g.city }}</span><span>{{ g.status }}</span></div>
+        <div style="font-family: 'Noto Serif Telugu', serif; font-size: 18px; font-weight: 700; line-height: 1.35">{{ g.title }}</div>
+        <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 14px; color: #4A3A30">“{{ g.purpose }}”</div>
+        <div style="display: flex; gap: 8px; align-items: center; font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; color: #6B5A4E; padding-top: 4px">
+          <span>{{ g.dates }}</span><span>·</span><span>{{ g.joined }} మంది</span><span>·</span><span>{{ g.readings }}</span>
+        </div>
+      </a>
+    </sc-for>
+    <div style="font-family: 'Noto Sans Telugu', sans-serif; font-size: 12px; color: #6B5A4E; text-align: center; padding: 6px 10px">నగరం మాత్రమే చూపిస్తాం · సభ్యుల పేర్లు చేరినవారికే కనిపిస్తాయి · Naamalu ఎప్పుడూ డబ్బు, కోడ్‌లు, పాస్‌వర్డ్‌లు అడగదు.</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { sel: 'Hyderabad' }; }
+  renderVals() {
+    const R = 155, CX = 195, CY = 345, lat0 = 18 * Math.PI / 180, lon0 = 78 * Math.PI / 180;
+    const proj = (la, lo) => {
+      const p = la * Math.PI / 180, l = lo * Math.PI / 180;
+      const cosc = Math.sin(lat0) * Math.sin(p) + Math.cos(lat0) * Math.cos(p) * Math.cos(l - lon0);
+      return { x: CX + R * Math.cos(p) * Math.sin(l - lon0), y: CY - R * (Math.cos(lat0) * Math.sin(p) - Math.sin(lat0) * Math.cos(p) * Math.cos(l - lon0)), vis: cosc > 0 };
+    };
+    const grat = [];
+    for (let lo = -180; lo < 180; lo += 30) { let d = '', pen = false; for (let la = -90; la <= 90; la += 5) { const q = proj(la, lo); if (q.vis) { d += (pen ? ' L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1); pen = true; } else pen = false; } if (d) grat.push(d); }
+    for (let la = -60; la <= 60; la += 30) { let d = '', pen = false; for (let lo = -180; lo <= 180; lo += 5) { const q = proj(la, lo); if (q.vis) { d += (pen ? ' L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1); pen = true; } else pen = false; } if (d) grat.push(d); }
+    const C = [
+      ['Hyderabad', 17.4, 78.5, 4, 'కార్తీక మాస లలితా సహస్రనామ పారాయణం', 'అమ్మ ఆరోగ్యం కోసం', 'కార్తీకం 1 → అమావాస్య', 38],
+      ['Vijayawada', 16.5, 80.6, 2, 'విష్ణు సహస్రనామం — 41 రోజులు', 'గ్రామ దేవాలయ పునర్నిర్మాణం', '41 రోజులు', 22],
+      ['Bengaluru', 12.97, 77.6, 2, 'హనుమాన్ చాలీసా — ప్రతి మంగళవారం', 'పిల్లల చదువు కోసం', 'నిరంతరం', 15],
+      ['Chennai', 13.08, 80.27, 1, 'లలితా త్రిశతి', 'కుటుంబ శాంతి', '21 రోజులు', 9],
+      ['Pune', 18.5, 73.9, 1, 'గణేశ అష్టోత్తరం', 'కొత్త ఇంటికి', '11 రోజులు', 12],
+      ['Varanasi', 25.3, 83.0, 1, 'శివ సహస్రనామం', 'పితృదేవతల స్మరణ', 'కార్తీకం', 31],
+      ['Delhi', 28.6, 77.2, 1, 'దుర్గా అష్టోత్తరం', 'నవరాత్రి సంకల్పం', '9 రోజులు', 18],
+      ['Dubai', 25.2, 55.3, 1, 'విష్ణు సహస్రనామం', 'ప్రవాసంలో కలిసి చదువుదాం', 'ప్రతి ఏకాదశి', 27],
+      ['Singapore', 1.35, 103.8, 1, 'లలితా సహస్రనామం', 'అందరి క్షేమం', 'శుక్రవారాలు', 19],
+      ['London', 51.5, -0.1, 1, 'గణేశ అష్టోత్తరం', 'కొత్త ఉద్యోగం', '11 రోజులు', 7]
+    ];
+    const sel = this.state.sel;
+    const dots = C.map(c => {
+      const q = proj(c[1], c[2]); const on = c[0] === sel; const r = 3 + c[3];
+      return { x: q.x.toFixed(1), y: q.y.toFixed(1), r, halo: r * 2.6, ring: r + 5, ringOp: on ? 1 : 0, label: c[0] + ', ' + c[3],
+        tap: () => this.setState({ sel: c[0] }),
+        hit: 'position: absolute; left: ' + (q.x - 22).toFixed(1) + 'px; top: ' + (q.y - 22).toFixed(1) + 'px; width: 44px; height: 44px; border-radius: 22px; border: none; background: transparent; cursor: pointer' };
+    });
+    const s = C.find(c => c[0] === sel);
+    const sq = s ? proj(s[1], s[2]) : { x: 0, y: 0 };
+    const px = Math.min(Math.max(sq.x - 150, 20), 390 - 20 - 300);
+    const list = C.slice(0, 3).map((c, i) => ({ city: c[0], title: c[4], purpose: c[5], dates: c[6], joined: c[7], readings: ['146 పారాయణాలు', '88 పారాయణాలు', '40 పారాయణాలు'][i], status: ['నడుస్తోంది', 'రేపు మొదలు', 'నడుస్తోంది'][i] }));
+    return {
+      grat, dots, list,
+      sel: s ? { city: s[0], count: s[3], title: s[4], purpose: s[5], dates: s[6], joined: s[7] } : {},
+      pop: s ? 'position: absolute; left: ' + px.toFixed(1) + 'px; top: ' + Math.max(sq.y - 250, 150).toFixed(1) + 'px; width: 300px' : 'display: none',
+      close: () => this.setState({ sel: '' })
+    };
+  }
+}
+</script>
+</body>
+</html>

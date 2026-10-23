@@ -1,0 +1,22 @@
+id,name_te,name_hi,name_en,image,alternatives,note_te,note_hi,note_en
+sm.clay-idol,మట్టి విగ్రహం,मिट्टी की प्रतिमा,Clay idol,img.samagri.clay-idol,sm.pasupu,నీటిలో కరిగేది మేలు,पानी में घुलने वाली बेहतर,One that dissolves in water is best
+sm.pasupu,పసుపు,हल्दी,Turmeric,img.samagri.pasupu,,,,
+sm.kumkuma,కుంకుమ,कुमकुम,Kumkum,img.samagri.kumkuma,,,,
+sm.akshata,అక్షతలు,अक्षत,Akshata (rice with turmeric),img.samagri.akshata,,బియ్యానికి పసుపు కలపండి,चावल में हल्दी मिलाएँ,Mix rice with a little turmeric
+sm.durva,గరిక,दूर्वा,Durva grass,img.samagri.durva,sm.akshata,,,
+sm.patri-21,21 పత్రాలు,21 पत्र,21 leaves,img.samagri.patri,sm.durva,దొరికినవి చాలు,जो मिलें वही काफ़ी,Whatever you can find is enough
+sm.flowers,పువ్వులు,फूल,Flowers,img.samagri.flowers,sm.akshata,,,
+sm.kalasham,కలశం,कलश,Kalasha (water pot),img.samagri.kalasham,,,,
+sm.coconut,కొబ్బరికాయ,नारियल,Coconut,img.samagri.coconut,,,,
+sm.betel,తమలపాకులు వక్కలు,पान सुपारी,Betel leaves and nuts,img.samagri.betel,,,,
+sm.banana,అరటిపండ్లు,केले,Bananas,img.samagri.banana,,,,
+sm.mango-leaves,మామిడాకులు,आम के पत्ते,Mango leaves,img.samagri.mango-leaves,,,,
+sm.palavelli,పాలవెల్లి,पालवेल्लि,Palavelli frame,img.samagri.palavelli,sm.mango-leaves,ఆంధ్ర-తెలంగాణ ఆచారం,आंध्र-तेलंगाना की परंपरा,An Andhra–Telangana custom
+sm.deepam,దీపం,दीपक,Lamp with ghee or oil,img.samagri.deepam,,,,
+sm.agarbatti,అగరబత్తి,अगरबत्ती,Incense,img.samagri.agarbatti,,,,
+sm.karpuram,కర్పూరం,कपूर,Camphor,img.samagri.karpuram,,,,
+sm.panchamritam,పంచామృతం,पंचामृत,Panchamritam,img.samagri.panchamritam,,పాలు పెరుగు నెయ్యి తేనె పంచదార,दूध दही घी शहद शक्कर,"Milk, curd, ghee, honey, sugar"
+sm.vastram,వస్త్రం (పత్తి దారాలు),वस्त्र (सूती धागे),Cotton cloth / threads,img.samagri.vastram,,,,
+sm.yajnopavitam,యజ్ఞోపవీతం,यज्ञोपवीत,Sacred thread,img.samagri.yajnopavitam,sm.vastram,,,
+sm.gandham,గంధం,चंदन,Sandal paste,img.samagri.gandham,sm.pasupu,,,
+sm.rice,బియ్యం,चावल,Rice,img.samagri.rice,,,,

@@ -1,0 +1,6 @@
+# Which samvatsaras (by the Gregorian year of their Ugadi) the app carries.
+# Each Ugadi: drop the oldest year, add the next one, rebuild, check against the TTD panchāṅgam.
+samvatsaras: [2026, 2027]
+# "all" or a list of city ids from content/master/cities.csv
+cities: all
+assets_out: app/src/main/assets/content

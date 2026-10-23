@@ -1,0 +1,153 @@
+{
+ "type": "array",
+ "items": {
+  "type": "object",
+  "required": [
+   "id",
+   "status",
+   "order",
+   "name",
+   "name_common",
+   "also_known_as",
+   "images",
+   "symbols",
+   "intro"
+  ],
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "status": {
+    "enum": [
+     "draft",
+     "reviewed",
+     "published",
+     "retired"
+    ]
+   },
+   "order": {
+    "type": "integer"
+   },
+   "name": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/S"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "name_common": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   },
+   "also_known_as": {
+    "type": "array",
+    "items": {
+     "$ref": "#/$defs/S"
+    }
+   },
+   "images": {
+    "type": "object",
+    "required": [],
+    "properties": {
+     "hero": {
+      "type": "string"
+     },
+     "card": {
+      "type": "string"
+     }
+    },
+    "additionalProperties": false
+   },
+   "symbols": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "required": [
+      "image",
+      "label",
+      "meaning"
+     ],
+     "properties": {
+      "image": {
+       "type": "string"
+      },
+      "label": {
+       "type": "string"
+      },
+      "meaning": {
+       "anyOf": [
+        {
+         "$ref": "#/$defs/L"
+        },
+        {
+         "type": "null"
+        }
+       ]
+      }
+     },
+     "additionalProperties": false
+    }
+   },
+   "intro": {
+    "anyOf": [
+     {
+      "$ref": "#/$defs/L"
+     },
+     {
+      "type": "null"
+     }
+    ]
+   }
+  },
+  "additionalProperties": false
+ },
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "deities.json",
+ "description": "Deities, sorted by order.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

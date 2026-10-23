@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>v3 · Naamalu library (EN / हिं)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Devanagari:wght@500;700&amp;family=Noto+Sans+Devanagari:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#1B3A4B}a:hover{color:#1B3A4B}
+
+</style>
+</helmet>
+<div style="width: 390px; height: 1180px; position: relative; overflow: hidden; background: #FBF4E9; color: #2A1A14; font-family: {{ ui }}">
+  <div style="position: absolute; left: 0; top: 0; width: 390px; height: 320px; background: linear-gradient(180deg, #CFE3E6 0%, #E9EEE4 60%, #F4EFE2 90%, #FBF4E9 100%)"></div>
+  <svg width="390" height="170" viewBox="0 0 390 170" style="position: absolute; left: 0; top: 150px">
+    <g stroke="#4E6B4A" stroke-width="1.5" fill="none" stroke-linecap="round"><path d="M110 30 q5 -5 10 0 q5 -5 10 0"/><path d="M142 18 q4 -4 8 0 q4 -4 8 0"/></g>
+    <path d="M0 80 C60 54 130 68 190 52 C250 38 310 62 390 48 L390 170 L0 170Z" fill="#B7C7C0"/>
+    <path d="M0 110 C80 90 150 108 220 96 C290 84 340 100 390 92 L390 170 L0 170Z" fill="#7F9A8E"/>
+    <path d="M246 100 L249 86 L291 86 L294 100Z M252 86 L255 74 L285 74 L288 86Z M258 74 L261 63 L279 63 L282 74Z M263 63 L265 53 L275 53 L277 63Z M262 53 L262 48 Q270 42 278 48 L278 53Z" fill="#7F9A8E"/>
+    <path d="M0 140 C90 126 200 146 390 132 L390 170 L0 170Z" fill="#4E6B4A"/>
+  </svg>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 20px 0">
+    <div style="font-family: {{ sacred }}; font-size: 22px; font-weight: 700; color: #1B3A4B">{{ t.brand }}</div>
+    <button onClick="{{ toggle }}" style="height: 44px; padding: 0 16px; border-radius: 22px; border: none; background: rgba(251,244,233,0.85); font-family: {{ ui }}; font-size: 15px; font-weight: 600; color: #2A1A14; cursor: pointer">{{ t.pill }}</button>
+  </div>
+  <div style="position: relative; padding: 18px 20px 0">
+    <div style="height: 52px; border-radius: 26px; background: rgba(255,253,248,0.9); display: flex; align-items: center; gap: 10px; padding: 0 18px; font-size: 15px; color: #6B5A4E"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6B5A4E" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>{{ t.search }}</div>
+  </div>
+  <div style="position: absolute; left: 0; top: 300px; width: 390px; height: 880px; background: #FBF4E9; border-radius: 30px 30px 0 0"></div>
+  <div style="position: absolute; left: 20px; top: 322px; width: 350px; display: flex; flex-direction: column; gap: 16px">
+    <a href="V3ReaderEN.dc.html" style="border-radius: 28px; background: #1B3A4B; color: #F1EBDF; padding: 18px 20px; display: flex; align-items: center; gap: 16px; text-decoration: none">
+      <svg width="52" height="52" viewBox="0 0 48 48"><rect x="7" y="13" width="34" height="7" rx="3.5" fill="#9CC5D1"/><rect x="7" y="21" width="34" height="7" rx="3.5" fill="#DCEBEF"/><rect x="7" y="29" width="34" height="7" rx="3.5" fill="#9CC5D1"/><path d="M24 9V41" stroke="#E0A93B" stroke-width="2"/><circle cx="24" cy="9" r="2.6" fill="#E0A93B"/></svg>
+      <div style="flex-grow: 1"><div style="font-size: 13px; font-weight: 600; color: #9CC5D1">{{ t.cont }} · 42 / 108</div><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 19px; font-weight: 650">{{ t.ganAsht }}</div></div>
+      <div style="width: 48px; height: 48px; border-radius: 24px; background: #F4D39B; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="#1B3A4B"><path d="M7 4l13 8-13 8z"/></svg></div>
+    </a>
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; color: #2F7188">{{ t.deities }}</div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="4">
+        <a href="V3ReaderEN.dc.html" style="height: 168px; border-radius: 26px; background: #DCEBEF; padding: 14px; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: #1B3A4B">
+          <div style="height: 84px; border-radius: 18px; background: #B9D6DF; display: flex; align-items: center; justify-content: center; font-family: 'Instrument Sans', sans-serif; font-size: 11px; color: #2F7188">[{{ c.id }}]</div>
+          <div><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 17px; font-weight: 650">{{ c.name }}</div><div style="font-size: 12px; opacity: 0.8">{{ c.n }}</div></div>
+        </a>
+      </sc-for>
+    </div>
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; color: #2F7188; padding-top: 4px">{{ t.today }}</div>
+    <div style="border-radius: 22px; background: #FFFFFF; border: 1px solid #E8DCC8; padding: 14px 16px; display: flex; align-items: center; gap: 12px">
+      <div style="flex-grow: 1"><div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 16px; font-weight: 650">{{ t.lalita }}</div><div style="font-size: 13px; color: #6B5A4E">{{ t.lalitaMeta }}</div></div>
+      <div style="height: 32px; padding: 0 12px; border-radius: 16px; background: #FBE4EA; color: #8C3B55; font-size: 12px; font-weight: 600; display: flex; align-items: center">{{ t.groups }}</div>
+    </div>
+  </div>
+  <nav style="position: absolute; left: 12px; right: 12px; bottom: 16px; height: 78px; border-radius: 28px; background: #FFFDF8; box-shadow: 0 6px 24px rgba(27,58,75,0.12); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; font-size: 12px; font-weight: 600; text-align: center; color: #7E6B5E">
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="height: 32px; display: flex; align-items: center"><svg width="24" height="24" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z" fill="#7E6B5E"/></svg></div>{{ t.nHome }}</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="height: 32px; display: flex; align-items: center"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="13" r="5" fill="#7E6B5E"/><path d="M13 28C13 40 35 40 35 28C35 23 30 20 24 20C18 20 13 23 13 28Z" fill="#7E6B5E"/></svg></div>{{ t.nPuja }}</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #1B3A4B"><div style="width: 52px; height: 32px; border-radius: 16px; background: #DCEBEF; display: flex; align-items: center; justify-content: center"><svg width="26" height="26" viewBox="0 0 48 48"><rect x="7" y="13" width="34" height="7" rx="3.5" fill="#1B3A4B"/><rect x="7" y="21" width="34" height="7" rx="3.5" fill="#2F7188"/><rect x="7" y="29" width="34" height="7" rx="3.5" fill="#1B3A4B"/></svg></div>{{ t.nNaam }}</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="height: 32px; display: flex; align-items: center"><svg width="26" height="26" viewBox="0 0 48 48"><circle cx="24" cy="20" r="13" fill="none" stroke="#7E6B5E" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="0.1 6.3"/><circle cx="24" cy="35" r="3.8" fill="#7E6B5E"/></svg></div>{{ t.nJapa }}</div>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="height: 32px; display: flex; align-items: center"><svg width="26" height="26" viewBox="0 0 48 48"><path d="M24 38C18 32 18 20 24 12C30 20 30 32 24 38Z" fill="#7E6B5E"/></svg></div>{{ t.nSaad }}</div>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { lang: 'en' }; }
+
+  langVals(S) {
+    const hi = this.state.lang === 'hi';
+    const t = {}; for (const k in S) t[k] = hi ? S[k][1] : S[k][0];
+    return Object.assign({ t, hi,
+      ui: hi ? "'Noto Sans Devanagari', sans-serif" : "'Instrument Sans', sans-serif",
+      sacred: hi ? "'Noto Serif Devanagari', serif" : "'Fraunces', serif",
+      sacredStyle: hi ? 'normal' : 'italic',
+      toggle: () => this.setState({ lang: hi ? 'en' : 'hi' }) });
+  }
+
+  renderVals() {
+    const S = {
+      brand: ['Naamalu', 'नामालु'], pill: ['English ▾', 'हिन्दी ▾'], search: ['Search a deity or stotram', 'देवता या स्तोत्र खोजें'],
+      cont: ['Continue', 'जारी रखें'], ganAsht: ['Gaṇeśa Aṣṭottaram', 'गणेश अष्टोत्तरम्'], deities: ['DEITIES', 'देवता'],
+      today: ['GOOD TO READ TODAY · FRIDAY', 'आज पढ़ने योग्य · शुक्रवार'], lalita: ['Śrī Lalitā Sahasranāma', 'श्री ललिता सहस्रनाम'],
+      lalitaMeta: ['1000 names · ~30 min', '1000 नाम · ~30 मिनट'], groups: ['4 group pārāyaṇams', '4 सामूहिक पारायण'],
+      nHome: ['Home', 'होम'], nPuja: ['Puja', 'पूजा'], nNaam: ['Naamalu', 'नामालु'], nJapa: ['Japam', 'जप'], nSaad: ['Saadhana', 'साधना']
+    };
+    const L = this.langVals(S), hi = L.hi;
+    const C = [['deity.ganesha','Vināyaka','विनायक',3],['deity.lalita','Lalitā Devī','ललिता देवी',3],['deity.vishnu','Viṣṇu','विष्णु',2],['deity.shiva','Śiva','शिव',3]];
+    L.cards = C.map(c => ({ id: c[0], name: hi ? c[2] : c[1], n: c[3] + (hi ? ' स्तोत्र' : ' stotrams') }));
+    return L;
+  }
+}
+</script>
+</body>
+</html>

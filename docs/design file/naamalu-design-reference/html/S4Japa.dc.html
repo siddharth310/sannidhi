@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="te">
+<head>
+<meta charset="utf-8">
+<title>Sandhya — Japa counter</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Telugu:wght@500;700&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#5A2340}
+a{color:#F4D39B}a:hover{color:#FFE2B0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: linear-gradient(180deg, #3E1A36 0%, #7A3350 38%, #C9666A 70%, #E9A06F 100%); color: #FBF4E9; font-family: 'Instrument Sans', sans-serif">
+  <button onClick="{{ tap }}" aria-label="Count one bead" style="position: absolute; left: 0; top: 0; width: 390px; height: 844px; border: none; background: transparent; cursor: pointer"></button>
+  <svg width="390" height="260" viewBox="0 0 390 260" style="position: absolute; left: 0; bottom: 0; pointer-events: none">
+    <path d="M0 110 C70 84 140 100 210 82 C280 66 330 88 390 76 L390 260 L0 260Z" fill="#A04C5C"/>
+    <path d="M0 150 C80 128 150 148 220 134 C290 120 340 138 390 128 L390 260 L0 260Z" fill="#6E2C43"/>
+    <path d="M110 140 L113 126 L155 126 L158 140Z M116 126 L119 114 L149 114 L152 126Z M122 114 L125 103 L143 103 L146 114Z M127 103 L129 93 L139 93 L141 103Z M126 93 L126 88 Q134 82 142 88 L142 93Z" fill="#6E2C43"/>
+    <path d="M0 190 C90 174 180 196 260 182 C320 172 360 182 390 178 L390 260 L0 260Z" fill="#461C31"/>
+    <g stroke="#461C31" stroke-width="3" fill="none" stroke-linecap="round"><path d="M320 186 Q324 150 318 114"/><path d="M318 114 Q300 106 288 118"/><path d="M318 114 Q304 96 294 94"/><path d="M318 114 Q328 94 342 92"/><path d="M318 114 Q338 106 350 120"/></g>
+    <path d="M0 226 C100 218 220 232 390 220 L390 260 L0 260Z" fill="#2A1220"/>
+  </svg>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3Home.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(42,18,32,0.3); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FBF4E9" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <div style="font-size: 13px; color: #F3D6C6">Mala {{ mala }}</div>
+    <button aria-label="Settings" style="width: 44px; height: 44px; border-radius: 22px; border: none; background: rgba(42,18,32,0.3); display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FBF4E9" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg></button>
+  </div>
+  <div style="position: relative; text-align: center; padding-top: 20px; pointer-events: none">
+    <div style="font-family: 'Noto Serif Telugu', serif; font-size: 24px; font-weight: 700">ఓం గం గణపతయే నమః</div>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 16px; color: #F3D6C6">oṁ gaṁ gaṇapataye namaḥ</div>
+  </div>
+  <div style="position: absolute; left: 45px; top: 250px; width: 300px; height: 300px; pointer-events: none">
+    <sc-for list="{{ beads }}" as="b" hint-placeholder-count="36">
+      <div style="{{ b.style }}"></div>
+    </sc-for>
+    <div style="position: absolute; left: 0; top: 0; width: 300px; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center">
+      <div style="font-family: 'Fraunces', serif; font-size: 84px; font-weight: 500; line-height: 1">{{ count }}</div>
+      <div style="font-size: 14px; color: #F3D6C6; margin-top: 4px">of 108</div>
+    </div>
+  </div>
+  <div style="position: absolute; left: 0; top: 574px; width: 390px; display: flex; justify-content: center">
+    <div style="height: 40px; padding: 0 16px; border-radius: 20px; background: rgba(140,59,85,0.85); display: flex; align-items: center; gap: 8px; font-size: 13px"><div style="width: 8px; height: 8px; border-radius: 4px; background: #F4D39B"></div>Adds to our sankalpa · [Group name]</div>
+  </div>
+  <div style="position: absolute; left: 0; top: 626px; width: 390px; text-align: center; font-size: 12px; color: #F3D6C6">Tap anywhere · volume keys work too</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { n: 47 }; }
+  renderVals() {
+    const n = this.state.n;
+    const inMala = n % 108;
+    const lit = Math.round(inMala / 108 * 36);
+    const beads = [];
+    for (let k = 0; k < 36; k++) {
+      const a = (k / 36) * Math.PI * 2 - Math.PI / 2;
+      const x = 150 + Math.cos(a) * 138 - 6;
+      const y = 150 + Math.sin(a) * 138 - 6;
+      const on = k < lit;
+      beads.push({ style: 'position: absolute; left: ' + x.toFixed(1) + 'px; top: ' + y.toFixed(1) + 'px; width: 12px; height: 12px; border-radius: 6px; background: ' + (on ? '#F4D39B' : 'rgba(251,244,233,0.22)') });
+    }
+    return {
+      beads,
+      count: inMala === 0 && n > 0 ? 108 : inMala,
+      mala: Math.floor(n / 108) + 1,
+      tap: () => this.setState({ n: n + 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

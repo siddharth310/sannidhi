@@ -1,0 +1,156 @@
+{
+ "type": "object",
+ "required": [
+  "city",
+  "samvatsara",
+  "start",
+  "end",
+  "days"
+ ],
+ "properties": {
+  "city": {
+   "type": "string"
+  },
+  "samvatsara": {
+   "type": "object",
+   "required": [
+    "year",
+    "id",
+    "n"
+   ],
+   "properties": {
+    "year": {
+     "type": "integer"
+    },
+    "id": {
+     "type": "string"
+    },
+    "n": {
+     "type": "integer"
+    }
+   },
+   "additionalProperties": false
+  },
+  "start": {
+   "type": "string"
+  },
+  "end": {
+   "type": "string"
+  },
+  "days": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": [
+     "date",
+     "sunrise",
+     "sunset",
+     "tithi",
+     "nakshatra",
+     "masa",
+     "adhika",
+     "moon_rashi",
+     "moon_pct",
+     "observances"
+    ],
+    "properties": {
+     "date": {
+      "type": "string"
+     },
+     "sunrise": {
+      "type": "string"
+     },
+     "sunset": {
+      "type": "string"
+     },
+     "tithi": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 30
+     },
+     "tithi_ends": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "nakshatra": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 27
+     },
+     "nakshatra_ends": {
+      "type": [
+       "string",
+       "null"
+      ]
+     },
+     "masa": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+     },
+     "adhika": {
+      "type": "boolean"
+     },
+     "moon_rashi": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+     },
+     "moon_pct": {
+      "type": "integer"
+     },
+     "observances": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      }
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "calendar/<city>/<year>-<samvatsara>.json",
+ "description": "One samvatsara (Ugadi to the day before next Ugadi) for one city. All times IST. tithi 1–15 śukla, 16–30 kṛṣṇa (30 = amāvāsyā). Values at sunrise.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

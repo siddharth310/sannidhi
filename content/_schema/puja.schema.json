@@ -1,0 +1,251 @@
+{
+ "type": "object",
+ "required": [
+  "id",
+  "deity",
+  "kind",
+  "title",
+  "regions",
+  "status",
+  "stages"
+ ],
+ "properties": {
+  "id": {
+   "type": "string"
+  },
+  "deity": {
+   "type": "string"
+  },
+  "kind": {
+   "enum": [
+    "festival",
+    "vratam",
+    "nitya"
+   ]
+  },
+  "observance": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "title": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/L"
+    },
+    {
+     "type": "null"
+    }
+   ]
+  },
+  "minutes": {
+   "type": [
+    "integer",
+    "null"
+   ]
+  },
+  "regions": {
+   "type": "array",
+   "items": {
+    "type": "string"
+   }
+  },
+  "status": {
+   "enum": [
+    "draft",
+    "reviewed",
+    "published",
+    "retired"
+   ]
+  },
+  "stages": {
+   "type": "array",
+   "minItems": 3,
+   "maxItems": 3,
+   "items": {
+    "type": "object",
+    "required": [
+     "stage",
+     "steps"
+    ],
+    "properties": {
+     "stage": {
+      "enum": [
+       "pre",
+       "during",
+       "post"
+      ]
+     },
+     "steps": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": [
+        "id",
+        "slug",
+        "title_iast",
+        "body",
+        "image",
+        "mantras",
+        "fills",
+        "naivedyam",
+        "optional",
+        "samagri"
+       ],
+       "properties": {
+        "id": {
+         "type": "string"
+        },
+        "slug": {
+         "type": "string"
+        },
+        "title_iast": {
+         "type": "string"
+        },
+        "body": {
+         "anyOf": [
+          {
+           "$ref": "#/$defs/L"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "note": {
+         "anyOf": [
+          {
+           "$ref": "#/$defs/L"
+          },
+          {
+           "type": "null"
+          }
+         ]
+        },
+        "image": {
+         "type": [
+          "string",
+          "null"
+         ]
+        },
+        "minutes": {
+         "type": [
+          "integer",
+          "null"
+         ]
+        },
+        "mantras": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "repeat": {
+         "type": [
+          "integer",
+          "null"
+         ]
+        },
+        "text": {
+         "type": [
+          "string",
+          "null"
+         ]
+        },
+        "fills": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "naivedyam": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "optional": {
+         "type": "boolean"
+        },
+        "samagri": {
+         "type": "array",
+         "items": {
+          "type": "object",
+          "required": [
+           "item",
+           "qty",
+           "required",
+           "alternatives"
+          ],
+          "properties": {
+           "item": {
+            "type": "string"
+           },
+           "qty": {
+            "type": "string"
+           },
+           "required": {
+            "type": "boolean"
+           },
+           "alternatives": {
+            "type": "array",
+            "items": {
+             "type": "string"
+            }
+           }
+          },
+          "additionalProperties": false
+         }
+        }
+       },
+       "additionalProperties": false
+      }
+     }
+    },
+    "additionalProperties": false
+   }
+  }
+ },
+ "additionalProperties": false,
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "pujas/<id>.json",
+ "description": "One puja: three stages in order pre, during, post, each an ordered list of steps.",
+ "$defs": {
+  "L": {
+   "type": "object",
+   "properties": {
+    "te": {
+     "type": "string"
+    },
+    "hi": {
+     "type": "string"
+    },
+    "en": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "S": {
+   "type": "object",
+   "required": [
+    "sa",
+    "iast",
+    "te"
+   ],
+   "properties": {
+    "sa": {
+     "type": "string"
+    },
+    "iast": {
+     "type": "string"
+    },
+    "te": {
+     "type": "string"
+    }
+   },
+   "additionalProperties": false
+  }
+ }
+}

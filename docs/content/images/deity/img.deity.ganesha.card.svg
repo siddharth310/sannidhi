@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600"><rect width="600" height="600" fill="#FBF0DC"/><g id="ganesha">
+  <!-- halo -->
+  <circle cx="300" cy="250" r="205" fill="#F6E3C4"/>
+  <circle cx="300" cy="250" r="205" fill="none" stroke="#E9B23F" stroke-width="6" stroke-dasharray="2 14" stroke-linecap="round"/>
+  <!-- lotus pedestal -->
+  <g fill="#C2414F">
+    <path d="M300 470 C270 500 270 540 300 555 C330 540 330 500 300 470Z"/>
+    <path d="M240 480 C205 500 200 540 235 555 C265 545 268 505 240 480Z"/>
+    <path d="M360 480 C395 500 400 540 365 555 C335 545 332 505 360 480Z"/>
+    <path d="M180 495 C140 510 135 545 170 556 C205 552 210 515 180 495Z"/>
+    <path d="M420 495 C460 510 465 545 430 556 C395 552 390 515 420 495Z"/>
+  </g>
+  <rect x="140" y="548" width="320" height="16" rx="8" fill="#8E2430"/>
+  <!-- upper arms (behind) -->
+  <path d="M232 285 C185 292 140 285 110 258" stroke="#D9A27A" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M368 285 C415 292 460 285 490 258" stroke="#D9A27A" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M232 285 C185 292 140 285 110 258" stroke="#F0C29A" stroke-width="33" fill="none" stroke-linecap="round"/>
+  <path d="M368 285 C415 292 460 285 490 258" stroke="#F0C29A" stroke-width="33" fill="none" stroke-linecap="round"/>
+  <!-- ankusha (his upper right = viewer left) -->
+  <rect x="103" y="150" width="12" height="140" rx="6" fill="#8E2430"/>
+  <path d="M109 108 L120 150 H98 Z" fill="#E9B23F"/>
+  <path d="M113 152 C141 148 149 172 135 182 C127 188 119 180 124 172" stroke="#E9B23F" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="108" cy="256" r="20" fill="#F6CFA9" stroke="#D9A27A" stroke-width="3"/>
+  <!-- pasha (viewer right) -->
+  <circle cx="494" cy="192" r="30" fill="none" stroke="#5B8A47" stroke-width="8"/>
+  <path d="M490 222 C486 232 496 240 492 250" stroke="#5B8A47" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="492" cy="256" r="20" fill="#F6CFA9" stroke="#D9A27A" stroke-width="3"/>
+  <!-- seated legs / cloth -->
+  <ellipse cx="300" cy="455" rx="160" ry="52" fill="#E9B23F"/>
+  <path d="M142 462 C200 500 400 500 458 462" stroke="#8E2430" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="205" cy="470" rx="34" ry="18" fill="#F0C29A"/>
+  <ellipse cx="395" cy="470" rx="34" ry="18" fill="#F0C29A"/>
+  <!-- torso -->
+  <path d="M215 270 C230 250 370 250 385 270 L395 330 L205 330 Z" fill="#F0C29A"/>
+  <ellipse cx="300" cy="370" rx="108" ry="95" fill="#F0C29A"/>
+  <path d="M200 400 C230 440 370 440 400 400 L405 430 C360 460 240 460 195 430 Z" fill="#E9B23F"/>
+  <path d="M195 430 C240 460 360 460 405 430" stroke="#8E2430" stroke-width="7" fill="none"/>
+  <circle cx="300" cy="380" r="5" fill="#D9A27A"/>
+  <!-- sacred thread -->
+  <path d="M235 270 C250 330 300 390 360 420" stroke="#FFF8EC" stroke-width="5" fill="none"/>
+  <!-- necklace -->
+  <path d="M235 280 C260 325 340 325 365 280" stroke="#D9A23A" stroke-width="7" fill="none" stroke-dasharray="1 9" stroke-linecap="round"/>
+  <circle cx="300" cy="318" r="9" fill="#C2414F" stroke="#D9A23A" stroke-width="3"/>
+  <!-- lower arms -->
+  <path d="M222 290 C200 320 190 345 190 372" stroke="#F0C29A" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <path d="M378 290 C400 320 410 345 410 372" stroke="#F0C29A" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <!-- abhaya hand (viewer left) -->
+  <rect x="168" y="335" width="44" height="58" rx="18" fill="#F6CFA9" stroke="#D9A27A" stroke-width="3"/>
+  <circle cx="190" cy="372" r="6" fill="#C2414F"/>
+  <!-- modaka in hand (viewer right) -->
+  <circle cx="410" cy="378" r="22" fill="#F6CFA9" stroke="#D9A27A" stroke-width="3"/>
+  <path d="M410 330 C413 340 428 348 431 360 C434 372 424 380 410 380 C396 380 386 372 389 360 C392 348 407 340 410 330Z" fill="#E9B23F" stroke="#B9822A" stroke-width="2"/>
+  <!-- ears -->
+  <ellipse cx="208" cy="185" rx="72" ry="84" fill="#F0C29A" stroke="#D9A27A" stroke-width="4"/>
+  <ellipse cx="392" cy="185" rx="72" ry="84" fill="#F0C29A" stroke="#D9A27A" stroke-width="4"/>
+  <ellipse cx="215" cy="188" rx="52" ry="64" fill="#EBA9A0"/>
+  <ellipse cx="385" cy="188" rx="52" ry="64" fill="#EBA9A0"/>
+  <!-- face -->
+  <ellipse cx="300" cy="185" rx="72" ry="82" fill="#F0C29A" stroke="#D9A27A" stroke-width="4"/>
+  <!-- crown -->
+  <path d="M232 132 C250 112 350 112 368 132 L352 70 C340 40 320 22 300 10 C280 22 260 40 248 70 Z" fill="#D9A23A"/>
+  <path d="M236 128 C255 112 345 112 364 128" stroke="#8E2430" stroke-width="8" fill="none"/>
+  <path d="M252 84 H348 M262 56 H338" stroke="#B9822A" stroke-width="5"/>
+  <circle cx="300" cy="100" r="9" fill="#C2414F"/>
+  <circle cx="300" cy="12" r="7" fill="#E9B23F"/>
+  <!-- tilak -->
+  <path d="M300 140 v22" stroke="#C2414F" stroke-width="6" stroke-linecap="round"/>
+  <!-- eyes -->
+  <path d="M262 185 C270 177 282 177 290 185 M310 185 C318 177 330 177 338 185" stroke="#4A1C22" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- tusks: broken (his right = viewer left), whole (viewer right) -->
+  
+  
+  <!-- trunk curving to his left (viewer right), towards modaka -->
+  <path d="M300 215 C298 258 290 300 310 326 C326 346 356 340 356 316" stroke="#C98F66" stroke-width="44" fill="none" stroke-linecap="round"/>
+  <path d="M300 215 C298 258 290 300 310 326 C326 346 356 340 356 316" stroke="#EDB98E" stroke-width="35" fill="none" stroke-linecap="round"/>
+  <path d="M290 238 h18 M288 260 h18 M288 282 h18 M294 304 h18" stroke="#D9A27A" stroke-width="3" stroke-linecap="round"/>
+  <path d="M276 232 L262 250 L278 254 Z" fill="#FFF8EC" stroke="#C98F66" stroke-width="2.5"/>
+  <path d="M322 230 C332 248 342 262 360 270 C340 274 324 260 316 238Z" fill="#FFF8EC" stroke="#C98F66" stroke-width="2.5"/>
+  <!-- mouse at feet -->
+  <g transform="translate(450 512) scale(0.7)">
+    <path d="M-34 10 C-46 8 -46 -4 -36 -6" stroke="#4A1C22" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="0" cy="0" rx="34" ry="22" fill="#9B8B84"/>
+    <circle cx="-30" cy="-18" r="16" fill="#9B8B84"/>
+    <circle cx="-26" cy="-34" r="9" fill="#9B8B84"/><circle cx="-26" cy="-34" r="5" fill="#D98FA3"/>
+    <circle cx="-36" cy="-20" r="2.6" fill="#4A1C22"/>
+  </g>
+</g>
+</svg>

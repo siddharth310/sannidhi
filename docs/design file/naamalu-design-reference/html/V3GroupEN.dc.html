@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>v3 · Group pārāyaṇam (EN / हिं)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;1,9..144,400&amp;family=Noto+Serif+Devanagari:wght@500;700&amp;family=Noto+Sans+Devanagari:wght@400;600&amp;family=Instrument+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#FBF4E9}
+a{color:#8C3B55}a:hover{color:#8C3B55}
+@keyframes rise{0%{transform:translateY(40px);opacity:0}15%{opacity:1}80%{opacity:1}100%{transform:translateY(-90px);opacity:0}}
+@media (prefers-reduced-motion: reduce){.bub{animation:none!important;opacity:1!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 1260px; position: relative; overflow: hidden; background: #FBF4E9; color: #2A1A14; font-family: {{ ui }}">
+  <div style="position: absolute; left: 0; top: 0; width: 390px; height: 520px; background: linear-gradient(180deg, #F6D3DC 0%, #F8E6E4 55%, #F6F0E4 100%)"></div>
+  <svg width="390" height="150" viewBox="0 0 390 150" style="position: absolute; left: 0; top: 400px">
+    <path d="M0 60 C60 36 130 50 190 34 C250 20 310 44 390 30 L390 150 L0 150Z" fill="#EBC3CF"/>
+    <path d="M0 90 C80 70 150 88 220 76 C290 64 340 80 390 72 L390 150 L0 150Z" fill="#D39AAA"/>
+    <g stroke="#A5646F" stroke-width="3" fill="none" stroke-linecap="round"><path d="M330 126 Q334 94 328 62"/><path d="M328 62 Q310 54 298 66"/><path d="M328 62 Q314 44 304 42"/><path d="M328 62 Q338 42 352 40"/><path d="M328 62 Q348 54 360 68"/></g>
+    <path d="M0 116 C90 102 200 122 390 108 L390 150 L0 150Z" fill="#A5646F"/>
+  </svg>
+  <div style="position: relative; display: flex; justify-content: space-between; align-items: center; padding: 48px 16px 0">
+    <a href="V3GlobeEN.dc.html" aria-label="Back" style="width: 44px; height: 44px; border-radius: 22px; background: rgba(251,244,233,0.8); display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2A1A14" stroke-width="1.8" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></a>
+    <div style="height: 36px; padding: 0 12px; border-radius: 18px; background: rgba(251,244,233,0.8); display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: #6E2A40"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#8C3B55" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>{{ t.onGlobe }}</div>
+    <button onClick="{{ toggle }}" style="height: 44px; padding: 0 14px; border-radius: 22px; border: none; background: rgba(251,244,233,0.8); font-family: {{ ui }}; font-size: 14px; font-weight: 600; color: #8C3B55; cursor: pointer">{{ t.pill }}</button>
+  </div>
+  <div style="position: relative; padding: 14px 20px 0; text-align: center">
+    <div style="font-size: 13px; color: #8C3B55; font-weight: 600">{{ t.day }}</div>
+    <div style="font-family: {{ sacred }}; font-style: {{ sacredStyle }}; font-size: 22px; font-weight: 650; line-height: 1.35; color: #5A1F35; margin-top: 2px">{{ t.title }}</div>
+    <div style="font-size: 14px; color: #6E4A55; margin-top: 4px">{{ t.purpose }}</div>
+  </div>
+  <div style="position: relative; display: flex; justify-content: center; padding-top: 12px">
+    <svg width="200" height="200" viewBox="0 0 200 200"><circle cx="100" cy="100" r="84" fill="none" stroke="#F3C6D2" stroke-width="12"/><circle cx="100" cy="100" r="84" fill="none" stroke="#8C3B55" stroke-width="12" stroke-linecap="round" stroke-dasharray="76 528" transform="rotate(-90 100 100)"/><circle cx="100" cy="100" r="68" fill="none" stroke="#C79A3E" stroke-width="1"/><text x="100" y="98" text-anchor="middle" font-family="Fraunces" font-size="38" font-weight="600" fill="#2A1A14">146</text><text x="100" y="124" text-anchor="middle" font-family="{{ ringFont }}" font-size="13" fill="#6E4A55">{{ t.ofTarget }}</text></svg>
+  </div>
+  <div class="bub" style="position: absolute; left: 34px; top: 330px; padding: 8px 14px; border-radius: 20px; background: #FBE4EA; color: #6E2A40; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(140,59,85,0.15); animation: rise 4s ease-out infinite">{{ t.b1 }}</div>
+  <div class="bub" style="position: absolute; left: 226px; top: 360px; padding: 8px 14px; border-radius: 20px; background: #FBE4EA; color: #6E2A40; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(140,59,85,0.15); animation: rise 4s ease-out 1.6s infinite">{{ t.b2 }}</div>
+  <div class="bub" style="position: absolute; left: 120px; top: 380px; padding: 8px 14px; border-radius: 20px; background: #FFFDF8; color: #8C3B55; font-size: 13px; font-weight: 600; box-shadow: 0 4px 12px rgba(140,59,85,0.15); animation: rise 4s ease-out 2.8s infinite">{{ t.b3 }}</div>
+  <div style="position: absolute; left: 0; top: 500px; width: 390px; height: 760px; background: #FBF4E9; border-radius: 30px 30px 0 0"></div>
+  <div style="position: absolute; left: 20px; top: 522px; width: 350px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+      <div style="border-radius: 20px; background: #FBE4EA; padding: 12px; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 650; color: #5A1F35">38</div><div style="font-size: 12px; color: #6E2A40">{{ t.s1 }}</div></div>
+      <div style="border-radius: 20px; background: #FBE4EA; padding: 12px; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 650; color: #5A1F35">12</div><div style="font-size: 12px; color: #6E2A40">{{ t.s2 }}</div></div>
+      <div style="border-radius: 20px; background: #FBE4EA; padding: 12px; text-align: center"><div style="font-family: 'Fraunces', serif; font-size: 24px; font-weight: 650; color: #5A1F35">7</div><div style="font-size: 12px; color: #6E2A40">{{ t.s3 }}</div></div>
+    </div>
+    <div style="display: flex; gap: 10px">
+      <a href="V3ReaderEN.dc.html" style="flex-grow: 2; height: 58px; border-radius: 29px; background: #8C3B55; color: #FBF4E9; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; text-decoration: none">{{ t.startRead }}</a>
+      <div style="flex-grow: 1; height: 58px; border-radius: 29px; border: 1.5px solid #E7C3CE; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #8C3B55">{{ t.add }}</div>
+    </div>
+    <div style="font-size: 13px; font-weight: 600; letter-spacing: 1px; color: #8A5A12">{{ t.todayH }}</div>
+    <div style="display: flex; flex-direction: column">
+      <sc-for list="{{ people }}" as="p" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #E8DCC8"><div style="width: 42px; height: 42px; border-radius: 21px; background: {{ p.bg }}; display: flex; align-items: center; justify-content: center; font-weight: 600; color: {{ p.fg }}">{{ p.ini }}</div><div style="flex-grow: 1"><div style="font-size: 16px; font-weight: 600">{{ p.name }}</div><div style="font-size: 13px; color: #6B5A4E">{{ p.meta }}</div></div></div>
+      </sc-for>
+    </div>
+    <div style="border-radius: 22px; background: #F4EAD9; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #4A321E">{{ t.inv }} <span style="font-family: 'Instrument Sans', sans-serif; font-weight: 600; letter-spacing: 2px; color: #5A1F35">LK7Q2M</span> · {{ t.safety }}</div>
+    <div style="display: flex; justify-content: space-between; font-size: 13px; color: #6B5A4E"><span>{{ t.leave }}</span><span>{{ t.report }}</span></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1260}}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { lang: 'en' }; }
+
+  langVals(S) {
+    const hi = this.state.lang === 'hi';
+    const t = {}; for (const k in S) t[k] = hi ? S[k][1] : S[k][0];
+    return Object.assign({ t, hi,
+      ui: hi ? "'Noto Sans Devanagari', sans-serif" : "'Instrument Sans', sans-serif",
+      sacred: hi ? "'Noto Serif Devanagari', serif" : "'Fraunces', serif",
+      sacredStyle: hi ? 'normal' : 'italic',
+      toggle: () => this.setState({ lang: hi ? 'en' : 'hi' }) });
+  }
+
+  renderVals() {
+    const S = {
+      pill: ['English ▾','हिन्दी ▾'], onGlobe: ['On the globe · open','ग्लोब पर · सबके लिए'], day: ['Day 12 of 30 · since Kārtika 1','दिन 12 / 30 · कार्तिक 1 से'],
+      title: ['Kārtika month Lalitā Sahasranāma pārāyaṇam','कार्तिक मास ललिता सहस्रनाम पारायण'],
+      purpose: ['“For mother\'s health” · [creator] · Hyderabad','“माँ के स्वास्थ्य के लिए” · [संयोजक] · हैदराबाद'],
+      ofTarget: ['of 1,008 readings','1,008 पाठों में से'], b1: ['Lakshmi · +1 reading','लक्ष्मी · +1 पाठ'], b2: ['Sharada (Dubai) · +1','शारदा (दुबई) · +1'], b3: ['Kamala just joined','कमला अभी जुड़ीं'],
+      s1: ['joined','लोग जुड़े'], s2: ['readings today','आज के पाठ'], s3: ['cities','शहर'],
+      startRead: ['Start reading','पढ़ना शुरू करें'], add: ['+ Reading','+ पाठ'], todayH: ['READ TODAY','आज पढ़ने वाले'],
+      inv: ['Invite code','आमंत्रण कोड'], safety: ['Names visible to members only · Naamalu never asks for money, codes or passwords.','नाम केवल सदस्यों को · Naamalu कभी पैसे, कोड या पासवर्ड नहीं माँगता।'],
+      leave: ['Leave this pārāyaṇam','पारायण छोड़ें'], report: ['Report','रिपोर्ट करें']
+    };
+    const L = this.langVals(S), hi = L.hi;
+    const P = [['L','Lakshmi','लक्ष्मी','Hyderabad · 1 reading · just now','हैदराबाद · 1 पाठ · अभी','#FBE4EA','#8C3B55'],
+               ['S','Sharada','शारदा','Dubai · 1 reading · 10 min ago','दुबई · 1 पाठ · 10 मिनट पहले','#DCEBEF','#1B3A4B'],
+               ['S','Sujatha','सुजाता','Vijayawada · 2 readings · morning','विजयवाड़ा · 2 पाठ · सुबह','#F4EAD9','#6B4A2E']];
+    L.people = P.map(p => ({ ini: hi ? p[2].charAt(0) : p[0], name: hi ? p[2] : p[1], meta: hi ? p[4] : p[3], bg: p[5], fg: p[6] }));
+    L.ringFont = hi ? 'Noto Sans Devanagari' : 'Instrument Sans';
+    return L;
+  }
+}
+</script>
+</body>
+</html>
