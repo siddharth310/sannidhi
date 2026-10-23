@@ -1,0 +1,26 @@
+{
+  "_note": "Settings for Sarvam bulbul:v3. Speakers below are first picks to audition, not final: the Sarvam docs list speaker names without gender, so listen with --audition before generating. bulbul:v3 has no pitch or loudness control; tone comes from the speaker, pace and temperature.",
+  "endpoint": "https://api.sarvam.ai/text-to-speech",
+  "model": "bulbul:v3",
+  "speech_sample_rate": 44100,
+  "output_audio_codec": "wav",
+  "temperature": 0.45,
+  "dict_id": null,
+  "languages": {
+    "te": { "language_code": "te-IN", "speaker": "kavitha", "pace": 0.85 },
+    "hi": { "language_code": "hi-IN", "speaker": "ritu",    "pace": 0.85 },
+    "en": { "language_code": "en-IN", "speaker": "priya",   "pace": 0.88 }
+  },
+  "audition_shortlist": ["kavitha", "roopa", "shruti", "ritu", "priya", "suhani", "anand", "gokul"],
+  "pauses_ms": {
+    "lead_in": 300,
+    "between_sentences": 450,
+    "before_last_beat_line": 900,
+    "after_title": 1200,
+    "tail": 600
+  },
+  "output": {
+    "format": "m4a (AAC, mono, 64 kbps) via ffmpeg; wav kept if ffmpeg is missing",
+    "loudness": "-16 LUFS integrated, true peak -1.5 dB (ffmpeg loudnorm)"
+  }
+}
