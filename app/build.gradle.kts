@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.smaranam.app"
+    namespace = "app.sannidhi"
     compileSdk = 35
 
     defaultConfig {

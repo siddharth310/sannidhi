@@ -20,6 +20,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Naamalu"
+rootProject.name = "Sannidhi"
 
 include(":app")

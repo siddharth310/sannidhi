@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".SmaranamApplication"
+        android:name=".SannidhiApplication"
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_rules"
         android:dataExtractionRules="@xml/backup_rules"
@@ -16,11 +16,11 @@
         android:roundIcon="@drawable/ic_launcher_foreground"
         android:supportsRtl="true"
         android:localeConfig="@xml/locales_config"
-        android:theme="@style/Theme.Smaranam">
+        android:theme="@style/Theme.Sannidhi">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Smaranam"
+            android:theme="@style/Theme.Sannidhi"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

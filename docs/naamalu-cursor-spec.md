@@ -1,6 +1,6 @@
 # Sannidhi v6 — UI/UX alignment spec for Cursor
 
-Hand this file to Cursor together with `AGENTS.md`. It turns the 22 mockups in the "Sannidhi v6" zip into screen-by-screen build instructions for the existing app (`com.smaranam.app`, project `~/Desktop/naamalu app creation`).
+Hand this file to Cursor together with `AGENTS.md`. It turns the 22 mockups in the "Sannidhi v6" zip into screen-by-screen build instructions for the existing app (package `app.sannidhi`, applicationId `com.smaranam.app`, project `~/Desktop/naamalu app creation`).
 
 **Sources (all read, nothing modified):** the 22 mockup PNGs; `AGENTS.md`; `docs/design-v6.md`; `docs/app-flow.md`; `docs/content-architecture.md`; `content/README.md`; `content/_schema/*.schema.json`; `content/_templates/*`; `content/deities/ganesha.md`; `content/pujas/ganesha/vinayaka-chavithi.md`; `content/calendar/observances/vinayaka-chavithi.md`; `content/stories/ganesha/elephant-head.md`; `content/texts/ganesha.ashtottara.yaml`; `content/images/manifest.csv`; `tools/build_content.py` (header, `SIZES`, `build_images`, `main`); `tools/build_config.yaml`; `tools/requirements.txt`; `ui/theme/{Color,Type,Shape}.kt`; `ui/common/Common.kt` (component list); `ui/navigation/SannidhiNavHost.kt` (routes); `res/values*/strings.xml` (keys).
 **Markers:** **[inferred]** = read off a mockup or reasoned, not found in a file. **[verify]** = Cursor must open the code to confirm. Code paths are relative to `app/src/main/java/com/smaranam/app/`.
@@ -346,7 +346,7 @@ scripts/install_debug_emulator.sh            # install on emulator  [verify scri
 ## 6. Rules block for Cursor
 
 ```
-YOU ARE EDITING: ~/Desktop/naamalu app creation (package com.smaranam.app; do NOT change applicationId).
+YOU ARE EDITING: ~/Desktop/naamalu app creation (package app.sannidhi; applicationId stays com.smaranam.app).
 READ FIRST: AGENTS.md, docs/app-flow.md, docs/design-v6.md, docs/content-architecture.md, this file.
 
 DO

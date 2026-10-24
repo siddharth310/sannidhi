@@ -1,0 +1,221 @@
+package app.sannidhi.settings
+
+import android.content.Context
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import app.sannidhi.content.Lang
+import app.sannidhi.content.TextView
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.time.LocalDate
+
+private val Context.settingsDataStore by preferencesDataStore("sannidhi_settings")
+
+data class AppSettings(
+    val lang: String = "en",
+    val textView: String = TextView.Iast.name,
+    val stateCode: String = "",
+    val cityId: String = "",
+    val name: String = "",
+    val rashi: Int? = null,
+    val nakshatra: String = "",
+    val pada: Int? = null,
+    val findNakshatraDismissed: Boolean = false,
+    val gotra: String = "",
+    val onboarded: Boolean = false,
+    val debugToday: String? = null,
+) {
+    fun language(): Lang = when (lang) {
+        "te" -> Lang.te
+        "hi" -> Lang.hi
+        else -> Lang.en
+    }
+
+    /** Home info line: Telugu script in te, Devanagari in hi, IAST in en. */
+    fun infoView(): TextView = when (lang) {
+        "te" -> TextView.Script
+        "hi" -> TextView.Devanagari
+        else -> TextView.Iast
+    }
+
+    companion object {
+        const val TELUGU_SCRIPT = "Telugu"
+
+        /** Sacred-text script that matches an app language. */
+        fun textViewFor(lang: String): String = when (lang) {
+            "te" -> TextView.Script.name
+            "hi" -> TextView.Devanagari.name
+            else -> TextView.Iast.name
+        }
+    }
+
+    fun textViewEnum(): TextView = when (textView) {
+        TextView.Devanagari.name -> TextView.Devanagari
+        TextView.Script.name, TELUGU_SCRIPT -> TextView.Script
+        else -> TextView.Iast
+    }
+
+    fun today(): LocalDate = debugToday?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: LocalDate.now()
+}
+
+class AppSettingsStore(private val context: Context) {
+    private val dataStore = context.settingsDataStore
+
+    val settings: Flow<AppSettings> = dataStore.data.map { it.toSettings() }
+
+    suspend fun setLang(lang: String) {
+        dataStore.edit {
+            it[Keys.lang] = lang
+            it[Keys.textView] = AppSettings.textViewFor(lang)
+        }
+    }
+
+    suspend fun setTextView(view: String) {
+        dataStore.edit { it[Keys.textView] = view }
+    }
+
+    suspend fun setPlace(stateCode: String, cityId: String) {
+        dataStore.edit {
+            it[Keys.state] = stateCode
+            it[Keys.city] = cityId
+        }
+    }
+
+    suspend fun setName(name: String) {
+        dataStore.edit { it[Keys.name] = name }
+    }
+
+    suspend fun setRashi(rashi: Int?) {
+        dataStore.edit {
+            if (rashi == null) it.remove(Keys.rashi) else it[Keys.rashi] = rashi
+        }
+    }
+
+    suspend fun setNakshatra(value: String) {
+        dataStore.edit {
+            it[Keys.nakshatra] = value
+            it.remove(Keys.pada)
+        }
+    }
+
+    /** Nakṣatra, pada and rāśi only. Birth date, time and place are not written. */
+    suspend fun setFoundStar(nakshatraId: String, pada: Int, rashi: Int) {
+        dataStore.edit {
+            it[Keys.nakshatra] = nakshatraId
+            it[Keys.pada] = pada
+            it[Keys.rashi] = rashi
+        }
+    }
+
+    suspend fun setFindNakshatraDismissed(value: Boolean) {
+        dataStore.edit { it[Keys.findNakshatraDismissed] = value }
+    }
+
+    suspend fun setGotra(value: String) {
+        dataStore.edit { it[Keys.gotra] = value }
+    }
+
+    suspend fun setOnboarded(onboarded: Boolean) {
+        dataStore.edit { it[Keys.onboarded] = onboarded }
+    }
+
+    suspend fun setDebugToday(isoDate: String?) {
+        dataStore.edit {
+            if (isoDate.isNullOrBlank()) it.remove(Keys.debugToday) else it[Keys.debugToday] = isoDate
+        }
+    }
+
+    /** Little ones or older children, remembered per story. */
+    fun storyAudience(storyId: String): Flow<String?> = dataStore.data.map { prefs ->
+        prefs[Keys.storyAudience].orEmpty()
+            .firstOrNull { it.startsWith("$storyId=") }
+            ?.substringAfter("=")
+            ?.takeIf { it == AUDIENCE_LITTLE || it == AUDIENCE_OLDER }
+    }
+
+    suspend fun setStoryAudience(storyId: String, audience: String) {
+        dataStore.edit { prefs ->
+            val kept = prefs[Keys.storyAudience].orEmpty()
+                .filterNot { it.startsWith("$storyId=") }
+                .toMutableSet()
+            kept.add("$storyId=$audience")
+            prefs[Keys.storyAudience] = kept
+        }
+    }
+
+    fun sankalpamTab(): Flow<String> = dataStore.data.map { it[Keys.sankalpamTab] ?: "japam" }
+
+    suspend fun setSankalpamTab(tab: String) {
+        dataStore.edit { it[Keys.sankalpamTab] = tab }
+    }
+
+    suspend fun clear() {
+        dataStore.edit { it.clear() }
+    }
+
+    /** Samagri ticks for this puja on this day. Older days are dropped. */
+    fun samagriTicks(pujaId: String, date: String): Flow<Set<String>> = dataStore.data.map { prefs ->
+        prefs[Keys.samagriTicks].orEmpty().mapNotNull { raw ->
+            val parts = raw.split("|", limit = 3)
+            if (parts.size == 3 && parts[0] == pujaId && parts[1] == date) parts[2] else null
+        }.toSet()
+    }
+
+    suspend fun setSamagriTick(pujaId: String, date: String, itemId: String, ticked: Boolean) {
+        dataStore.edit { prefs ->
+            val kept = prefs[Keys.samagriTicks].orEmpty().filter { raw ->
+                val parts = raw.split("|", limit = 3)
+                parts.size == 3 && parts[1] == date
+            }.toMutableSet()
+            val key = "$pujaId|$date|$itemId"
+            if (ticked) kept.add(key) else kept.remove(key)
+            prefs[Keys.samagriTicks] = kept
+        }
+    }
+
+    private fun Preferences.toSettings(): AppSettings {
+        val rashi = this[Keys.rashi]
+        return AppSettings(
+            lang = this[Keys.lang] ?: "en",
+            textView = this[Keys.textView] ?: TextView.Iast.name,
+            stateCode = this[Keys.state] ?: "",
+            cityId = this[Keys.city] ?: "",
+            name = this[Keys.name] ?: "",
+            rashi = rashi?.takeIf { it in 1..12 },
+            nakshatra = this[Keys.nakshatra] ?: "",
+            pada = this[Keys.pada]?.takeIf { it in 1..4 },
+            findNakshatraDismissed = this[Keys.findNakshatraDismissed] ?: false,
+            gotra = this[Keys.gotra] ?: "",
+            onboarded = this[Keys.onboarded] ?: false,
+            debugToday = this[Keys.debugToday],
+        )
+    }
+
+    private object Keys {
+        val lang = stringPreferencesKey("lang")
+        val textView = stringPreferencesKey("text_view")
+        val state = stringPreferencesKey("state_code")
+        val city = stringPreferencesKey("city_id")
+        val name = stringPreferencesKey("name")
+        val rashi = intPreferencesKey("rashi")
+        val nakshatra = stringPreferencesKey("nakshatra")
+        val pada = intPreferencesKey("pada")
+        val findNakshatraDismissed = booleanPreferencesKey("find_nakshatra_dismissed")
+        val gotra = stringPreferencesKey("gotra")
+        val onboarded = booleanPreferencesKey("onboarded")
+        val debugToday = stringPreferencesKey("debug_today")
+        val samagriTicks = stringSetPreferencesKey("samagri_ticks")
+        val storyAudience = stringSetPreferencesKey("story_audience")
+        val sankalpamTab = stringPreferencesKey("sankalpam_tab")
+    }
+
+    companion object {
+        const val AUDIENCE_LITTLE = "little"
+        const val AUDIENCE_OLDER = "older"
+    }
+}
