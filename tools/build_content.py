@@ -613,39 +613,141 @@ def load_observances(master):
     return out
 
 
-def load_stories():
+def _audio_ms(path):
+    try:
+        out = subprocess.run(["afinfo", path], capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    match = re.search(r"estimated duration:\s+([0-9.]+)", out.stdout)
+    return int(float(match.group(1)) * 1000) if match else None
+
+
+def _narration_clip(story_id, name, expected, where):
+    """Read one narration file. Returns the clip, or None when the file is absent."""
+    base = os.path.join(C, "audio", "stories", story_id)
+    audio = os.path.join(base, f"{name}.m4a")
+    timing = os.path.join(base, f"{name}.json")
+    if not (os.path.exists(audio) and os.path.exists(timing)):
+        return None
+    try:
+        data = json.load(open(timing, encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        R.err(where, f"{name}.json: {e}")
+        return None
+    sentences = data.get("sentences") if isinstance(data, dict) else None
+    if not isinstance(sentences, list) or not sentences:
+        R.err(where, f"{name}.json has no sentences")
+        return None
+    last = -1
+    joined = []
+    for row in sentences:
+        if not isinstance(row, dict) or not {"start_ms", "end_ms", "text"} <= set(row):
+            R.err(where, f"{name}.json sentence needs start_ms, end_ms and text")
+            return None
+        start, end = int(row["start_ms"]), int(row["end_ms"])
+        if start < last or end <= start:
+            R.err(where, f"{name}.json sentence times must rise and stay inside the line")
+            return None
+        last = start
+        joined.append(str(row["text"]))
+    length = _audio_ms(audio)
+    if length is None:
+        R.warn(where, f"could not read the length of {name}.m4a")
+    elif last_end(sentences) > length + 80:
+        R.err(where, f"{name}.json ends after the audio")
+    if re.sub(r"\s+", "", "".join(joined)) != re.sub(r"\s+", "", expected or ""):
+        R.err(where, f"{name}.json text does not match the story line")
+    return {"file": f"audio/stories/{story_id}/{name}.m4a",
+            "sentences": [{"start_ms": int(s["start_ms"]), "end_ms": int(s["end_ms"]), "text": str(s["text"])}
+                          for s in sentences]}
+
+
+def last_end(sentences):
+    return max(int(s["end_ms"]) for s in sentences)
+
+
+def load_stories(release=False):
     out = []
     for path in sorted(glob.glob(f"{C}/stories/*/*.md")):
         w = rel(path)
         fm, root = parse(path)
         st = check_status(fm, w, reviewed_needed=True)
         check_id("story", fm.get("id"), w)
+        story_id = fm["id"]
         beats = []
         for b in root.children:
             if not b.title.startswith("beat"):
                 continue
             k = b.keys(w)
-            short, more = b.child("short"), b.child("more")
             where = f"{w} {b.title}"
-            s_l = localized(short.langs() if short else None, where + " short", st)
-            m_l = localized(more.langs() if more else None, where + " more", st, required=False) if more else None
-            for l, txt in (s_l or {}).items():
-                if l != "te" and len(txt.split()) > 20:
-                    R.warn(where, f"short ({l}) is {len(txt.split())} words; keep ≤ 20")
-            for l, txt in (m_l or {}).items():
-                if l != "te" and len(txt.split()) > 60:
-                    R.warn(where, f"more ({l}) is {len(txt.split())} words; keep ≤ 60")
+            text = localized(b.langs(), where, st)
+            if not text or any(not text.get(l) for l in LANGS):
+                R.err(where, "every beat needs te, hi and en")
             touch = k.get("touch")
             if touch and touch.get("effect") not in TOUCH_EFFECTS:
                 R.err(where, f"touch.effect must be one of {sorted(TOUCH_EFFECTS)}")
-            beats.append({"n": len(beats) + 1, "image": k.get("image"), "touch": touch, "short": s_l, "more": m_l})
+            sound = (touch or {}).get("sound")
+            if sound and not os.path.exists(os.path.join(C, "sfx", f"{sound}.m4a")):
+                R.err(where, f"touch sound missing: {sound}")
+            beats.append({"n": len(beats) + 1, "image": k.get("image"), "touch": touch,
+                          "text": text, "music_low": k.get("music") == "low", "narration": {}})
         if not 4 <= len(beats) <= 8:
             R.err(w, f"stories need 4–8 beats, has {len(beats)}")
-        out.append({"id": fm["id"], "deity": fm.get("deity"), "title": localized(fm.get("title"), f"{w} title", st),
+        music = fm.get("music")
+        music_file = music_low_file = None
+        if music:
+            folder = os.path.join(C, "music")
+            full, low = os.path.join(folder, f"{music}.m4a"), os.path.join(folder, f"{music}.low.m4a")
+            licence = os.path.exists(os.path.join(folder, f"{music}.licence.txt")) or os.path.exists(
+                os.path.join(folder, "placeholder.licence.txt"))
+            if not (os.path.exists(full) and os.path.exists(low) and licence):
+                R.err(w, f"music {music} needs the file, its .low version and a licence")
+            else:
+                music_file, music_low_file = f"music/{music}.m4a", f"music/{music}.low.m4a"
+        title = localized(fm.get("title"), f"{w} title", st) or {}
+        title_narration = {}
+        missing = []
+        wants_narration = str(fm.get("narration", "")).lower() in ("yes", "true")
+        if wants_narration:
+            for lang in LANGS:
+                title_clip = _narration_clip(story_id, f"title.{lang}", title.get(lang, ""), f"{w} title {lang}")
+                if title_clip:
+                    title_narration[lang] = title_clip
+                else:
+                    missing.append(lang)
+                for beat in beats:
+                    clip = _narration_clip(story_id, f"b{beat['n']}.{lang}", (beat["text"] or {}).get(lang, ""),
+                                           f"{w} beat {beat['n']} {lang}")
+                    if clip:
+                        beat["narration"][lang] = clip
+                    elif lang not in missing:
+                        missing.append(lang)
+            if missing:
+                note = f"narration missing for {', '.join(missing)}"
+                ship = release and st in ("reviewed", "published")
+                (R.err if ship else R.warn)(w, note)
+        out.append({"id": story_id, "deity": fm.get("deity"), "title": title,
                     "ages": str(fm.get("ages", "4-12")), "minutes": fm.get("minutes"), "feeling": as_list(fm.get("feeling")),
                     "source": fm.get("source"), "observances": as_list(fm.get("observances")), "cover": fm.get("cover"),
-                    "status": st, "beats": beats})
+                    "status": st, "music": music, "music_file": music_file, "music_low_file": music_low_file,
+                    "title_narration": title_narration, "beats": beats})
     return out
+
+
+def copy_story_media(out_dir):
+    """Copy music, touch sounds and any narration that is already on disk."""
+    for folder in ("music", "sfx"):
+        src = os.path.join(C, folder)
+        if not os.path.isdir(src):
+            continue
+        dst = os.path.join(out_dir, folder)
+        os.makedirs(dst, exist_ok=True)
+        for name in os.listdir(src):
+            if name.endswith((".m4a", ".mp3", ".txt", ".md")):
+                shutil.copy(os.path.join(src, name), os.path.join(dst, name))
+    src = os.path.join(C, "audio", "stories")
+    if os.path.isdir(src):
+        shutil.copytree(src, os.path.join(out_dir, "audio", "stories"), dirs_exist_ok=True)
 
 
 def load_rashi():
@@ -968,7 +1070,7 @@ def main():
         images = load_images()
         data = {"master": master, "deities": load_deities(), "mantras": load_mantras(), "texts": load_texts(),
                 "pujas": load_pujas(), "naivedyam": load_naivedyam(), "samagri": load_samagri(),
-                "observances": load_observances(master), "stories": load_stories(), "rashi": load_rashi()}
+                "observances": load_observances(master), "stories": load_stories(args.release), "rashi": load_rashi()}
     except ContentError as e:
         R.err("parse", str(e))
         R.print()
@@ -1043,6 +1145,7 @@ def main():
                 continue
             os.makedirs(f"{out_dir}/audio", exist_ok=True)
             shutil.copy(audio, f"{out_dir}/audio/")
+    copy_story_media(out_dir)
 
     files = {}
     for path in sorted(glob.glob(f"{out_dir}/**/*", recursive=True)):

@@ -218,12 +218,29 @@ data class Chantable(
 @Serializable data class RashiContent(val status: Status, val profiles: Map<String, Localized?> = emptyMap(), val gochara: List<GocharaNote> = emptyList())
 
 // ---------- stories ----------
-@Serializable data class Touch(val target: String, val effect: String)   // glow | wiggle | hide | appear | bounce
-@Serializable data class Beat(val n: Int, val image: String? = null, val touch: Touch? = null, val short: Localized? = null, val more: Localized? = null)
+@Serializable data class SentenceTime(
+    @SerialName("start_ms") val startMs: Int,
+    @SerialName("end_ms") val endMs: Int,
+    val text: String,
+)
+@Serializable data class NarrationClip(val file: String, val sentences: List<SentenceTime> = emptyList())
+@Serializable data class Touch(val target: String, val effect: String, val sound: String? = null)
+@Serializable data class Beat(
+    val n: Int,
+    val image: String? = null,
+    val touch: Touch? = null,
+    val text: Localized? = null,
+    @SerialName("music_low") val musicLow: Boolean = false,
+    val narration: Map<String, NarrationClip> = emptyMap(),
+)
 @Serializable data class Story(
     val id: String, val deity: String, val title: Localized? = null, val ages: String, val minutes: Int? = null,
     val feeling: List<String> = emptyList(), val source: String? = null, val observances: List<String> = emptyList(),
-    val cover: String? = null, val status: Status, val beats: List<Beat>,
+    val cover: String? = null, val status: Status, val music: String? = null,
+    @SerialName("music_file") val musicFile: String? = null,
+    @SerialName("music_low_file") val musicLowFile: String? = null,
+    @SerialName("title_narration") val titleNarration: Map<String, NarrationClip> = emptyMap(),
+    val beats: List<Beat>,
 )
 @Serializable data class StorySummary(
     val id: String, val deity: String, val title: Localized? = null, val ages: String, val minutes: Int? = null,

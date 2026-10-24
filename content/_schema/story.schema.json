@@ -68,6 +68,30 @@
     "retired"
    ]
   },
+  "music": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "music_file": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "music_low_file": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
+  "title_narration": {
+   "type": "object",
+   "additionalProperties": {
+    "$ref": "#/$defs/Clip"
+   }
+  },
   "beats": {
    "type": "array",
    "minItems": 4,
@@ -77,7 +101,9 @@
     "required": [
      "n",
      "image",
-     "short"
+     "text",
+     "music_low",
+     "narration"
     ],
     "properties": {
      "n": {
@@ -112,13 +138,16 @@
            "appear",
            "bounce"
           ]
+         },
+         "sound": {
+          "type": "string"
          }
         },
         "additionalProperties": false
        }
       ]
      },
-     "short": {
+     "text": {
       "anyOf": [
        {
         "$ref": "#/$defs/L"
@@ -128,15 +157,14 @@
        }
       ]
      },
-     "more": {
-      "anyOf": [
-       {
-        "$ref": "#/$defs/L"
-       },
-       {
-        "type": "null"
-       }
-      ]
+     "music_low": {
+      "type": "boolean"
+     },
+     "narration": {
+      "type": "object",
+      "additionalProperties": {
+       "$ref": "#/$defs/Clip"
+      }
      }
     },
     "additionalProperties": false
@@ -159,6 +187,42 @@
     },
     "en": {
      "type": "string"
+    }
+   },
+   "additionalProperties": false
+  },
+  "Clip": {
+   "type": "object",
+   "required": [
+    "file",
+    "sentences"
+   ],
+   "properties": {
+    "file": {
+     "type": "string"
+    },
+    "sentences": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": [
+       "start_ms",
+       "end_ms",
+       "text"
+      ],
+      "properties": {
+       "start_ms": {
+        "type": "integer"
+       },
+       "end_ms": {
+        "type": "integer"
+       },
+       "text": {
+        "type": "string"
+       }
+      },
+      "additionalProperties": false
+     }
     }
    },
    "additionalProperties": false

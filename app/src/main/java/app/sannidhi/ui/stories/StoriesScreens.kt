@@ -41,10 +41,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,12 +59,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -75,6 +83,7 @@ import app.sannidhi.content.Status
 import app.sannidhi.content.Story
 import app.sannidhi.content.StorySummary
 import app.sannidhi.settings.AppSettings
+import app.sannidhi.settings.AppSettingsStore
 import app.sannidhi.ui.common.ImageOrFallback
 import app.sannidhi.ui.common.ModuleKind
 import app.sannidhi.ui.common.TopBar
@@ -83,7 +92,6 @@ import app.sannidhi.ui.puja.deityEnglishName
 import app.sannidhi.ui.puja.deityScriptName
 import app.sannidhi.ui.puja.matchesQuery
 import app.sannidhi.ui.puja.searchParts
-import app.sannidhi.ui.theme.CormorantFamily
 import app.sannidhi.ui.theme.Gold
 import app.sannidhi.ui.theme.Peacock
 import app.sannidhi.ui.theme.Ink
@@ -94,7 +102,12 @@ import app.sannidhi.ui.theme.Maroon
 import app.sannidhi.ui.theme.NotoSerifDevanagariFamily
 import app.sannidhi.ui.theme.NotoSerifTeluguFamily
 import app.sannidhi.ui.theme.TintStories
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 private data class TodayStory(val story: StorySummary, val observanceTitle: String)
@@ -220,6 +233,7 @@ fun DeityStoriesScreen(
 fun StoryPlayerScreen(
     storyId: String,
     settings: AppSettings,
+    store: AppSettingsStore,
     repository: ContentRepository,
     onBack: () -> Unit,
     onHome: () -> Unit,
@@ -228,15 +242,18 @@ fun StoryPlayerScreen(
 ) {
     var story by remember { mutableStateOf<Story?>(null) }
     var symbolId by remember { mutableStateOf<String?>(null) }
+    var deityName by remember { mutableStateOf("") }
     var pujaId by remember { mutableStateOf<String?>(null) }
     var started by remember(storyId) { mutableStateOf(false) }
     var langCode by remember(storyId) { mutableStateOf(settings.lang) }
-    LaunchedEffect(storyId) {
+    val scope = rememberCoroutineScope()
+    LaunchedEffect(storyId, langCode) {
         val loaded = repository.story(storyId)
         story = loaded
         if (loaded != null) {
             val deity = repository.deity(loaded.deity)
             symbolId = deity?.symbols?.firstOrNull()?.image
+            deityName = deity?.let { deityScriptName(it, langOf(langCode)) } ?: loaded.deity
             val observanceId = loaded.observances.firstOrNull()
             pujaId = observanceId?.let { repository.observance(it)?.links?.get("pujas")?.firstOrNull() }
         }
@@ -271,6 +288,11 @@ fun StoryPlayerScreen(
                 lang = langOf(langCode),
                 symbolId = symbolId,
                 repository = repository,
+                readToMe = settings.readToMe && telling.hasNarration(langCode),
+                showReadToMe = telling.hasNarration(langCode),
+                music = settings.storyMusic,
+                onReadToMe = { scope.launch { store.setReadToMe(it) } },
+                onMusic = { scope.launch { store.setStoryMusic(it) } },
                 onBegin = { started = true },
             )
         } else if (telling != null) {
@@ -278,7 +300,10 @@ fun StoryPlayerScreen(
                 story = telling,
                 langCode = langCode,
                 symbolId = symbolId,
+                deityName = deityName,
                 repository = repository,
+                readToMe = settings.readToMe && telling.hasNarration(langCode),
+                music = settings.storyMusic,
                 pujaId = pujaId,
                 onPuja = onPuja,
                 onBackToStories = { onBackToStories(telling.deity) },
@@ -293,6 +318,11 @@ private fun CoverPage(
     lang: Lang,
     symbolId: String?,
     repository: ContentRepository,
+    readToMe: Boolean,
+    showReadToMe: Boolean,
+    music: Boolean,
+    onReadToMe: (Boolean) -> Unit,
+    onMusic: (Boolean) -> Unit,
     onBegin: () -> Unit,
 ) {
     Column(
@@ -323,6 +353,10 @@ private fun CoverPage(
         if (source.isNotBlank()) {
             Text(source, color = InkSoft, fontStyle = androidx.compose.ui.text.font.FontStyle.Italic, style = MaterialTheme.typography.bodyLarge)
         }
+        if (showReadToMe) {
+            SwitchRow(stringResource(R.string.read_to_me), readToMe, onReadToMe)
+        }
+        SwitchRow(stringResource(R.string.story_music), music, onMusic)
         ChoiceButton(stringResource(R.string.begin_action), onBegin)
     }
 }
@@ -332,7 +366,10 @@ private fun BeatPlayer(
     story: Story,
     langCode: String,
     symbolId: String?,
+    deityName: String,
     repository: ContentRepository,
+    readToMe: Boolean,
+    music: Boolean,
     pujaId: String?,
     onPuja: (String) -> Unit,
     onBackToStories: () -> Unit,
@@ -341,9 +378,72 @@ private fun BeatPlayer(
     val pager = rememberPagerState(pageCount = { beats.size })
     val scope = rememberCoroutineScope()
     val lang = langOf(langCode)
+    val context = LocalContext.current
+    val audio = remember(story.id) { StoryAudio(context) }
+    var sentence by remember { mutableIntStateOf(-1) }
+    var turn by remember { mutableStateOf<Job?>(null) }
+    var stage by remember(story.id, langCode) { mutableIntStateOf(0) }
     val hinted = remember(story.id) {
         mutableStateMapOf<Int, Boolean>().apply {
             beats.forEach { beat -> if (beat.touch != null) put(beat.n, true) }
+        }
+    }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(audio, lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) audio.hold()
+        }
+        lifecycle.addObserver(observer)
+        onDispose {
+            lifecycle.removeObserver(observer)
+            audio.release()
+        }
+    }
+    LaunchedEffect(story.id) {
+        audio.prepareBed(story.musicFile, story.musicLowFile)
+    }
+    LaunchedEffect(readToMe, music) { audio.switches(readToMe, music) }
+    LaunchedEffect(pager.currentPage, langCode, readToMe, stage) {
+        turn?.cancel()
+        val page = pager.currentPage
+        val beat = beats[page]
+        sentence = -1
+        val title = page == 0 && stage == 0 && readToMe && story.titleNarration[langCode] != null
+        if (title) {
+            audio.playTitle(story.titleNarration[langCode])
+            audio.onNarrationFinished = { stage = 1 }
+            return@LaunchedEffect
+        }
+        if (stage == 0) {
+            stage = 1
+            return@LaunchedEffect
+        }
+        val clip = beat.narration[langCode]
+        audio.playBeat(clip, beat.musicLow)
+        audio.onNarrationFinished = {
+            turn = scope.launch {
+                if (page == beats.lastIndex) {
+                    audio.fadeOutBed()
+                    return@launch
+                }
+                delay(1500)
+                if (pager.currentPage == page) pager.animateScrollToPage(page + 1)
+            }
+        }
+        if (!readToMe) {
+            if (page == beats.lastIndex) {
+                turn = scope.launch {
+                    delay(3000)
+                    if (pager.currentPage == page) audio.fadeOutBed()
+                }
+            }
+            return@LaunchedEffect
+        }
+        val times = clip?.sentences.orEmpty()
+        while (true) {
+            val at = audio.positionMs()
+            sentence = times.indexOfFirst { at in it.startMs.toLong()..it.endMs.toLong() }
+            delay(50)
         }
     }
     Column(Modifier.fillMaxSize()) {
@@ -359,7 +459,12 @@ private fun BeatPlayer(
                 symbolId = symbolId,
                 repository = repository,
                 showHint = hinted[beat.n] == true,
-                onImageTap = { hinted[beat.n] = false },
+                activeSentence = beat.narration[langCode]?.sentences?.getOrNull(sentence)?.text,
+                onImageTap = {
+                    hinted[beat.n] = false
+                    audio.playTouch(beat.touch?.sound)
+                },
+                deityName = deityName,
                 pujaId = pujaId,
                 onPuja = onPuja,
                 onBackToStories = onBackToStories,
@@ -398,6 +503,13 @@ private fun BeatPlayer(
                 if (pager.currentPage < beats.lastIndex) scope.launch { pager.animateScrollToPage(pager.currentPage + 1) }
             }
         }
+        Box(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+            ChoiceButton(
+                stringResource(if (audio.playing.value) R.string.pause_audio else R.string.play_audio),
+            ) {
+                if (audio.playing.value) audio.pause() else audio.resume()
+            }
+        }
     }
 }
 
@@ -409,7 +521,9 @@ private fun BeatPage(
     symbolId: String?,
     repository: ContentRepository,
     showHint: Boolean,
+    activeSentence: String?,
     onImageTap: () -> Unit,
+    deityName: String,
     pujaId: String?,
     onPuja: (String) -> Unit,
     onBackToStories: () -> Unit,
@@ -440,16 +554,13 @@ private fun BeatPage(
                 }
                 .padding(vertical = 8.dp),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                StoryLine(beat.short?.pick(lang).orEmpty(), lang, title = true)
-                StoryLine(beat.more?.pick(lang).orEmpty(), lang, title = false)
-            }
+            StoryLine(beat.text?.pick(lang).orEmpty(), lang, activeSentence)
         }
         if (last) {
             if (pujaId != null) {
                 ParentLink(stringResource(R.string.do_the_puja)) { onPuja(pujaId) }
             }
-            ChoiceButton(stringResource(R.string.back_to_stories), onBackToStories)
+            ChoiceButton(stringResource(R.string.more_stories_of, deityName), onBackToStories)
         }
     }
 }
@@ -653,21 +764,51 @@ private fun StoryCard(
 }
 
 @Composable
-private fun StoryLine(text: String, lang: Lang, title: Boolean) {
+private fun StoryLine(text: String, lang: Lang, active: String?) {
     if (text.isBlank()) return
     val family: FontFamily = when (lang) {
         Lang.te -> NotoSerifTeluguFamily
         Lang.hi -> NotoSerifDevanagariFamily
-        Lang.en -> if (title) CormorantFamily else InterFamily
+        Lang.en -> InterFamily
     }
-    val size = if (title) 22.sp else 18.sp
+    val shown = if (active.isNullOrBlank()) {
+        androidx.compose.ui.text.AnnotatedString(text)
+    } else {
+        val at = text.indexOf(active)
+        if (at < 0) {
+            androidx.compose.ui.text.AnnotatedString(text)
+        } else {
+            buildAnnotatedString {
+                append(text.substring(0, at))
+                withStyle(SpanStyle(color = Maroon, fontWeight = FontWeight.Bold)) {
+                    append(text.substring(at, at + active.length))
+                }
+                append(text.substring(at + active.length))
+            }
+        }
+    }
     Text(
-        text = text,
+        text = shown,
         color = Ink,
         fontFamily = family,
-        fontSize = size,
-        lineHeight = size * 1.4f,
+        fontSize = 18.sp,
+        lineHeight = 26.sp,
     )
+}
+
+private fun Story.hasNarration(lang: String): Boolean =
+    titleNarration.containsKey(lang) || beats.any { it.narration.containsKey(lang) }
+
+@Composable
+private fun SwitchRow(label: String, on: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier.fillMaxWidth().heightIn(min = 56.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(label, color = Ink, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+        Switch(checked = on, onCheckedChange = onChange)
+    }
 }
 
 @Composable

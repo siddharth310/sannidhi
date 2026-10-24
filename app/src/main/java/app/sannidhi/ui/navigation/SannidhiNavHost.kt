@@ -293,6 +293,7 @@ fun SannidhiNavHost(container: AppContainer) {
             StoryPlayerScreen(
                 storyId = route.storyId,
                 settings = current,
+                store = container.settingsStore,
                 repository = repo,
                 onBack = { nav.popBackStack() },
                 onHome = { home() },

@@ -153,6 +153,9 @@
     <string name="do_the_puja">పూజ చేయండి ›</string>
     <string name="chant_the_names">నామాలు చదవండి ›</string>
     <string name="back_to_stories">కథల వద్దకు</string>
+    <string name="read_to_me">నాకు చదవండి</string>
+    <string name="story_music">సంగీతం</string>
+    <string name="more_stories_of">%1$s కథలు ఇంకా</string>
     <string name="tap_picture">బొమ్మను తట్టండి</string>
     <string name="previous_beat">ముందు</string>
     <string name="next_beat">తర్వాత</string>

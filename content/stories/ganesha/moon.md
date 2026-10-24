@@ -10,11 +10,13 @@ observances: [obs.vinayaka-chavithi]
 cover: img.story.ganesha.moon.cover
 status: draft
 reviewed_by:
+music: mus.ganesha.moon
+narration: yes          # files in content/audio/stories/ganesha.story.moon/ (see narration/NARRATION-GUIDE.md)
 ---
+
 ## beat 1
 image: img.story.ganesha.moon.b1
-touch: { target: modaka, effect: bounce }
-### short
+touch: { target: modaka, effect: bounce, sound: sfx.bounce }
 #### te
 గణపతి పుట్టినరోజు! అందరూ ఉండ్రాళ్ళు, మోదకాలు తెచ్చారు. ఆయన బొజ్జ నిండా తిన్నాడు.
 #### hi
@@ -24,8 +26,7 @@ It was Ganesha's birthday! Everyone brought modakas, and he ate until his tummy 
 
 ## beat 2
 image: img.story.ganesha.moon.b2
-touch: { target: mouse, effect: wiggle }
-### short
+touch: { target: mouse, effect: wiggle, sound: sfx.wiggle }
 #### te
 రాత్రి ఎలుక మీద ఇంటికి బయలుదేరాడు. చిట్టి ఎలుక కష్టపడి మోసింది.
 #### hi
@@ -35,8 +36,8 @@ At night he rode home on his mouse. The little mouse puffed and pulled.
 
 ## beat 3
 image: img.story.ganesha.moon.b3
-touch: { target: modakas, effect: appear }
-### short
+touch: { target: modakas, effect: appear, sound: sfx.appear }
+music: low              # music dips to the drone; never darker
 #### te
 దారిలో పాము! ఎలుక గెంతింది. గణపతి దొర్లిపడ్డాడు, మోదకాలు అటూ ఇటూ దొర్లాయి.
 #### hi
@@ -46,26 +47,18 @@ A snake on the path! The mouse jumped. Ganesha tumbled, and the modakas rolled e
 
 ## beat 4
 image: img.story.ganesha.moon.b4
-touch: { target: moon, effect: glow }
-### short
+touch: { target: moon, effect: glow, sound: sfx.glow }
 #### te
-ఆకాశంలో చంద్రుడు పకపకా నవ్వాడు. "ఎంత బొజ్జ!" అన్నాడు.
+ఆకాశంలో చంద్రుడు పకపకా నవ్వాడు. "ఎంత బొజ్జ!" అన్నాడు. గణపతి లేచి, మోదకాలు ఏరుకుని, ప్రశాంతంగా అడిగాడు: "ఎవరైనా పడిపోతే నవ్వడం మంచిదేనా?"
 #### hi
-आसमान में चंदा मामा ज़ोर से हँस पड़े। "कितना बड़ा पेट!"
+आसमान में चंदा मामा ज़ोर से हँस पड़े। "कितना बड़ा पेट!" गणेश जी उठे, मोदक बटोरे और शांति से पूछा, "क्या किसी के गिरने पर हँसना अच्छा है?"
 #### en
-Up in the sky, the moon laughed and laughed. "What a big tummy!"
-### more
-#### te
-గణపతి లేచి, మోదకాలు ఏరుకుని, ప్రశాంతంగా అడిగాడు: "ఎవరైనా పడిపోతే నవ్వడం మంచిదేనా?"
-#### hi
-गणेश जी उठे, मोदक बटोरे और शांति से पूछा, "क्या किसी के गिरने पर हँसना अच्छा है?"
-#### en
-Ganesha stood up, gathered his modakas and asked calmly, "Is it kind to laugh when someone falls?"
+Up in the sky, the moon laughed and laughed. "What a big tummy!" Ganesha stood up, gathered his modakas and asked calmly, "Is it kind to laugh when someone falls?"
 
 ## beat 5
 image: img.story.ganesha.moon.b5
-touch: { target: moon, effect: hide }
-### short
+touch: { target: moon, effect: hide, sound: sfx.hide }
+music: low              # music dips to the drone; never darker
 #### te
 "నువ్వు దాక్కో" అన్నాడు గణపతి. చంద్రుడు మేఘాల వెనక్కి వెళ్ళిపోయాడు. ఆకాశం చీకటైపోయింది.
 #### hi
@@ -75,25 +68,16 @@ touch: { target: moon, effect: hide }
 
 ## beat 6
 image: img.story.ganesha.moon.b6
-touch: { target: moon, effect: appear }
-### short
+touch: { target: moon, effect: appear, sound: sfx.appear }
 #### te
-"క్షమించు!" అన్నాడు చంద్రుడు. గణపతి క్షమించాడు: "నువ్వు నెలంతా కొంచెం కొంచెం పెరిగి, తగ్గుతావు."
+"క్షమించు!" అన్నాడు చంద్రుడు. గణపతి క్షమించాడు: "నువ్వు నెలంతా కొంచెం కొంచెం పెరిగి, తగ్గుతావు." "నా పుట్టినరోజు రాత్రి మాత్రం నిన్ను ఎవరూ చూడరు — ఆ రోజు ఏం జరిగిందో గుర్తుగా." అందుకే చవితి నాడు చంద్రుణ్ణి చూడరు.
 #### hi
-"माफ़ करो!" चंदा मामा बोले। गणेश जी ने माफ़ कर दिया: "तुम हर महीने थोड़ा-थोड़ा बढ़ोगे और घटोगे।"
+"माफ़ करो!" चंदा मामा बोले। गणेश जी ने माफ़ कर दिया: "तुम हर महीने थोड़ा-थोड़ा बढ़ोगे और घटोगे।" "बस मेरे जन्मदिन की रात तुम्हें कोई नहीं देखेगा — उस दिन की याद में।" इसीलिए चतुर्थी को चाँद नहीं देखते।
 #### en
-"I'm sorry!" said the moon. Ganesha forgave him: "Each month you'll grow a little, then shrink a little."
-### more
-#### te
-"నా పుట్టినరోజు రాత్రి మాత్రం నిన్ను ఎవరూ చూడరు — ఆ రోజు ఏం జరిగిందో గుర్తుగా." అందుకే చవితి నాడు చంద్రుణ్ణి చూడరు.
-#### hi
-"बस मेरे जन्मदिन की रात तुम्हें कोई नहीं देखेगा — उस दिन की याद में।" इसीलिए चतुर्थी को चाँद नहीं देखते।
-#### en
-"Only on my birthday night, no one will look at you — to remember that day." That is why people don't look at the moon on Chavithi.
+"I'm sorry!" said the moon. Ganesha forgave him: "Each month you'll grow a little, then shrink a little." "Only on my birthday night, no one will look at you — to remember that day." That is why people don't look at the moon on Chavithi.
 
 ## beat 7
 image: img.story.ganesha.moon.b7
-### short
 #### te
 ఎవరైనా పడిపోతే నవ్వకు, చేయి అందించు. తప్పు చేస్తే "సారీ" చెప్పు.
 #### hi

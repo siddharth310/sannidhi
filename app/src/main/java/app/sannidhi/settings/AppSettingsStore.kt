@@ -29,6 +29,8 @@ data class AppSettings(
     val gotra: String = "",
     val onboarded: Boolean = false,
     val debugToday: String? = null,
+    val readToMe: Boolean = true,
+    val storyMusic: Boolean = true,
 ) {
     fun language(): Lang = when (lang) {
         "te" -> Lang.te
@@ -154,6 +156,14 @@ class AppSettingsStore(private val context: Context) {
         dataStore.edit { it[Keys.sankalpamTab] = tab }
     }
 
+    suspend fun setReadToMe(on: Boolean) {
+        dataStore.edit { it[Keys.readToMe] = on }
+    }
+
+    suspend fun setStoryMusic(on: Boolean) {
+        dataStore.edit { it[Keys.storyMusic] = on }
+    }
+
     suspend fun clear() {
         dataStore.edit { it.clear() }
     }
@@ -193,6 +203,8 @@ class AppSettingsStore(private val context: Context) {
             gotra = this[Keys.gotra] ?: "",
             onboarded = this[Keys.onboarded] ?: false,
             debugToday = this[Keys.debugToday],
+            readToMe = this[Keys.readToMe] ?: true,
+            storyMusic = this[Keys.storyMusic] ?: true,
         )
     }
 
@@ -212,6 +224,8 @@ class AppSettingsStore(private val context: Context) {
         val samagriTicks = stringSetPreferencesKey("samagri_ticks")
         val storyAudience = stringSetPreferencesKey("story_audience")
         val sankalpamTab = stringPreferencesKey("sankalpam_tab")
+        val readToMe = booleanPreferencesKey("read_to_me")
+        val storyMusic = booleanPreferencesKey("story_music")
     }
 
     companion object {
