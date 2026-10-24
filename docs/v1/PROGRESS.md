@@ -31,3 +31,13 @@ Checked on the emulator (debug date 14 Sep 2026, English, Hyderabad):
 | All three stories offline in te, hi, en with narration | Music and touch sounds are on the phone. Narration waits for the Sarvam files. |
 
 `python3 tools/build_content.py --check`: 0 errors, 3 warnings (narration missing for the three Ganesha stories).
+
+## M3 — Puja
+
+The offering page replaces the empty placeholder. For a Telangana profile it opens as Undrallu, then the other forms as equal cards (Kudumulu, Kozhukattai, Kadubu, Modak) with the state name and the note. Maharashtra puts Modak first by the same rule. Why, Offered on (Sankashti, Vinayaka Chavithi, and the puja), and the elder line are on the page. Search is on the screen while the emulator is online. The button is hidden when the phone has no connection; that hide was not tapped through after airplane mode.
+
+A step with a mantra and a count shows "Chant 21 times" and a tap counter. The count stays in memory for that visit and is not written as practice. Samagri still says "No durva? Akshata is fine." Clear ticks removes that puja's ticks for the day. Guided mode remembers the step for 12 hours and asks "Continue from step N?". Leaving it scrolls the puja page back to that step. The screen stays on in guided mode, as before.
+
+`python3 tools/build_content.py --check` prints every draft row. A `--release` build already drops draft deities, pujas, mantras, texts, naivedyam, observances and stories.
+
+Not walked on the device this pass: the 21-count up to 21, Clear ticks after a restart, the 12-hour continue question, and a Maharashtra profile. The Telangana offering page was opened on the emulator.

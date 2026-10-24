@@ -68,7 +68,15 @@
     <string name="meaning_expand">अर्थ ›</string>
     <string name="optional_chip">इच्छानुसार</string>
     <string name="repeat_chip">× %1$d</string>
-    <string name="instead_of">इसके बदले: %1$s</string>
+    <string name="instead_of">%1$s नहीं है? %2$s चलेगा।</string>
+    <string name="chant_times">%1$d बार जपें</string>
+    <string name="clear_ticks">निशान हटाएँ</string>
+    <string name="continue_from_step">कदम %1$d से आगे चलें?</string>
+    <string name="continue_yes">आगे चलें</string>
+    <string name="why_offering">यह नैवेद्य क्यों</string>
+    <string name="offered_on">किन दिनों</string>
+    <string name="recipes_differ">हर घर की विधि अलग है। बड़ों से पूछें, या \'%1$s\' खोजें।</string>
+    <string name="search_offering">खोजें</string>
     <string name="offer_enough">प्रेम से जो अर्पित हो, वही काफ़ी है.</string>
     <string name="edit_my_details">मेरी जानकारी बदलें</string>
     <string name="read_text">पढ़ें</string>

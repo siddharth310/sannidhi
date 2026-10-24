@@ -1056,6 +1056,11 @@ def status_report(data, images):
         w = csv.writer(f)
         w.writerow(["type", "id", "status", "needs_review / priority"])
         w.writerows(rows)
+    drafts = [r for r in rows if r[2] == "draft"]
+    if drafts:
+        print(f"\n{len(drafts)} drafts still to review:")
+        for kind, item_id, _, _ in drafts:
+            print(f"  {kind}  {item_id}")
 
 
 def main():

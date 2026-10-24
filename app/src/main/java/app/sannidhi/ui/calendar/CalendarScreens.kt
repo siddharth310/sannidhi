@@ -733,24 +733,6 @@ fun ObservanceScreen(
     }
 }
 
-@Composable
-fun NaivedyamStubScreen(
-    itemId: String,
-    settings: AppSettings,
-    repository: ContentRepository,
-    onBack: () -> Unit,
-    onHome: () -> Unit,
-) {
-    var title by remember { mutableStateOf(itemId) }
-    LaunchedEffect(itemId, settings.lang) {
-        val item = repository.naivedyamItem(itemId)
-        title = item?.regionalForms?.firstOrNull()?.name?.pick(settings.language())?.takeIf { it.isNotBlank() } ?: itemId
-    }
-    Column(Modifier.fillMaxSize().background(Ivory)) {
-        TopBar(title, onBack, onHome)
-    }
-}
-
 private fun linked(
     ids: List<String>,
     kind: Int,

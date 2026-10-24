@@ -88,7 +88,15 @@
     <string name="meaning_expand">Meaning ›</string>
     <string name="optional_chip">optional</string>
     <string name="repeat_chip">× %1$d</string>
-    <string name="instead_of">Instead: %1$s</string>
+    <string name="instead_of">No %1$s? %2$s is fine.</string>
+    <string name="chant_times">Chant %1$d times</string>
+    <string name="clear_ticks">Clear ticks</string>
+    <string name="continue_from_step">Continue from step %1$d?</string>
+    <string name="continue_yes">Continue</string>
+    <string name="why_offering">Why this offering</string>
+    <string name="offered_on">Offered on</string>
+    <string name="recipes_differ">Recipes differ in every home. Ask an elder, or search for \'%1$s\'.</string>
+    <string name="search_offering">Search</string>
     <string name="offer_enough">Whatever you offer with love is enough.</string>
     <string name="edit_my_details">Edit my details</string>
     <string name="read_text">Read</string>

@@ -68,7 +68,15 @@
     <string name="meaning_expand">అర్థం ›</string>
     <string name="optional_chip">ఐచ్ఛికం</string>
     <string name="repeat_chip">× %1$d</string>
-    <string name="instead_of">బదులుగా: %1$s</string>
+    <string name="instead_of">%1$s లేదా? %2$s సరిపోతుంది.</string>
+    <string name="chant_times">%1$d సార్లు జపించండి</string>
+    <string name="clear_ticks">గుర్తులు తీసేయండి</string>
+    <string name="continue_from_step">%1$dవ అడుగు నుండి కొనసాగించాలా?</string>
+    <string name="continue_yes">కొనసాగించు</string>
+    <string name="why_offering">ఈ నైవేద్యం ఎందుకు</string>
+    <string name="offered_on">ఏ రోజుల్లో</string>
+    <string name="recipes_differ">ప్రతి ఇంటి వంటకం వేరు. పెద్దలను అడగండి, లేదా \'%1$s\' కోసం వెతకండి.</string>
+    <string name="search_offering">వెతకండి</string>
     <string name="offer_enough">ప్రేమతో సమర్పించినది చాలు.</string>
     <string name="edit_my_details">నా వివరాలు మార్చండి</string>
     <string name="read_text">చదవండి</string>

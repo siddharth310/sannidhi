@@ -65,6 +65,8 @@ data class AppSettings(
     fun today(): LocalDate = debugToday?.let { runCatching { LocalDate.parse(it) }.getOrNull() } ?: LocalDate.now()
 }
 
+data class GuidedPlace(val index: Int, val at: Long)
+
 class AppSettingsStore(private val context: Context) {
     private val dataStore = context.settingsDataStore
 
@@ -176,6 +178,15 @@ class AppSettingsStore(private val context: Context) {
         }.toSet()
     }
 
+    suspend fun clearSamagriTicks(pujaId: String, date: String) {
+        dataStore.edit { prefs ->
+            prefs[Keys.samagriTicks] = prefs[Keys.samagriTicks].orEmpty().filter { raw ->
+                val parts = raw.split("|", limit = 3)
+                !(parts.size == 3 && parts[0] == pujaId && parts[1] == date)
+            }.toSet()
+        }
+    }
+
     suspend fun setSamagriTick(pujaId: String, date: String, itemId: String, ticked: Boolean) {
         dataStore.edit { prefs ->
             val kept = prefs[Keys.samagriTicks].orEmpty().filter { raw ->
@@ -185,6 +196,27 @@ class AppSettingsStore(private val context: Context) {
             val key = "$pujaId|$date|$itemId"
             if (ticked) kept.add(key) else kept.remove(key)
             prefs[Keys.samagriTicks] = kept
+        }
+    }
+
+    fun guidedPlace(pujaId: String): Flow<GuidedPlace?> = dataStore.data.map { prefs ->
+        prefs[Keys.guidedPlaces].orEmpty().firstNotNullOfOrNull { raw ->
+            val parts = raw.split("|")
+            if (parts.size == 3 && parts[0] == pujaId) {
+                val index = parts[1].toIntOrNull()
+                val at = parts[2].toLongOrNull()
+                if (index != null && at != null) GuidedPlace(index, at) else null
+            } else {
+                null
+            }
+        }
+    }
+
+    suspend fun setGuidedPlace(pujaId: String, index: Int) {
+        dataStore.edit { prefs ->
+            val kept = prefs[Keys.guidedPlaces].orEmpty().filter { !it.startsWith("$pujaId|") }.toMutableSet()
+            kept.add("$pujaId|$index|${System.currentTimeMillis()}")
+            prefs[Keys.guidedPlaces] = kept
         }
     }
 
@@ -226,6 +258,7 @@ class AppSettingsStore(private val context: Context) {
         val sankalpamTab = stringPreferencesKey("sankalpam_tab")
         val readToMe = booleanPreferencesKey("read_to_me")
         val storyMusic = booleanPreferencesKey("story_music")
+        val guidedPlaces = stringSetPreferencesKey("guided_places")
     }
 
     companion object {

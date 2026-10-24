@@ -17,7 +17,7 @@ import app.sannidhi.di.AppContainer
 import app.sannidhi.ui.home.HomeScreen
 import app.sannidhi.ui.calendar.CalendarHomeScreen
 import app.sannidhi.ui.calendar.FindNakshatraScreen
-import app.sannidhi.ui.calendar.NaivedyamStubScreen
+import app.sannidhi.ui.puja.NaivedyamScreen
 import app.sannidhi.ui.calendar.ObservanceScreen
 import app.sannidhi.ui.puja.GodPageScreen
 import app.sannidhi.ui.puja.GuidedPujaScreen
@@ -171,6 +171,7 @@ fun SannidhiNavHost(container: AppContainer) {
                 onHome = { home() },
                 onGuided = { nav.navigate(PujaGuidedRoute(route.pujaId)) },
                 onProfile = { nav.navigate(ProfileRoute) },
+                onNaivedyam = { nav.navigate(NaivedyamRoute(it)) },
             )
         }
         composable<PujaGuidedRoute> { entry ->
@@ -181,6 +182,7 @@ fun SannidhiNavHost(container: AppContainer) {
                 store = container.settingsStore,
                 repository = repo,
                 onClose = { nav.popBackStack() },
+                onNaivedyam = { nav.navigate(NaivedyamRoute(it)) },
             )
         }
         composable<CalendarRoute> {
@@ -209,7 +211,15 @@ fun SannidhiNavHost(container: AppContainer) {
         }
         composable<NaivedyamRoute> { entry ->
             val route = entry.toRoute<NaivedyamRoute>()
-            NaivedyamStubScreen(route.itemId, current, repo, { nav.popBackStack() }, { home() })
+            NaivedyamScreen(
+                itemId = route.itemId,
+                settings = current,
+                repository = repo,
+                onBack = { nav.popBackStack() },
+                onHome = { home() },
+                onObservance = { nav.navigate(CalendarObsRoute(it)) },
+                onPuja = { nav.navigate(PujaIdRoute(it)) },
+            )
         }
         composable<SankalpamRoute> {
             SankalpamHomeScreen(

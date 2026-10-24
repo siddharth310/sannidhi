@@ -36,6 +36,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -74,6 +76,7 @@ import app.sannidhi.content.Mantra
 import app.sannidhi.content.Master
 import app.sannidhi.content.Naivedyam
 import app.sannidhi.content.Puja
+import app.sannidhi.content.PujaStage
 import app.sannidhi.content.PujaStep
 import app.sannidhi.content.PujaSummary
 import app.sannidhi.content.SamagriItem
@@ -96,6 +99,7 @@ import app.sannidhi.ui.theme.Ivory
 import app.sannidhi.ui.theme.Maroon
 import app.sannidhi.ui.theme.Peacock
 import app.sannidhi.ui.theme.TintPuja
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -334,10 +338,13 @@ fun PujaPageScreen(
     onHome: () -> Unit,
     onGuided: () -> Unit,
     onProfile: () -> Unit,
+    onNaivedyam: (String) -> Unit,
 ) {
     var bundle by remember { mutableStateOf<PujaBundle?>(null) }
     var openMeanings by remember { mutableStateOf(setOf<String>()) }
+    var counts by remember(pujaId) { mutableStateOf(mapOf<String, Int>()) }
     val scope = rememberCoroutineScope()
+    val place by remember(pujaId) { store.guidedPlace(pujaId) }.collectAsState(initial = null)
     val listState = rememberLazyListState()
     val date = settings.today().toString()
     val ticksFlow = remember(pujaId, date) { store.samagriTicks(pujaId, date) }
@@ -347,6 +354,12 @@ fun PujaPageScreen(
         bundle = loadPuja(repository, pujaId, settings)
     }
     val loaded = bundle
+    LaunchedEffect(loaded?.puja?.id, place?.at) {
+        val saved = place ?: return@LaunchedEffect
+        val stages = loaded?.puja?.stages ?: return@LaunchedEffect
+        if (System.currentTimeMillis() - saved.at > TWELVE_HOURS) return@LaunchedEffect
+        listState.scrollToItem(stepListIndex(stages, saved.index))
+    }
     val lang = settings.language()
     val title = loaded?.puja?.title?.pick(lang) ?: pujaId
     val anchors = remember(loaded?.puja?.id, loaded?.puja?.stages?.size) {
@@ -431,16 +444,26 @@ fun PujaPageScreen(
                             script = script,
                             showChips = step.id == firstMantraStep,
                             ticks = ticks,
+                            count = counts[step.id] ?: 0,
                             meaningsOpen = openMeanings,
                             repository = repository,
                             onScript = { chosen -> scope.launch { store.setTextView(mantraStorage(chosen)) } },
                             onTick = { itemId, ticked ->
                                 scope.launch { store.setSamagriTick(pujaId, date, itemId, ticked) }
                             },
+                            onCount = {
+                                val times = step.repeat
+                                if (times != null) {
+                                    val now = counts[step.id] ?: 0
+                                    if (now < times) counts = counts + (step.id to now + 1)
+                                }
+                            },
+                            onClearTicks = { scope.launch { store.clearSamagriTicks(pujaId, date) } },
                             onMeaning = { id ->
                                 openMeanings = if (id in openMeanings) openMeanings - id else openMeanings + id
                             },
                             onProfile = onProfile,
+                            onNaivedyam = onNaivedyam,
                             guided = false,
                         )
                     }
@@ -457,6 +480,7 @@ fun GuidedPujaScreen(
     store: AppSettingsStore,
     repository: ContentRepository,
     onClose: () -> Unit,
+    onNaivedyam: (String) -> Unit,
 ) {
     var bundle by remember { mutableStateOf<PujaBundle?>(null) }
     val view = LocalView.current
@@ -475,6 +499,20 @@ fun GuidedPujaScreen(
     val script = mantraScript(settings)
     val date = settings.today().toString()
     val ticks by remember(pujaId, date) { store.samagriTicks(pujaId, date) }.collectAsState(initial = emptySet())
+    var counts by remember(pujaId) { mutableStateOf(mapOf<String, Int>()) }
+    var offer by remember(pujaId) { mutableStateOf<Int?>(null) }
+    var placeReady by remember(pujaId) { mutableStateOf(false) }
+    LaunchedEffect(pujaId) {
+        val saved = store.guidedPlace(pujaId).first()
+        if (saved != null && saved.index > 0 && System.currentTimeMillis() - saved.at < TWELVE_HOURS) {
+            offer = saved.index
+        }
+        placeReady = true
+    }
+    LaunchedEffect(pager.currentPage, offer, placeReady) {
+        if (!placeReady || offer != null) return@LaunchedEffect
+        store.setGuidedPlace(pujaId, pager.currentPage)
+    }
     Column(Modifier.fillMaxSize().background(Ivory).statusBarsPadding()) {
         val stage = pages.getOrNull(pager.currentPage)?.first ?: ""
         Row(
@@ -517,12 +555,22 @@ fun GuidedPujaScreen(
                     script = script,
                     showChips = false,
                     ticks = ticks,
+                    count = counts[step.id] ?: 0,
                     meaningsOpen = emptySet(),
                     repository = repository,
                     onScript = {},
                     onTick = { itemId, ticked -> scope.launch { store.setSamagriTick(pujaId, date, itemId, ticked) } },
+                    onCount = {
+                        val times = step.repeat
+                        if (times != null) {
+                            val now = counts[step.id] ?: 0
+                            if (now < times) counts = counts + (step.id to now + 1)
+                        }
+                    },
+                    onClearTicks = { scope.launch { store.clearSamagriTicks(pujaId, date) } },
                     onMeaning = {},
                     onProfile = {},
+                    onNaivedyam = onNaivedyam,
                     guided = true,
                 )
             }
@@ -566,6 +614,22 @@ fun GuidedPujaScreen(
                     .padding(horizontal = 8.dp),
             )
         }
+    }
+    val resume = offer
+    if (resume != null) {
+        AlertDialog(
+            onDismissRequest = { offer = null },
+            title = { Text(stringResource(R.string.continue_from_step, resume + 1)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    offer = null
+                    scope.launch { pager.scrollToPage(resume) }
+                }) { Text(stringResource(R.string.continue_yes)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { offer = null }) { Text(stringResource(R.string.start_again)) }
+            },
+        )
     }
 }
 
@@ -611,12 +675,16 @@ private fun StepCard(
     script: MantraScript,
     showChips: Boolean,
     ticks: Set<String>,
+    count: Int,
     meaningsOpen: Set<String>,
     repository: ContentRepository,
     onScript: (MantraScript) -> Unit,
     onTick: (String, Boolean) -> Unit,
+    onCount: () -> Unit,
+    onClearTicks: () -> Unit,
     onMeaning: (String) -> Unit,
     onProfile: () -> Unit,
+    onNaivedyam: (String) -> Unit,
     guided: Boolean,
 ) {
     val lang = settings.language()
@@ -642,8 +710,19 @@ private fun StepCard(
             Text(step.titleIast, color = Ink, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            step.repeat?.let { Chip(stringResource(R.string.repeat_chip, it)) }
+            val times = step.repeat
+            if (times != null && step.mantras.isNotEmpty()) {
+                Text(stringResource(R.string.chant_times, times), color = Maroon, style = MaterialTheme.typography.bodyLarge)
+            }
             if (step.optional) Chip(stringResource(R.string.optional_chip))
+        }
+        if (step.repeat != null && step.mantras.isNotEmpty()) {
+            Text(
+                stringResource(R.string.chant_of, count, step.repeat),
+                color = Ink,
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onCount).padding(vertical = 12.dp),
+            )
         }
         if (step.image != null) {
             ImageOrFallback(
@@ -697,15 +776,23 @@ private fun StepCard(
                         Text("$name · ${row.qty}", color = Ink, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                     }
                     if (instead.isNotEmpty()) {
-                        Text(stringResource(R.string.instead_of, instead.joinToString(", ")), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
+                        Text(stringResource(R.string.instead_of, name, instead.joinToString(", ")), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
                     }
                 }
+            }
+            if (step.samagri.any { it.item in ticks }) {
+                Text(
+                    stringResource(R.string.clear_ticks),
+                    color = Maroon,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onClearTicks).padding(vertical = 12.dp),
+                )
             }
             Text(stringResource(R.string.offer_enough), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
         }
         if (step.naivedyam.isNotEmpty()) {
             step.naivedyam.mapNotNull { bundle.naivedyam[it] }.forEach { offering ->
-                NaivedyamCard(offering, settings, symbol, repository)
+                NaivedyamCard(offering, settings, symbol, repository) { onNaivedyam(offering.id) }
             }
         }
         val mantraIds = step.mantras
@@ -766,11 +853,12 @@ private fun NaivedyamCard(
     settings: AppSettings,
     symbol: String?,
     repository: ContentRepository,
+    onOpen: () -> Unit,
 ) {
     val lang = settings.language()
     val forms = offering.regionalForms.sortedBy { form -> if (settings.stateCode in form.region) 0 else 1 }
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Ivory).padding(12.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp)).background(Ivory).clickable(onClick = onOpen).padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         ImageOrFallback(
@@ -971,4 +1059,18 @@ private suspend fun loadPuja(repository: ContentRepository, pujaId: String, sett
         naivedyam = naivedyam,
         textTitles = textTitles,
     )
+}
+
+private const val TWELVE_HOURS = 12L * 60L * 60L * 1000L
+
+private fun stepListIndex(stages: List<PujaStage>, stepIndex: Int): Int {
+    var listIndex = 2
+    var seen = 0
+    for (stage in stages) {
+        listIndex += 1
+        if (seen + stage.steps.size > stepIndex) return listIndex + (stepIndex - seen)
+        listIndex += stage.steps.size
+        seen += stage.steps.size
+    }
+    return 2
 }
