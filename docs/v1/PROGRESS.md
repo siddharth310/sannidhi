@@ -103,3 +103,9 @@ Still waiting for audio: the title and sentence lighting, the 1.5 second advance
 The patra step counts to 21 of 21. Leaving the puja and opening it again shows 0 of 21, and the japam totals stay 112, 7 and 5. A durva tick is still there after a force-stop. Clear ticks removes it. The durva line reads “No Durva grass? Akshata is fine.” Pre, During and Post jump to those parts. Guided mode is one step at a time, and opening it again asks “Continue from step 24?”.
 
 Telangana’s offering page leads with Undrallu. Maharashtra’s leads with Modak. All five forms are listed, with Why this offering, the days it is offered, and the elder line. Search is on the page while the phone is online. In airplane mode the page still opens and Search is hidden. The profile is Telangana, Hyderabad, English again. A release build was not made this pass, so the draft-exclusion row is still open. Audio rows stay waiting.
+
+## M4 device pass
+
+The debug date was set to the three acceptance days and put back to 14 Sep 2026. Home showed Thu 19 Mar · kṛṣṇa amāvāsyā with no observance, Vinayaka Chavithi on 14 Sep, and Sun 11 Oct · śukla pratipat with no observance. Those match `tests/calendar-export/hyderabad-2026.csv`. Vijayawada’s CSV is beside it. The calendar month still opens in airplane mode. No override was added.
+
+Moving the debug date to 11 Oct closed the 11-day aṣṭottaram, because that day is past its last day. That one row was set back to active. Its counts were left as they were. The comparison with the TTD panchāṅgam is still open.
