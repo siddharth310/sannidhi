@@ -189,11 +189,12 @@ def load_images():
         check_id("img", r["id"], where)
         if r["id"] in out:
             R.err(where, "duplicate image id")
-        src = os.path.join(C, "images", r["file"]) if r["file"] else None
-        exists = bool(src and os.path.exists(src))
-        if r["status"] in ("supplied", "approved") and not exists:
-            R.err(where, f"marked {r['status']} but file missing: {r['file']}")
-        out[r["id"]] = {"kind": r["kind"], "src": src if exists else None, "status": r["status"] if exists else "missing",
+        named = (r.get("file") or "").strip()
+        src = os.path.join(C, "images", named) if named else None
+        if named and not os.path.exists(src):
+            R.err(where, f"image cannot be produced; file missing: {named}")
+            src = None
+        out[r["id"]] = {"kind": r["kind"], "src": src, "status": r["status"] if src else "missing",
                         "used_by": r["used_by"], "priority": r["priority"],
                         "alt": {l: r.get(f"alt_{l}", "") for l in LANGS if r.get(f"alt_{l}")}}
     return out
@@ -867,6 +868,19 @@ def rasterize_svg(src, tmp, size):
             raise RuntimeError(f"{cairo_error}; resvg: {detail}") from cairo_error
 
 
+def prove_images(images):
+    """Turn every supplied drawing into a picture. A failure is an error, never a skipped file."""
+    import tempfile
+    tmp = tempfile.mkdtemp(prefix="sannidhi-images-")
+    try:
+        built = build_images(images, tmp)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    for iid, im in images.items():
+        if im["src"] and not (built.get(iid) or {}).get("file"):
+            R.err(f"images/{iid}", "image cannot be produced")
+
+
 def build_images(images, out_dir):
     out = {}
     for iid, im in images.items():
@@ -965,6 +979,7 @@ def main():
                 R.warn(o["id"], f"links puja {pid} whose observance is {p['observance']}")
 
     if args.check:
+        prove_images(images)
         status_report(data, images)
         R.print()
         sys.exit(1 if R.errors else 0)

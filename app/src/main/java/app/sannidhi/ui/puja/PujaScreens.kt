@@ -81,6 +81,7 @@ import app.sannidhi.content.Status
 import app.sannidhi.settings.AppSettings
 import app.sannidhi.settings.AppSettingsStore
 import app.sannidhi.ui.common.ComingUpCard
+import app.sannidhi.ui.common.ModuleKind
 import app.sannidhi.ui.common.FloatingPills
 import app.sannidhi.ui.common.ImageOrFallback
 import app.sannidhi.ui.common.TopBar
@@ -245,7 +246,7 @@ fun GodPageScreen(
                 repository = repository,
                 modifier = Modifier.fillMaxWidth().height(380.dp),
                 corner = 0.dp,
-                missingLabel = if (symbolId == null) stringResource(R.string.art_coming) else null,
+                module = ModuleKind.Puja,
             )
             Column(
                 Modifier
@@ -275,12 +276,13 @@ fun GodPageScreen(
                         ImageOrFallback(
                             imageId = item.image,
                             fallbackSymbolId = item.image,
-                            tint = Ivory,
+                            tint = TintPuja,
                             repository = repository,
                             modifier = Modifier.size(56.dp).clickable { symbol = item },
                             corner = 28.dp,
                             containSymbol = true,
                             symbolFraction = 0.72f,
+                            module = ModuleKind.Puja,
                         )
                     }
                 }
@@ -647,9 +649,10 @@ private fun StepCard(
             ImageOrFallback(
                 imageId = step.image,
                 fallbackSymbolId = symbol,
-                tint = Ivory,
+                tint = TintPuja,
                 repository = repository,
                 modifier = Modifier.fillMaxWidth().height(180.dp),
+                module = ModuleKind.Puja,
             )
         }
         step.body?.pick(lang)?.takeIf { it.isNotBlank() }?.let { body ->
@@ -776,6 +779,7 @@ private fun NaivedyamCard(
             tint = TintPuja,
             repository = repository,
             modifier = Modifier.fillMaxWidth().height(120.dp),
+            module = ModuleKind.Puja,
         )
         offering.why?.pick(lang)?.takeIf { it.isNotBlank() }?.let {
             Text(it, color = Ink, style = MaterialTheme.typography.bodyLarge)
@@ -881,11 +885,11 @@ fun GodCard(
         ImageOrFallback(
             imageId = deity.images.card,
             fallbackSymbolId = symbolId,
-            tint = Ivory,
+            tint = TintPuja,
             repository = repository,
             modifier = Modifier.fillMaxWidth().height(140.dp),
             corner = 0.dp,
-            missingLabel = if (symbolId == null) stringResource(R.string.art_coming) else null,
+            module = ModuleKind.Puja,
         )
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(deityScriptName(deity, lang), color = Ink, style = MaterialTheme.typography.headlineMedium)

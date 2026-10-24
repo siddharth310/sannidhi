@@ -646,7 +646,7 @@ fun ObservanceScreen(
                 repository = repository,
                 modifier = Modifier.fillMaxWidth().height(260.dp),
                 corner = 0.dp,
-                missingLabel = if (symbol == null && image == null) stringResource(R.string.art_coming) else null,
+                module = ModuleKind.Calendar,
             )
             Column(
                 Modifier

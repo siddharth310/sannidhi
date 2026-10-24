@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -198,6 +199,7 @@ fun ComingUpCard(
                 repository = repository,
                 modifier = Modifier.size(88.dp),
                 corner = 16.dp,
+                module = ModuleKind.Calendar,
             )
         }
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -248,14 +250,15 @@ fun ImageOrFallback(
     corner: Dp = 16.dp,
     containSymbol: Boolean = false,
     symbolFraction: Float = 0.46f,
-    missingLabel: String? = null,
+    module: ModuleKind? = null,
 ) {
     val context = LocalContext.current
     var bitmap by remember(imageId, fallbackSymbolId) { mutableStateOf<android.graphics.Bitmap?>(null) }
     var contained by remember(imageId, fallbackSymbolId, containSymbol) { mutableStateOf(containSymbol) }
     LaunchedEffect(imageId, fallbackSymbolId, containSymbol) {
         val primary = repository.imagePath(imageId)
-        val path = primary ?: repository.imagePath(fallbackSymbolId)
+        val symbol = repository.imagePath(fallbackSymbolId)
+        val path = primary ?: symbol
         contained = containSymbol || primary == null
         bitmap = path?.let { asset ->
             runCatching { context.assets.open(asset).use { BitmapFactory.decodeStream(it) } }.getOrNull()
@@ -283,23 +286,8 @@ fun ImageOrFallback(
                 modifier = Modifier.matchParentSize(),
                 contentScale = ContentScale.Crop,
             )
-        } else if (!missingLabel.isNullOrBlank()) {
-            Text(
-                text = missingLabel,
-                color = Maroon,
-                fontFamily = CormorantFamily,
-                fontSize = 18.sp,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(12.dp),
-            )
-        } else {
-            val mark = (fallbackSymbolId ?: imageId).orEmpty().substringAfterLast('.').take(1).uppercase()
-            Text(
-                text = mark.ifBlank { "•" },
-                color = Maroon,
-                fontFamily = CormorantFamily,
-                fontSize = 32.sp,
-            )
+        } else if (module != null) {
+            ModuleGlyph(module, Modifier.fillMaxSize(symbolFraction))
         }
     }
 }

@@ -76,6 +76,7 @@ import app.sannidhi.content.Story
 import app.sannidhi.content.StorySummary
 import app.sannidhi.settings.AppSettings
 import app.sannidhi.ui.common.ImageOrFallback
+import app.sannidhi.ui.common.ModuleKind
 import app.sannidhi.ui.common.TopBar
 import app.sannidhi.ui.puja.GodCard
 import app.sannidhi.ui.puja.deityEnglishName
@@ -305,6 +306,7 @@ private fun CoverPage(
             repository = repository,
             modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f),
             corner = 24.dp,
+            module = ModuleKind.Stories,
         )
         Text(story.title?.pick(lang).orEmpty(), color = Ink, style = MaterialTheme.typography.displayLarge)
         val minutes = story.minutes
@@ -562,6 +564,7 @@ private fun TouchImage(
             fallbackSymbolId = symbolId,
             tint = TintStories,
             repository = repository,
+            module = ModuleKind.Stories,
             modifier = Modifier
                 .matchParentSize()
                 .graphicsLayer {
@@ -634,6 +637,7 @@ private fun StoryCard(
             repository = repository,
             modifier = Modifier.fillMaxWidth().aspectRatio(4f / 3f),
             corner = 0.dp,
+            module = ModuleKind.Stories,
         )
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             if (!kicker.isNullOrBlank()) {
