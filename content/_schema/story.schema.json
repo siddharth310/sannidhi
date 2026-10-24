@@ -92,10 +92,19 @@
     "$ref": "#/$defs/Clip"
    }
   },
+  "order": {
+   "type": "integer"
+  },
+  "puja_katha": {
+   "type": [
+    "string",
+    "null"
+   ]
+  },
   "beats": {
    "type": "array",
    "minItems": 4,
-   "maxItems": 8,
+   "maxItems": 12,
    "items": {
     "type": "object",
     "required": [

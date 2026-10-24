@@ -31,6 +31,7 @@ data class AppSettings(
     val debugToday: String? = null,
     val readToMe: Boolean = true,
     val storyMusic: Boolean = true,
+    val debugStorySearch: Boolean = false,
 ) {
     fun language(): Lang = when (lang) {
         "te" -> Lang.te
@@ -66,6 +67,8 @@ data class AppSettings(
 }
 
 data class GuidedPlace(val index: Int, val at: Long)
+
+data class KathaPlace(val part: Int, val beat: Int, val at: Long)
 
 class AppSettingsStore(private val context: Context) {
     private val dataStore = context.settingsDataStore
@@ -166,6 +169,28 @@ class AppSettingsStore(private val context: Context) {
         dataStore.edit { it[Keys.storyMusic] = on }
     }
 
+    suspend fun setDebugStorySearch(on: Boolean) {
+        dataStore.edit { it[Keys.debugStorySearch] = on }
+    }
+
+    fun kathaPlace(): Flow<KathaPlace?> = dataStore.data.map { prefs ->
+        val raw = prefs[Keys.kathaPlace] ?: return@map null
+        val parts = raw.split("|")
+        if (parts.size != 3) return@map null
+        val part = parts[0].toIntOrNull()
+        val beat = parts[1].toIntOrNull()
+        val at = parts[2].toLongOrNull()
+        if (part == null || beat == null || at == null) null else KathaPlace(part, beat, at)
+    }
+
+    suspend fun setKathaPlace(part: Int, beat: Int) {
+        dataStore.edit { it[Keys.kathaPlace] = "$part|$beat|${System.currentTimeMillis()}" }
+    }
+
+    suspend fun clearKathaPlace() {
+        dataStore.edit { it.remove(Keys.kathaPlace) }
+    }
+
     suspend fun clear() {
         dataStore.edit { it.clear() }
     }
@@ -237,6 +262,7 @@ class AppSettingsStore(private val context: Context) {
             debugToday = this[Keys.debugToday],
             readToMe = this[Keys.readToMe] ?: true,
             storyMusic = this[Keys.storyMusic] ?: true,
+            debugStorySearch = this[Keys.debugStorySearch] ?: false,
         )
     }
 
@@ -258,6 +284,8 @@ class AppSettingsStore(private val context: Context) {
         val sankalpamTab = stringPreferencesKey("sankalpam_tab")
         val readToMe = booleanPreferencesKey("read_to_me")
         val storyMusic = booleanPreferencesKey("story_music")
+        val debugStorySearch = booleanPreferencesKey("debug_story_search")
+        val kathaPlace = stringPreferencesKey("katha_place")
         val guidedPlaces = stringSetPreferencesKey("guided_places")
     }
 

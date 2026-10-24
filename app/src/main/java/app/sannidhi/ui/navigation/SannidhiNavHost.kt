@@ -60,7 +60,13 @@ import kotlinx.serialization.Serializable
 @Serializable data class SankalpamDoneRoute(val id: String)
 @Serializable data object StoriesRoute
 @Serializable data class StoriesGodRoute(val deity: String)
-@Serializable data class StoryRoute(val storyId: String)
+@Serializable data class StoryRoute(
+    val storyId: String,
+    val series: String = "",
+    val part: Int = 0,
+    val beat: Int = 0,
+    val origin: String = "",
+)
 
 @Composable
 fun SannidhiNavHost(container: AppContainer) {
@@ -190,6 +196,7 @@ fun SannidhiNavHost(container: AppContainer) {
                 onGuided = { nav.navigate(PujaGuidedRoute(route.pujaId)) },
                 onProfile = { nav.navigate(ProfileRoute) },
                 onNaivedyam = { nav.navigate(NaivedyamRoute(it)) },
+                onKatha = { ids, part, beat -> openKatha(nav, ids, part, beat, "puja") },
             )
         }
         composable<PujaGuidedRoute> { entry ->
@@ -201,6 +208,7 @@ fun SannidhiNavHost(container: AppContainer) {
                 repository = repo,
                 onClose = { nav.popBackStack() },
                 onNaivedyam = { nav.navigate(NaivedyamRoute(it)) },
+                onKatha = { ids, part, beat -> openKatha(nav, ids, part, beat, "puja") },
             )
         }
         composable<CalendarRoute> {
@@ -219,12 +227,14 @@ fun SannidhiNavHost(container: AppContainer) {
             ObservanceScreen(
                 obsId = route.obsId,
                 settings = current,
+                store = container.settingsStore,
                 repository = repo,
                 onBack = { nav.popBackStack() },
                 onHome = { home() },
                 onPuja = { pujaId -> nav.navigate(PujaIdRoute(pujaId)) },
                 onStory = { storyId -> nav.navigate(StoryRoute(storyId)) },
                 onNaivedyam = { itemId -> nav.navigate(NaivedyamRoute(itemId)) },
+                onKatha = { ids, part, beat -> openKatha(nav, ids, part, beat, "observance") },
             )
         }
         composable<NaivedyamRoute> { entry ->
@@ -298,11 +308,12 @@ fun SannidhiNavHost(container: AppContainer) {
         composable<StoriesRoute> {
             StoriesHomeScreen(
                 settings = current,
+                store = container.settingsStore,
                 repository = repo,
                 onBack = { nav.popBackStack() },
                 onHome = { home() },
                 onDeity = { nav.navigate(StoriesGodRoute(it)) },
-                onStory = { nav.navigate(StoryRoute(it)) },
+                onKatha = { ids, part, beat -> openKatha(nav, ids, part, beat, "") },
             )
         }
         composable<StoriesGodRoute> { entry ->
@@ -331,7 +342,23 @@ fun SannidhiNavHost(container: AppContainer) {
                         popUpTo(route) { inclusive = true }
                     }
                 },
+                series = route.series.split(",").filter { it.isNotBlank() },
+                startPart = route.part,
+                startBeat = route.beat,
+                origin = route.origin,
             )
         }
     }
+}
+
+private fun openKatha(
+    nav: androidx.navigation.NavHostController,
+    ids: List<String>,
+    part: Int,
+    beat: Int,
+    origin: String,
+) {
+    if (ids.isEmpty()) return
+    val safe = part.coerceIn(0, ids.lastIndex)
+    nav.navigate(StoryRoute(ids[safe], ids.joinToString(","), safe, beat, origin))
 }

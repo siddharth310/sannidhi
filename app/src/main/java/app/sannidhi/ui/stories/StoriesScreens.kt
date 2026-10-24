@@ -46,6 +46,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -90,7 +91,6 @@ import app.sannidhi.ui.common.ImageOrFallback
 import app.sannidhi.ui.common.ModuleKind
 import app.sannidhi.ui.common.TopBar
 import app.sannidhi.ui.puja.GodCard
-import app.sannidhi.ui.puja.deityEnglishName
 import app.sannidhi.ui.puja.deityScriptName
 import app.sannidhi.ui.puja.matchesQuery
 import app.sannidhi.ui.puja.searchParts
@@ -112,41 +112,44 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private data class TodayStory(val story: StorySummary, val observanceTitle: String)
-
 @Composable
 fun StoriesHomeScreen(
     settings: AppSettings,
+    store: AppSettingsStore,
     repository: ContentRepository,
     onBack: () -> Unit,
     onHome: () -> Unit,
     onDeity: (String) -> Unit,
-    onStory: (String) -> Unit,
+    onKatha: (List<String>, Int, Int) -> Unit,
 ) {
     var deities by remember { mutableStateOf<List<Deity>>(emptyList()) }
     var stories by remember { mutableStateOf<List<StorySummary>>(emptyList()) }
-    var today by remember { mutableStateOf<List<TodayStory>>(emptyList()) }
+    var katha by remember { mutableStateOf<List<StorySummary>>(emptyList()) }
     var query by remember { mutableStateOf("") }
+    val place by store.kathaPlace().collectAsState(initial = null)
     val lang = settings.language()
     LaunchedEffect(settings.cityId, settings.lang, settings.debugToday) {
-        deities = repository.deities().sortedBy { it.order }
+        val all = repository.deities().sortedBy { it.order }
         val index = repository.storyIndex().filter { it.status != Status.retired }
         stories = index
+        deities = all.filter { deity -> index.any { it.deity == deity.id } }
         val day = repository.day(settings.cityId, settings.today())
-        today = day?.observances.orEmpty().flatMap { obsId ->
-            val observance = repository.observance(obsId) ?: return@flatMap emptyList()
-            val title = observance.title?.pick(lang).orEmpty()
-            observance.links["stories"].orEmpty().mapNotNull { storyId ->
-                index.firstOrNull { it.id == storyId }?.let { TodayStory(it, title) }
-            }
+        val todayIds = day?.observances.orEmpty()
+        val linkedPuja = todayIds.firstNotNullOfOrNull { obsId ->
+            val links = repository.observance(obsId)?.links?.get("pujas").orEmpty()
+            links.firstOrNull { pujaId -> index.any { it.pujaKatha == pujaId } }
+        }
+        val deityIds = todayIds.mapNotNull { repository.observance(it)?.deity }.toSet()
+        katha = when {
+            linkedPuja != null -> index.filter { it.pujaKatha == linkedPuja }.sortedBy { it.order }
+            else -> index.filter { it.pujaKatha != null && it.deity in deityIds }.sortedBy { it.order }
         }
     }
-    val storyHits = if (query.isBlank()) emptyList() else stories.filter { matchesQuery(query, storyParts(it)) }
     val gods = deities.filter { deity ->
         query.isBlank() || matchesQuery(query, searchParts(deity)) ||
             stories.any { it.deity == deity.id && matchesQuery(query, storyParts(it)) }
     }
-    val symbols = deities.associate { it.id to it.symbols.firstOrNull()?.image }
+    val showSearch = deities.size > 8 || (BuildConfig.DEBUG && settings.debugStorySearch)
     Column(Modifier.fillMaxSize().background(Ivory)) {
         TopBar(stringResource(R.string.module_stories), onBack, onHome)
         LazyVerticalGrid(
@@ -156,44 +159,35 @@ fun StoriesHomeScreen(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                SearchBox(query) { query = it }
+            if (showSearch) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    SearchBox(query) { query = it }
+                }
             }
-            if (query.isBlank()) {
-                items(today, key = { "today-${it.story.id}" }, span = { GridItemSpan(maxLineSpan) }) { card ->
-                    StoryCard(
-                        story = card.story,
-                        lang = lang,
-                        symbolId = symbols[card.story.deity],
+            if (query.isBlank() && katha.size >= 2) {
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Text(stringResource(R.string.for_today, stringResource(R.string.chavithi_katha)), color = Maroon, style = MaterialTheme.typography.labelLarge)
+                }
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    ChavithiKathaCard(
+                        coverId = katha.first().cover,
+                        symbolId = deities.firstOrNull { it.id == katha.first().deity }?.symbols?.firstOrNull()?.image,
                         repository = repository,
-                        kicker = stringResource(R.string.for_today, card.observanceTitle),
-                        onClick = { onStory(card.story.id) },
+                        place = place,
+                        heading = stringResource(R.string.chavithi_katha),
+                        onOpen = { part, beat -> onKatha(katha.map { it.id }, part, beat) },
                     )
                 }
             }
-            items(storyHits, key = { "hit-${it.id}" }, span = { GridItemSpan(maxLineSpan) }) { story ->
-                StoryCard(
-                    story = story,
-                    lang = lang,
-                    symbolId = symbols[story.deity],
-                    repository = repository,
-                    kicker = null,
-                    onClick = { onStory(story.id) },
-                )
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(stringResource(R.string.choose_a_god), color = Ink, style = MaterialTheme.typography.headlineMedium)
-            }
             items(gods, key = { it.id }) { deity ->
                 val count = stories.count { it.deity == deity.id }
-                val meta = if (count == 0) {
-                    stringResource(R.string.coming_later)
-                } else {
-                    stringResource(if (count == 1) R.string.god_stories_one else R.string.god_stories, deityEnglishName(deity), count)
-                }
-                GodCard(deity, settings, repository, meta = meta, enabled = count > 0) {
-                    if (count > 0) onDeity(deity.id)
-                }
+                val name = deityScriptName(deity, lang)
+                val meta = stringResource(if (count == 1) R.string.stories_count_one else R.string.stories_count, count)
+                GodCard(
+                    deity, settings, repository,
+                    meta = meta,
+                    talkBack = stringResource(R.string.god_stories_talkback, name, count),
+                ) { onDeity(deity.id) }
             }
         }
     }
@@ -216,7 +210,7 @@ fun DeityStoriesScreen(
         val deity = repository.deity(deityId)
         title = deity?.let { deityScriptName(it, lang) } ?: deityId
         symbolId = deity?.symbols?.firstOrNull()?.image
-        stories = repository.storiesFor(deityId).filter { it.status != Status.retired }
+        stories = repository.storiesFor(deityId).filter { it.status != Status.retired }.sortedBy { it.order }
     }
     Column(Modifier.fillMaxSize().background(Ivory)) {
         TopBar(title, onBack, onHome)
@@ -241,16 +235,23 @@ fun StoryPlayerScreen(
     onHome: () -> Unit,
     onPuja: (String) -> Unit,
     onBackToStories: (String) -> Unit,
+    series: List<String> = emptyList(),
+    startPart: Int = 0,
+    startBeat: Int = 0,
+    origin: String = "",
 ) {
+    var part by remember(storyId, startPart) { mutableIntStateOf(startPart) }
+    val ids = if (series.isEmpty()) listOf(storyId) else series
+    val currentId = ids.getOrElse(part) { storyId }
     var story by remember { mutableStateOf<Story?>(null) }
     var symbolId by remember { mutableStateOf<String?>(null) }
     var deityName by remember { mutableStateOf("") }
     var pujaId by remember { mutableStateOf<String?>(null) }
-    var started by remember(storyId) { mutableStateOf(false) }
+    var started by remember(currentId) { mutableStateOf(series.isNotEmpty()) }
     var langCode by remember(storyId) { mutableStateOf(settings.lang) }
     val scope = rememberCoroutineScope()
-    LaunchedEffect(storyId, langCode) {
-        val loaded = repository.story(storyId)
+    LaunchedEffect(currentId, langCode) {
+        val loaded = repository.story(currentId)
         story = loaded
         if (loaded != null) {
             val deity = repository.deity(loaded.deity)
@@ -276,7 +277,16 @@ fun StoryPlayerScreen(
             LangChip("te", stringResource(R.string.lang_te_short), langCode) { langCode = it }
             LangChip("hi", stringResource(R.string.lang_hi_short), langCode) { langCode = it }
             LangChip("en", stringResource(R.string.lang_en_short), langCode) { langCode = it }
-            Box(Modifier.weight(1f))
+            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                if (series.isNotEmpty()) {
+                    Text(
+                        stringResource(R.string.chavithi_katha_part, part + 1, ids.size),
+                        color = Ink,
+                        style = MaterialTheme.typography.labelLarge,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
             Text(
                 stringResource(R.string.home),
                 color = Maroon,
@@ -298,6 +308,7 @@ fun StoryPlayerScreen(
                 onBegin = { started = true },
             )
         } else if (telling != null) {
+            androidx.compose.runtime.key(telling.id) {
             BeatPlayer(
                 story = telling,
                 langCode = langCode,
@@ -306,10 +317,23 @@ fun StoryPlayerScreen(
                 repository = repository,
                 readToMe = settings.readToMe && telling.hasNarration(langCode),
                 music = settings.storyMusic,
-                pujaId = pujaId,
+                pujaId = if (series.isEmpty()) pujaId else null,
                 onPuja = onPuja,
                 onBackToStories = { onBackToStories(telling.deity) },
+                startBeat = if (part == startPart) startBeat else 0,
+                katha = series.isNotEmpty(),
+                lastPart = part >= ids.lastIndex,
+                leaveLabel = stringResource(if (origin == "puja") R.string.back_to_the_puja else R.string.back),
+                onAdvance = { part += 1 },
+                onLeave = {
+                    scope.launch { store.clearKathaPlace() }
+                    onBack()
+                },
+                onBeat = { beat ->
+                    if (series.isNotEmpty()) scope.launch { store.setKathaPlace(part, beat) }
+                },
             )
+            }
         }
     }
 }
@@ -363,6 +387,12 @@ private fun CoverPage(
     }
 }
 
+private sealed interface BeatEnding {
+    data object Library : BeatEnding
+    data class Next(val secondsLeft: Int, val onContinue: () -> Unit, val onStay: () -> Unit) : BeatEnding
+    data class Leave(val label: String, val onLeave: () -> Unit) : BeatEnding
+}
+
 @Composable
 private fun BeatPlayer(
     story: Story,
@@ -375,9 +405,18 @@ private fun BeatPlayer(
     pujaId: String?,
     onPuja: (String) -> Unit,
     onBackToStories: () -> Unit,
+    startBeat: Int = 0,
+    katha: Boolean = false,
+    lastPart: Boolean = true,
+    leaveLabel: String = "",
+    onAdvance: () -> Unit = {},
+    onLeave: () -> Unit = {},
+    onBeat: (Int) -> Unit = {},
 ) {
     val beats = story.beats
-    val pager = rememberPagerState(pageCount = { beats.size })
+    val pager = rememberPagerState(initialPage = startBeat.coerceIn(0, beats.lastIndex), pageCount = { beats.size })
+    var stayed by remember(story.id) { mutableStateOf(false) }
+    var secondsLeft by remember(story.id) { mutableIntStateOf(0) }
     val scope = rememberCoroutineScope()
     val lang = langOf(langCode)
     val context = LocalContext.current
@@ -403,6 +442,20 @@ private fun BeatPlayer(
     }
     LaunchedEffect(story.id) {
         audio.prepareBed(story.musicFile, story.musicLowFile)
+    }
+    LaunchedEffect(pager.currentPage) { onBeat(pager.currentPage) }
+    LaunchedEffect(pager.currentPage, readToMe, stayed, story.id) {
+        if (!katha || lastPart || stayed || !readToMe || pager.currentPage != beats.lastIndex) {
+            secondsLeft = 0
+            return@LaunchedEffect
+        }
+        for (left in 3 downTo 1) {
+            secondsLeft = left
+            delay(1000)
+            if (stayed || pager.currentPage != beats.lastIndex) return@LaunchedEffect
+        }
+        secondsLeft = 0
+        onAdvance()
     }
     LaunchedEffect(readToMe, music) { audio.switches(readToMe, music) }
     LaunchedEffect(pager.currentPage, langCode, readToMe, stage) {
@@ -470,6 +523,11 @@ private fun BeatPlayer(
                 pujaId = pujaId,
                 onPuja = onPuja,
                 onBackToStories = onBackToStories,
+                ending = when {
+                    page != beats.lastIndex || !katha -> BeatEnding.Library
+                    !lastPart -> BeatEnding.Next(secondsLeft, onAdvance) { stayed = true; secondsLeft = 0 }
+                    else -> BeatEnding.Leave(leaveLabel, onLeave)
+                },
                 onPrevious = {
                     if (pager.currentPage > 0) scope.launch { pager.animateScrollToPage(pager.currentPage - 1) }
                 },
@@ -531,6 +589,7 @@ private fun BeatPage(
     onBackToStories: () -> Unit,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
+    ending: BeatEnding = BeatEnding.Library,
 ) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp),
@@ -560,10 +619,23 @@ private fun BeatPage(
             StoryLine(beat.text?.pick(lang).orEmpty(), lang, activeSentence)
         }
         if (last) {
-            if (pujaId != null) {
-                ParentLink(stringResource(R.string.do_the_puja)) { onPuja(pujaId) }
+            when (ending) {
+                BeatEnding.Library -> {
+                    if (pujaId != null) {
+                        ParentLink(stringResource(R.string.do_the_puja)) { onPuja(pujaId) }
+                    }
+                    ChoiceButton(stringResource(R.string.more_stories_of, deityName), onBackToStories)
+                }
+                is BeatEnding.Next -> {
+                    Text(stringResource(R.string.part_2_syamantaka), color = Ink, style = MaterialTheme.typography.headlineMedium)
+                    if (ending.secondsLeft > 0) {
+                        Text(stringResource(R.string.continue_in_seconds, ending.secondsLeft), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
+                        ChoiceButton(stringResource(R.string.stay), ending.onStay)
+                    }
+                    ChoiceButton(stringResource(R.string.continue_step), ending.onContinue)
+                }
+                is BeatEnding.Leave -> ChoiceButton(ending.label, ending.onLeave)
             }
-            ChoiceButton(stringResource(R.string.more_stories_of, deityName), onBackToStories)
         }
     }
 }
@@ -784,6 +856,9 @@ private fun StoryCard(
             }
             Text(story.title?.pick(lang).orEmpty(), color = Ink, style = MaterialTheme.typography.headlineMedium)
             Text(storyMeta(story.minutes), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
+            if (lang.name in story.narrationLangs) {
+                Text(stringResource(R.string.read_to_me), color = Maroon, style = MaterialTheme.typography.labelLarge)
+            }
             if (story.status == Status.draft && BuildConfig.DEBUG) {
                 Text(stringResource(R.string.draft), color = Maroon, style = MaterialTheme.typography.labelLarge)
             }

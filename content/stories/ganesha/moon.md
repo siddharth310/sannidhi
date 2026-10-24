@@ -1,12 +1,14 @@
 ---
 id: ganesha.story.moon
 deity: ganesha
+order: 1
 title: { te: గణపతి, చంద్రుడు, hi: गणेश जी और चंदा मामा, en: Ganesha and the Moon }
 ages: 4-12
 minutes: 3
 feeling: [kind, safe]
 source: Popular retelling (Purāṇic). In the Telugu vratakalpam katha it is Parvati who speaks the curse; this children's telling follows the widely told version where Ganesha does, and explains the moon's phases.
 observances: [obs.vinayaka-chavithi]
+puja_katha: ganesha.puja.vinayaka-chavithi
 cover: img.story.ganesha.moon.cover
 status: draft
 reviewed_by:

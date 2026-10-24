@@ -56,6 +56,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
@@ -339,12 +341,14 @@ fun PujaPageScreen(
     onGuided: () -> Unit,
     onProfile: () -> Unit,
     onNaivedyam: (String) -> Unit,
+    onKatha: (List<String>, Int, Int) -> Unit,
 ) {
     var bundle by remember { mutableStateOf<PujaBundle?>(null) }
     var openMeanings by remember { mutableStateOf(setOf<String>()) }
     var counts by remember(pujaId) { mutableStateOf(mapOf<String, Int>()) }
     val scope = rememberCoroutineScope()
     val place by remember(pujaId) { store.guidedPlace(pujaId) }.collectAsState(initial = null)
+    val kathaPlace by store.kathaPlace().collectAsState(initial = null)
     val listState = rememberLazyListState()
     val date = settings.today().toString()
     val ticksFlow = remember(pujaId, date) { store.samagriTicks(pujaId, date) }
@@ -464,6 +468,8 @@ fun PujaPageScreen(
                             },
                             onProfile = onProfile,
                             onNaivedyam = onNaivedyam,
+                            kathaPlace = kathaPlace,
+                            onKatha = onKatha,
                             guided = false,
                         )
                     }
@@ -481,8 +487,10 @@ fun GuidedPujaScreen(
     repository: ContentRepository,
     onClose: () -> Unit,
     onNaivedyam: (String) -> Unit,
+    onKatha: (List<String>, Int, Int) -> Unit,
 ) {
     var bundle by remember { mutableStateOf<PujaBundle?>(null) }
+    val kathaPlace by store.kathaPlace().collectAsState(initial = null)
     val view = LocalView.current
     androidx.compose.runtime.DisposableEffect(Unit) {
         view.keepScreenOn = true
@@ -571,6 +579,8 @@ fun GuidedPujaScreen(
                     onMeaning = {},
                     onProfile = {},
                     onNaivedyam = onNaivedyam,
+                    kathaPlace = kathaPlace,
+                    onKatha = onKatha,
                     guided = true,
                 )
             }
@@ -685,8 +695,15 @@ private fun StepCard(
     onMeaning: (String) -> Unit,
     onProfile: () -> Unit,
     onNaivedyam: (String) -> Unit,
+    kathaPlace: app.sannidhi.settings.KathaPlace? = null,
+    onKatha: (List<String>, Int, Int) -> Unit = { _, _, _ -> },
     guided: Boolean,
 ) {
+    var kathaCover by remember(step.stories) { mutableStateOf<String?>(null) }
+    LaunchedEffect(step.stories) {
+        val first = step.stories.firstOrNull()
+        kathaCover = first?.let { id -> repository.storyIndex().firstOrNull { it.id == id }?.cover }
+    }
     val lang = settings.language()
     val bodySize = if (guided) 22.sp else MaterialTheme.typography.bodyLarge.fontSize
     val mantraSize = if (guided) 30.sp else 24.sp
@@ -739,6 +756,16 @@ private fun StepCard(
         }
         step.note?.pick(lang)?.takeIf { it.isNotBlank() }?.let { note ->
             Text(note, color = InkSoft, fontSize = 16.sp, fontStyle = FontStyle.Italic, lineHeight = 22.sp)
+        }
+        if (step.stories.size >= 2) {
+            app.sannidhi.ui.stories.ChavithiKathaCard(
+                coverId = kathaCover,
+                symbolId = symbol,
+                repository = repository,
+                place = kathaPlace,
+                heading = stringResource(R.string.chavithi_katha_parts),
+                onOpen = { part, beat -> onKatha(step.stories, part, beat) },
+            )
         }
         step.text?.let { textId ->
             Text(bundle.textTitles[textId] ?: textId, color = Ink, style = MaterialTheme.typography.headlineMedium)
@@ -959,6 +986,7 @@ fun GodCard(
     repository: ContentRepository,
     meta: String? = null,
     enabled: Boolean = true,
+    talkBack: String? = null,
     onClick: () -> Unit,
 ) {
     val lang = settings.language()
@@ -968,6 +996,7 @@ fun GodCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
             .background(TintPuja)
+            .then(if (talkBack == null) Modifier else Modifier.semantics(mergeDescendants = true) { contentDescription = talkBack })
             .clickable(enabled = enabled, onClick = onClick),
     ) {
         ImageOrFallback(

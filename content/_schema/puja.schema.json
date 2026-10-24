@@ -168,6 +168,12 @@
         "optional": {
          "type": "boolean"
         },
+        "stories": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
         "samagri": {
          "type": "array",
          "items": {

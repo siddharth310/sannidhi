@@ -1,6 +1,7 @@
 ---
 id: ganesha.story.mango
 deity: ganesha
+order: 4
 title: { te: జ్ఞాన ఫలం, hi: ज्ञान का फल, en: The Fruit of Wisdom }
 ages: 4-12
 minutes: 3

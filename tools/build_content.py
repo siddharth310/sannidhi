@@ -544,6 +544,7 @@ def load_pujas():
                     "image": k.get("image"), "minutes": k.get("minutes"),
                     "mantras": as_list(k.get("mantra")), "repeat": k.get("repeat"), "text": k.get("text"),
                     "fills": as_list(k.get("fills")), "naivedyam": as_list(k.get("naivedyam")),
+                    "stories": as_list(k.get("stories")),
                     "optional": yes(k.get("optional", "no")), "samagri": samagri,
                 })
             if not steps:
@@ -696,8 +697,8 @@ def load_stories(release=False):
                 R.err(where, f"touch sound missing: {sound}")
             beats.append({"n": len(beats) + 1, "image": k.get("image"), "touch": touch,
                           "text": text, "music_low": k.get("music") == "low", "narration": {}})
-        if not 4 <= len(beats) <= 8:
-            R.err(w, f"stories need 4–8 beats, has {len(beats)}")
+        if not 4 <= len(beats) <= 12:
+            R.err(w, f"stories need 4–12 beats, has {len(beats)}")
         music = fm.get("music")
         music_file = music_low_file = None
         if music:
@@ -731,9 +732,11 @@ def load_stories(release=False):
                 note = f"narration missing for {', '.join(missing)}"
                 ship = release and st in ("reviewed", "published")
                 (R.err if ship else R.warn)(w, note)
-        out.append({"id": story_id, "deity": fm.get("deity"), "title": title,
+        order = fm.get("order")
+        out.append({"id": story_id, "deity": fm.get("deity"), "order": int(order) if order else 99, "title": title,
                     "ages": str(fm.get("ages", "4-12")), "minutes": fm.get("minutes"), "feeling": as_list(fm.get("feeling")),
-                    "source": fm.get("source"), "observances": as_list(fm.get("observances")), "cover": fm.get("cover"),
+                    "source": fm.get("source"), "observances": as_list(fm.get("observances")),
+                    "puja_katha": fm.get("puja_katha") or None, "cover": fm.get("cover"),
                     "status": st, "music": music, "music_file": music_file, "music_low_file": music_low_file,
                     "title_narration": title_narration, "beats": beats})
     return out
@@ -794,7 +797,25 @@ def load_rashi():
 
 # ---------------------------------------------------------------- references
 
-def check_refs(data, images):
+def report_katha(data):
+    counts = defaultdict(int)
+    for story in data["stories"]:
+        if story["status"] != "retired":
+            counts[story["deity"]] += 1
+    if counts:
+        print("\nStories by god:")
+        for deity, count in sorted(counts.items()):
+            print(f"  {deity}: {count}")
+    for puja in data["pujas"]:
+        for stage in puja["stages"]:
+            for step in stage["steps"]:
+                refs = step.get("stories") or []
+                if refs and "vinayaka-chavithi" in puja["id"]:
+                    short = " → ".join(ref.rsplit(".", 1)[-1] for ref in refs)
+                    print(f"Vināyaka Chavithi katha: {short}")
+
+
+def check_refs(data, images, release=False):
     ids = defaultdict(set)
     for k in ("deities", "mantras", "texts", "pujas", "naivedyam", "samagri", "observances", "stories"):
         for item in data[k]:
@@ -827,6 +848,13 @@ def check_refs(data, images):
                     need("naivedyam", n, s["id"])
                 need("texts", s["text"], s["id"])
                 img(s["image"], s["id"])
+                allowed = ("reviewed", "published") if release else ("draft", "reviewed", "published")
+                for ref in s.get("stories") or []:
+                    story = next((item for item in data["stories"] if item["id"] == ref), None)
+                    if story is None or story["status"] not in allowed:
+                        R.err(s["id"], f"story '{ref}' is missing or not allowed in this build")
+                    elif story.get("puja_katha") != p["id"]:
+                        R.err(s["id"], f"story '{ref}' is not the katha for this puja")
                 for row in s["samagri"]:
                     need("samagri", row["item"], s["id"])
                     for a in row["alternatives"]:
@@ -889,6 +917,7 @@ def prune_for_release(data):
         for stage in p["stages"]:
             for s in stage["steps"]:
                 s["mantras"] = [m for m in s["mantras"] if m in live]
+                s["stories"] = [ref for ref in s.get("stories") or [] if ref in live]
                 s["naivedyam"] = [m for m in s["naivedyam"] if m in live]
                 if s["text"] not in live:
                     s["text"] = None
@@ -1152,7 +1181,8 @@ def main():
                 if box:
                     touch["box"] = box
 
-    check_refs(data, images)
+    check_refs(data, images, args.release)
+    report_katha(data)
     for o in data["observances"]:
         for pid in o["links"].get("pujas", []):
             p = next((p for p in data["pujas"] if p["id"] == pid), None)
@@ -1200,8 +1230,11 @@ def main():
                                          for p in data["pujas"]])
     for s in data["stories"]:
         write_json(f"{out_dir}/stories/{s['id']}.json", s)
-    write_json(f"{out_dir}/stories.json", [{k: s[k] for k in ("id", "deity", "title", "ages", "minutes", "feeling", "observances", "cover", "status")}
-                                           | {"beats": len(s["beats"])} for s in data["stories"]])
+    write_json(f"{out_dir}/stories.json", [
+        {k: s[k] for k in ("id", "deity", "order", "title", "ages", "minutes", "feeling", "observances", "cover", "status", "puja_katha")}
+        | {"beats": len(s["beats"]),
+           "narration_langs": sorted({lang for beat in s["beats"] for lang in beat["narration"]} | set(s["title_narration"]))}
+        for s in data["stories"]])
     write_json(f"{out_dir}/images.json", build_images(images, out_dir))
 
     if args.no_calendar and os.path.isdir(os.path.join(out_dir, "calendar")):

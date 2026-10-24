@@ -29,6 +29,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -579,12 +580,14 @@ private fun DayBubble(
 fun ObservanceScreen(
     obsId: String,
     settings: AppSettings,
+    store: app.sannidhi.settings.AppSettingsStore,
     repository: ContentRepository,
     onBack: () -> Unit,
     onHome: () -> Unit,
     onPuja: (String) -> Unit,
     onStory: (String) -> Unit,
     onNaivedyam: (String) -> Unit,
+    onKatha: (List<String>, Int, Int) -> Unit,
 ) {
     val lang = settings.language()
     val script = mantraScript(settings)
@@ -596,6 +599,8 @@ fun ObservanceScreen(
     var whenTithi by remember { mutableStateOf<String?>(null) }
     var sections by remember { mutableStateOf<List<Pair<Int, String>>>(emptyList()) }
     var actions by remember { mutableStateOf<List<ObsAction>>(emptyList()) }
+    var katha by remember { mutableStateOf<List<app.sannidhi.content.StorySummary>>(emptyList()) }
+    val kathaPlace by store.kathaPlace().collectAsState(initial = null)
 
     LaunchedEffect(obsId, settings.cityId, settings.lang, settings.textView, settings.today()) {
         val obs = repository.observance(obsId)
@@ -625,6 +630,8 @@ fun ObservanceScreen(
         val foodTitles = foodIds.associateWith { id ->
             repository.naivedyamItem(id)?.regionalForms?.firstOrNull()?.name?.pick(prose).orEmpty()
         }
+        val linkedPuja = obs.links["pujas"].orEmpty().firstOrNull()
+        katha = repository.storyIndex().filter { it.pujaKatha == linkedPuja && linkedPuja != null }.sortedBy { it.order }
         actions = buildList {
             addAll(linked(obs.links["pujas"].orEmpty(), R.string.action_puja, pujaTitles) { ObsLink.Puja(it) })
             addAll(linked(obs.links["stories"].orEmpty(), R.string.action_story, storyTitles) { ObsLink.Story(it) })
@@ -711,6 +718,16 @@ fun ObservanceScreen(
                 openSections.forEach { (heading, body) ->
                     Text(stringResource(heading), color = Ink, style = MaterialTheme.typography.headlineMedium)
                     Text(body, color = Ink, style = MaterialTheme.typography.bodyLarge)
+                    if (heading == R.string.section_families && katha.size >= 2) {
+                        app.sannidhi.ui.stories.ChavithiKathaCard(
+                            coverId = katha.first().cover,
+                            symbolId = symbol,
+                            repository = repository,
+                            place = kathaPlace,
+                            heading = stringResource(R.string.chavithi_katha_parts),
+                            onOpen = { part, beat -> onKatha(katha.map { it.id }, part, beat) },
+                        )
+                    }
                 }
                 folded.forEach { (heading, body) ->
                     val history = heading == R.string.section_history

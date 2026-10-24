@@ -135,6 +135,9 @@ fun ProfileScreen(
                     val parsed = runCatching { LocalDate.parse(debugDate) }.getOrNull()
                     scope.launch { store.setDebugToday(parsed?.toString()) }
                 }
+                SelectRow(stringResource(R.string.show_story_search), settings.debugStorySearch) {
+                    scope.launch { store.setDebugStorySearch(!settings.debugStorySearch) }
+                }
                 SelectRow(stringResource(R.string.debug_clear), settings.debugToday == null) {
                     scope.launch { store.setDebugToday(null) }
                 }

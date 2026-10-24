@@ -1,6 +1,7 @@
 ---
 id: ganesha.story.elephant-head
 deity: ganesha
+order: 3
 title: { te: గణపతికి ఏనుగు తల ఎలా వచ్చింది, hi: गणेश जी को हाथी का सिर कैसे मिला, en: How Ganesha Got His Elephant Head }
 ages: 4-12
 minutes: 4

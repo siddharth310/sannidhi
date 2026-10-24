@@ -149,6 +149,7 @@ data class Chantable(
     val mantras: List<String> = emptyList(), val repeat: Int? = null,
     val text: String? = null, val fills: List<String> = emptyList(),
     val naivedyam: List<String> = emptyList(), val optional: Boolean = false,
+    val stories: List<String> = emptyList(),
     val samagri: List<SamagriRow> = emptyList(),
 )
 @Serializable data class PujaStage(val stage: String, val steps: List<PujaStep>)  // pre | during | post
@@ -239,7 +240,8 @@ data class Chantable(
     val narration: Map<String, NarrationClip> = emptyMap(),
 )
 @Serializable data class Story(
-    val id: String, val deity: String, val title: Localized? = null, val ages: String, val minutes: Int? = null,
+    val id: String, val deity: String, val order: Int = 99, val title: Localized? = null, val ages: String, val minutes: Int? = null,
+    @SerialName("puja_katha") val pujaKatha: String? = null,
     val feeling: List<String> = emptyList(), val source: String? = null, val observances: List<String> = emptyList(),
     val cover: String? = null, val status: Status, val music: String? = null,
     @SerialName("music_file") val musicFile: String? = null,
@@ -248,9 +250,11 @@ data class Chantable(
     val beats: List<Beat>,
 )
 @Serializable data class StorySummary(
-    val id: String, val deity: String, val title: Localized? = null, val ages: String, val minutes: Int? = null,
+    val id: String, val deity: String, val order: Int = 99, val title: Localized? = null, val ages: String, val minutes: Int? = null,
     val feeling: List<String> = emptyList(), val observances: List<String> = emptyList(),
     val cover: String? = null, val status: Status, val beats: Int,
+    @SerialName("puja_katha") val pujaKatha: String? = null,
+    @SerialName("narration_langs") val narrationLangs: List<String> = emptyList(),
 )
 
 // ---------- images ----------

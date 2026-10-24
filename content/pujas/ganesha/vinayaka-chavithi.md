@@ -247,6 +247,7 @@ Show the incense and the lamp.
 
 ### katha | Vināyaka kathā
 image: img.puja.ganesha.katha
+stories: [ganesha.story.moon, ganesha.story.syamantaka]
 minutes: 15
 note: { te: చాలా ఇళ్ళలో హారతి తర్వాత కథ చదువుతారు — మీ ఇంటి పద్ధతి పాటించండి., hi: कई घरों में आरती के बाद कथा पढ़ी जाती है — अपने घर की परंपरा मानिए।, en: Many families read the katha after the harati — follow your family's way. }
 #### te

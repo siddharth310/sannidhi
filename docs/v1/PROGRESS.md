@@ -69,3 +69,11 @@ Not done on a device: a full language switch walk, 200% font screenshots, TalkBa
 ## Images v1
 
 The 60 drawings and 3 god cards from the image pack are in `content/images/`, and `manifest.csv` now marks every row supplied. The figure sources in `content/images/_characters/` stay in the repo and are not packed into the app. `--check` reports 0 missing images and 0 conversion errors. A `used_by` of `future` (Śiva, Pārvatī, Kārtikeya cards) does not warn. On the emulator, the first puja step shows the courtyard drawing. Each story beat that can be tapped uses the `touch-…` group in its drawing as the tap area.
+
+## Stories by god, and the Chavithi katha
+
+Stories opens on the same god cards as Puja. Only gods with a story in this build are shown, and the grid stays even when there is one god. Search is hidden until there are more than eight gods. A debug row, Show story search, forces the field so that case can be checked. On Vināyaka Chavithi and on Saṅkaṣṭi, For today is one card, The Chavithi katha: the moon story, then the Syamantaka jewel. The Gaṇeśa page lists the four stories by `order`.
+
+The Vināyaka Chavithi katha step, and the Vināyaka Chavithi observance page under the families-do lines, show the same two-part card. Part 1 is the moon story and part 2 is the Syamantaka jewel. The end of part 1 offers Continue, and continues by itself after three seconds only while Read to me is on. The end of part 2 offers only Back to the puja, or Back when the katha was opened from the observance or from Stories. Back returns to the same step. A place left in the middle is kept for 12 hours. No other step shows a story. Syamantaka has `narration: yes` and no audio yet, so Read to me stays hidden, the same as the other three stories.
+
+`python3 tools/build_content.py --check`: 0 errors, 4 narration warnings, and the lines `ganesha: 4` and `Vināyaka Chavithi katha: moon → syamantaka`. 0 missing images. Rows for the god grid, the search flag, god-page order, the back path and For today are in `tests/M2-stories.xlsx`. Rows for the katha card, part 1 to part 2, auto-continue, guided Back and the 12-hour resume are in `tests/M3-puja.xlsx`.
