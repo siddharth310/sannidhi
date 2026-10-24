@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -539,6 +541,7 @@ private fun BeatPage(
             symbolId = symbolId,
             effect = beat.touch?.effect,
             target = beat.touch?.target,
+            box = beat.touch?.box,
             showHint = showHint,
             repository = repository,
             onTap = onImageTap,
@@ -571,6 +574,7 @@ private fun TouchImage(
     symbolId: String?,
     effect: String?,
     target: String?,
+    box: List<Float>?,
     showHint: Boolean,
     repository: ContentRepository,
     onTap: () -> Unit,
@@ -585,15 +589,10 @@ private fun TouchImage(
     val scope = rememberCoroutineScope()
     val hop = with(density) { 8.dp.toPx() }
     val hideDrop = with(density) { 12.dp.toPx() }
-    Box(
-        Modifier
-            .fillMaxWidth()
-            .aspectRatio(4f / 3f)
-            .graphicsLayer { clip = false }
-            .clickable {
-                onTap()
-                scope.launch {
-                    // TODO: when beat art ships separate layers, apply this to touch.target only.
+    val region = box?.takeIf { it.size == 4 }
+    val play: () -> Unit = {
+        onTap()
+        scope.launch {
                     when (effect) {
                         "glow" -> {
                             halo.snapTo(0f)
@@ -655,8 +654,14 @@ private fun TouchImage(
                             })
                         }
                     }
-                }
-            },
+        }
+    }
+    Box(
+        Modifier
+            .fillMaxWidth()
+            .aspectRatio(4f / 3f)
+            .graphicsLayer { clip = false }
+            .then(if (region == null) Modifier.clickable(onClick = play) else Modifier),
     ) {
         if (halo.value > 0f) {
             Box(
@@ -687,6 +692,29 @@ private fun TouchImage(
                 },
             corner = 24.dp,
         )
+        if (region != null) {
+            BoxWithConstraints(Modifier.matchParentSize()) {
+                val min = 56.dp
+                var x = maxWidth * region[0]
+                var y = maxHeight * region[1]
+                var w = maxWidth * region[2]
+                var h = maxHeight * region[3]
+                if (w < min) {
+                    x -= (min - w) / 2
+                    w = min
+                }
+                if (h < min) {
+                    y -= (min - h) / 2
+                    h = min
+                }
+                Box(
+                    Modifier
+                        .offset(x, y)
+                        .size(w, h)
+                        .clickable(onClick = play),
+                )
+            }
+        }
         if (!target.isNullOrBlank()) {
             Text(
                 stringResource(R.string.tap_the, target),

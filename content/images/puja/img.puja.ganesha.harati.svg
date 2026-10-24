@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900"><defs><linearGradient id="hwall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E4C8"/><stop offset="1" stop-color="#E7C9A2"/></linearGradient><linearGradient id="hfloor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9B58C"/><stop offset="1" stop-color="#C79F74"/></linearGradient></defs><rect width="1200" height="640" fill="url(#hwall)"/><rect y="640" width="1200" height="260" fill="url(#hfloor)"/><rect y="640" width="1200" height="8" fill="#C79F74"/><ellipse cx="600" cy="420" rx="420" ry="360" fill="#FFE7A6" opacity="0.22"/><g transform="translate(600 760) rotate(0) scale(1 1)"><rect x="-210.0" y="-90" width="420" height="31.499999999999996" rx="8" fill="#8A5A3C"/><rect x="-190.0" y="-59.400000000000006" width="22" height="59.400000000000006" fill="#6B4129"/><rect x="168.0" y="-59.400000000000006" width="22" height="59.400000000000006" fill="#6B4129"/><path d="M-216.0 -94 H216.0 L204.0 -38 Q0 -20 -204.0 -38 Z" fill="#C2414F"/><path d="M-204.0 -44 Q0 -26 204.0 -44" stroke="#E9B23F" stroke-width="6" fill="none"/></g><g transform="translate(414.0 328.8) rotate(0) scale(0.62 0.62)"><g id="ganesha">
+  
+  <!-- upper arms (behind) -->
+  <path d="M232 285 C185 292 140 285 110 258" stroke="#A97C55" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M368 285 C415 292 460 285 490 258" stroke="#A97C55" stroke-width="40" fill="none" stroke-linecap="round"/>
+  <path d="M232 285 C185 292 140 285 110 258" stroke="#C99A72" stroke-width="33" fill="none" stroke-linecap="round"/>
+  <path d="M368 285 C415 292 460 285 490 258" stroke="#C99A72" stroke-width="33" fill="none" stroke-linecap="round"/>
+  <!-- ankusha (his upper right = viewer left) -->
+  <rect x="103" y="150" width="12" height="140" rx="6" fill="#7E5236"/>
+  <path d="M109 108 L120 150 H98 Z" fill="#BF8D63"/>
+  <path d="M113 152 C141 148 149 172 135 182 C127 188 119 180 124 172" stroke="#BF8D63" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="108" cy="256" r="20" fill="#D2A47C" stroke="#A97C55" stroke-width="3"/>
+  <!-- pasha (viewer right) -->
+  <circle cx="494" cy="192" r="30" fill="none" stroke="#8E6A4C" stroke-width="8"/>
+  <path d="M490 222 C486 232 496 240 492 250" stroke="#8E6A4C" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <circle cx="492" cy="256" r="20" fill="#D2A47C" stroke="#A97C55" stroke-width="3"/>
+  <!-- seated legs / cloth -->
+  <ellipse cx="300" cy="455" rx="160" ry="52" fill="#BF8D63"/>
+  <path d="M142 462 C200 500 400 500 458 462" stroke="#7E5236" stroke-width="10" fill="none" stroke-linecap="round"/>
+  <ellipse cx="205" cy="470" rx="34" ry="18" fill="#C99A72"/>
+  <ellipse cx="395" cy="470" rx="34" ry="18" fill="#C99A72"/>
+  <!-- torso -->
+  <path d="M215 270 C230 250 370 250 385 270 L395 330 L205 330 Z" fill="#C99A72"/>
+  <ellipse cx="300" cy="370" rx="108" ry="95" fill="#C99A72"/>
+  <path d="M200 400 C230 440 370 440 400 400 L405 430 C360 460 240 460 195 430 Z" fill="#BF8D63"/>
+  <path d="M195 430 C240 460 360 460 405 430" stroke="#7E5236" stroke-width="7" fill="none"/>
+  <circle cx="300" cy="380" r="5" fill="#A97C55"/>
+  <!-- sacred thread -->
+  <path d="M235 270 C250 330 300 390 360 420" stroke="#E3C7A6" stroke-width="5" fill="none"/>
+  <!-- necklace -->
+  <path d="M235 280 C260 325 340 325 365 280" stroke="#B88962" stroke-width="7" fill="none" stroke-dasharray="1 9" stroke-linecap="round"/>
+  <circle cx="300" cy="318" r="9" fill="#A8704C" stroke="#B88962" stroke-width="3"/>
+  <!-- lower arms -->
+  <path d="M222 290 C200 320 190 345 190 372" stroke="#C99A72" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <path d="M378 290 C400 320 410 345 410 372" stroke="#C99A72" stroke-width="34" fill="none" stroke-linecap="round"/>
+  <!-- abhaya hand (viewer left) -->
+  <rect x="168" y="335" width="44" height="58" rx="18" fill="#D2A47C" stroke="#A97C55" stroke-width="3"/>
+  <circle cx="190" cy="372" r="6" fill="#A8704C"/>
+  <!-- modaka in hand (viewer right) -->
+  <circle cx="410" cy="378" r="22" fill="#D2A47C" stroke="#A97C55" stroke-width="3"/>
+  <path d="M410 330 C413 340 428 348 431 360 C434 372 424 380 410 380 C396 380 386 372 389 360 C392 348 407 340 410 330Z" fill="#BF8D63" stroke="#9A6E48" stroke-width="2"/>
+  <!-- ears -->
+  <ellipse cx="208" cy="185" rx="72" ry="84" fill="#C99A72" stroke="#A97C55" stroke-width="4"/>
+  <ellipse cx="392" cy="185" rx="72" ry="84" fill="#C99A72" stroke="#A97C55" stroke-width="4"/>
+  <ellipse cx="215" cy="188" rx="52" ry="64" fill="#B88462"/>
+  <ellipse cx="385" cy="188" rx="52" ry="64" fill="#B88462"/>
+  <!-- face -->
+  <ellipse cx="300" cy="185" rx="72" ry="82" fill="#C99A72" stroke="#A97C55" stroke-width="4"/>
+  <!-- crown -->
+  <path d="M232 132 C250 112 350 112 368 132 L352 70 C340 40 320 22 300 10 C280 22 260 40 248 70 Z" fill="#B88962"/>
+  <path d="M236 128 C255 112 345 112 364 128" stroke="#7E5236" stroke-width="8" fill="none"/>
+  <path d="M252 84 H348 M262 56 H338" stroke="#9A6E48" stroke-width="5"/>
+  <circle cx="300" cy="100" r="9" fill="#A8704C"/>
+  <circle cx="300" cy="12" r="7" fill="#BF8D63"/>
+  <!-- tilak -->
+  <path d="M300 140 v22" stroke="#A8704C" stroke-width="6" stroke-linecap="round"/>
+  <!-- eyes -->
+  <path d="M262 185 C270 177 282 177 290 185 M310 185 C318 177 330 177 338 185" stroke="#4A2E22" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- tusks: broken (his right = viewer left), whole (viewer right) -->
+  
+  
+  <!-- trunk curving to his left (viewer right), towards modaka -->
+  <path d="M300 215 C298 258 290 300 310 326 C326 346 356 340 356 316" stroke="#A97C55" stroke-width="44" fill="none" stroke-linecap="round"/>
+  <path d="M300 215 C298 258 290 300 310 326 C326 346 356 340 356 316" stroke="#C99A72" stroke-width="35" fill="none" stroke-linecap="round"/>
+  <path d="M290 238 h18 M288 260 h18 M288 282 h18 M294 304 h18" stroke="#A97C55" stroke-width="3" stroke-linecap="round"/>
+  <path d="M276 232 L262 250 L278 254 Z" fill="#E3C7A6" stroke="#A97C55" stroke-width="2.5"/>
+  <path d="M322 230 C332 248 342 262 360 270 C340 274 324 260 316 238Z" fill="#E3C7A6" stroke="#A97C55" stroke-width="2.5"/>
+  <!-- mouse at feet -->
+  <g transform="translate(450 512) scale(0.7)">
+    <path d="M-34 10 C-46 8 -46 -4 -36 -6" stroke="#4A2E22" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <ellipse cx="0" cy="0" rx="34" ry="22" fill="#A97E5C"/>
+    <circle cx="-30" cy="-18" r="16" fill="#A97E5C"/>
+    <circle cx="-26" cy="-34" r="9" fill="#A97E5C"/><circle cx="-26" cy="-34" r="5" fill="#B88462"/>
+    <circle cx="-36" cy="-20" r="2.6" fill="#4A2E22"/>
+  </g>
+</g><path d="M300 140 v22" stroke="#C2414F" stroke-width="7" stroke-linecap="round"/><circle cx="300" cy="372" r="0"/></g><ellipse cx="600" cy="560" rx="300" ry="120" fill="none" stroke="#FFE7A6" stroke-width="6" stroke-dasharray="4 22" stroke-linecap="round" opacity="0.9"/><g transform="translate(860 620) rotate(0) scale(1 1)"><ellipse cx="0" cy="0" rx="80" ry="22.400000000000002" fill="#A97A2A"/><ellipse cx="0" cy="-6" rx="73.60000000000001" ry="17.6" fill="#D6A548"/><g transform="translate(0 -12) rotate(0) scale(1 1)"><g transform="scale(0.7)"><ellipse cx="0" cy="-40" rx="60" ry="70" fill="#FFE7A6" opacity="0.35"/><path d="M0 0 C-30 -20 -24 -60 0 -96 C24 -60 30 -20 0 0Z" fill="#F6B13D"/><path d="M0 -6 C-14 -20 -12 -46 0 -66 C12 -46 14 -20 0 -6Z" fill="#FFF0B8"/></g></g></g><g transform="translate(880 700) rotate(10) scale(1 1)"><g transform="translate(0 0) rotate(0) scale(1.3 1.3)"><path d="M-30 0 C-34 -30 -26 -60 -8 -66 C4 -70 22 -64 30 -48 L38 -20 C40 -6 30 4 12 6 Z" fill="#C98B62"/><path d="M-30 0 C-40 20 -40 60 -36 110 H24 C24 60 22 30 12 6 Z" fill="#C98B62"/><path d="M-36 96 H24 V112 H-36 Z" fill="#E9B23F"/><path d="M-36 84 H24 V92 H-36 Z" fill="#C2414F"/></g></g></svg>

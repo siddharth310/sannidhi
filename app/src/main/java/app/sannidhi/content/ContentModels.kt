@@ -224,7 +224,12 @@ data class Chantable(
     val text: String,
 )
 @Serializable data class NarrationClip(val file: String, val sentences: List<SentenceTime> = emptyList())
-@Serializable data class Touch(val target: String, val effect: String, val sound: String? = null)
+@Serializable data class Touch(
+    val target: String,
+    val effect: String,
+    val sound: String? = null,
+    val box: List<Float>? = null,
+)
 @Serializable data class Beat(
     val n: Int,
     val image: String? = null,

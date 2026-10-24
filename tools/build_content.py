@@ -28,6 +28,7 @@ from indic_transliteration import sanscript
 sys.path.insert(0, os.path.dirname(__file__))
 import panchanga as P  # noqa: E402
 from mdparse import LANGS, ContentError, parse, slug_title  # noqa: E402
+from touch_box import touch_box  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 C = os.path.join(ROOT, "content")
@@ -189,7 +190,10 @@ def load_images():
         check_id("img", r["id"], where)
         if r["id"] in out:
             R.err(where, "duplicate image id")
-        named = (r.get("file") or "").strip()
+        named = (r.get("file") or "").strip().replace("\\", "/")
+        if named.startswith("_characters/") or "/_characters/" in named:
+            R.err(where, "drawings in _characters are source figures and are not shipped")
+            named = ""
         src = os.path.join(C, "images", named) if named else None
         exists = bool(src and os.path.exists(src))
         status = r["status"]
@@ -198,7 +202,8 @@ def load_images():
         if exists and status == "missing":
             status = "supplied"
         out[r["id"]] = {"kind": r["kind"], "src": src if exists else None, "status": status if exists else "missing",
-                        "used_by": r["used_by"], "priority": r["priority"],
+                        "used_by": r.get("used_by", ""), "priority": r["priority"],
+                        "characters": [c for c in (r.get("characters") or "").split() if c],
                         "alt": {l: r.get(f"alt_{l}", "") for l in LANGS if r.get(f"alt_{l}")}}
     return out
 
@@ -855,6 +860,12 @@ def check_refs(data, images):
     for r in data["master"]["rashis"]:
         if r["id"] not in data["rashi"]["profiles"]:
             R.err("rashi/profiles.md", f"missing profile for {r['id']}")
+    for iid, im in images.items():
+        used = (im.get("used_by") or "").strip()
+        if not used or used == "future":
+            continue
+        if used not in ids["all"]:
+            R.warn(f"images/manifest.csv:{iid}", f"used_by '{used}' is not a content id")
 
 
 def drop_draft_audio(data):
@@ -1130,6 +1141,16 @@ def main():
         R.err("parse", str(e))
         R.print()
         sys.exit(1)
+
+    for story in data["stories"]:
+        for beat in story["beats"]:
+            touch = beat.get("touch")
+            image = images.get(beat.get("image") or "")
+            src = (image or {}).get("src")
+            if isinstance(touch, dict) and src and src.endswith(".svg"):
+                box = touch_box(src)
+                if box:
+                    touch["box"] = box
 
     check_refs(data, images)
     for o in data["observances"]:

@@ -141,6 +141,14 @@
          },
          "sound": {
           "type": "string"
+         },
+         "box": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+           "type": "number"
+          }
          }
         },
         "additionalProperties": false
