@@ -277,21 +277,21 @@ fun StoryPlayerScreen(
             LangChip("te", stringResource(R.string.lang_te_short), langCode) { langCode = it }
             LangChip("hi", stringResource(R.string.lang_hi_short), langCode) { langCode = it }
             LangChip("en", stringResource(R.string.lang_en_short), langCode) { langCode = it }
-            Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                if (series.isNotEmpty()) {
-                    Text(
-                        stringResource(R.string.chavithi_katha_part, part + 1, ids.size),
-                        color = Ink,
-                        style = MaterialTheme.typography.labelLarge,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-            }
+            Box(Modifier.weight(1f))
             Text(
                 stringResource(R.string.home),
                 color = Maroon,
                 style = MaterialTheme.typography.labelLarge,
                 modifier = Modifier.heightIn(min = 56.dp).clickable(onClick = onHome).padding(12.dp),
+            )
+        }
+        if (series.isNotEmpty()) {
+            Text(
+                stringResource(R.string.chavithi_katha_part, part + 1, ids.size),
+                color = Ink,
+                style = MaterialTheme.typography.labelLarge,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp),
             )
         }
         if (telling != null && !started) {

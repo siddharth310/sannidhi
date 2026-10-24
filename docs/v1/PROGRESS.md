@@ -77,3 +77,17 @@ Stories opens on the same god cards as Puja. Only gods with a story in this buil
 The Vināyaka Chavithi katha step, and the Vināyaka Chavithi observance page under the families-do lines, show the same two-part card. Part 1 is the moon story and part 2 is the Syamantaka jewel. The end of part 1 offers Continue, and continues by itself after three seconds only while Read to me is on. The end of part 2 offers only Back to the puja, or Back when the katha was opened from the observance or from Stories. Back returns to the same step. A place left in the middle is kept for 12 hours. No other step shows a story. Syamantaka has `narration: yes` and no audio yet, so Read to me stays hidden, the same as the other three stories.
 
 `python3 tools/build_content.py --check`: 0 errors, 4 narration warnings, and the lines `ganesha: 4` and `Vināyaka Chavithi katha: moon → syamantaka`. 0 missing images. Rows for the god grid, the search flag, god-page order, the back path and For today are in `tests/M2-stories.xlsx`. Rows for the katha card, part 1 to part 2, auto-continue, guided Back and the 12-hour resume are in `tests/M3-puja.xlsx`.
+
+## Device pass on the skipped checks
+
+Emulator, debug date 14 Sep 2026, Hyderabad. Results are in column L of `tests/M2-stories.xlsx` and `tests/M3-puja.xlsx`. Audio rows stay “waiting for audio”.
+
+Telugu on the story chip showed the beat in Telugu and left the chrome in English. Switching the app language to Telugu while the story was open changed the chrome and the story together. The language is English again.
+
+At 200% the god grid, the god page and the katha card scroll and stay readable. The katha part title had been squeezed to one letter a line, so it now sits on its own line under the chips. With TalkBack on, the god card reads “Ganesha, 4 stories” and the katha card reads “Chavithi katha, 2 parts”. A system notification sheet blocked the spoken double-tap and was closed without allowing notifications.
+
+Airplane mode: Stories and the moon story open, and the music plays. The offering Search button was not opened, so that row is not a pass. Show story search, with one god, shows the field; `zzzz` hides the list and `gane` shows Ganesha. The flag was turned off again afterwards.
+
+Back from the katha in guided mode stays on step 24 of 32. The first try had restarted the puja and asked “Continue from step 24?”; the guided page is now kept while the story is open, and a fresh entry still asks. The Vināyaka Chavithi observance page, under What families do, shows the same two-part card.
+
+A missed tap during the language sheet started one extra empty japam. It was left in place, because it cannot be told apart from an earlier empty row without deleting practice. Delete my data was not pressed.

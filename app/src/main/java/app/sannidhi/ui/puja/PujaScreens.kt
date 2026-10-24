@@ -50,8 +50,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -497,12 +499,18 @@ fun GuidedPujaScreen(
         onDispose { view.keepScreenOn = false }
     }
     BackHandler(onBack = onClose)
+    // Survives opening a story on top of this screen, so Back returns to the same step.
+    var savedPage by rememberSaveable(pujaId) { mutableIntStateOf(-1) }
+    var asked by rememberSaveable(pujaId) { mutableStateOf(false) }
     LaunchedEffect(pujaId, settings.cityId, settings.debugToday, settings.lang) {
         bundle = loadPuja(repository, pujaId, settings)
     }
     val loaded = bundle ?: return
     val pages = loaded.puja.stages.flatMap { stage -> stage.steps.map { stage.stage to it } }
-    val pager = rememberPagerState(pageCount = { pages.size })
+    val pager = rememberPagerState(
+        initialPage = savedPage.coerceIn(0, pages.lastIndex.coerceAtLeast(0)),
+        pageCount = { pages.size },
+    )
     val scope = rememberCoroutineScope()
     val script = mantraScript(settings)
     val date = settings.today().toString()
@@ -511,14 +519,18 @@ fun GuidedPujaScreen(
     var offer by remember(pujaId) { mutableStateOf<Int?>(null) }
     var placeReady by remember(pujaId) { mutableStateOf(false) }
     LaunchedEffect(pujaId) {
-        val saved = store.guidedPlace(pujaId).first()
-        if (saved != null && saved.index > 0 && System.currentTimeMillis() - saved.at < TWELVE_HOURS) {
-            offer = saved.index
+        if (!asked) {
+            val saved = store.guidedPlace(pujaId).first()
+            if (savedPage < 0 && saved != null && saved.index > 0 && System.currentTimeMillis() - saved.at < TWELVE_HOURS) {
+                offer = saved.index
+            }
+            asked = true
         }
         placeReady = true
     }
     LaunchedEffect(pager.currentPage, offer, placeReady) {
         if (!placeReady || offer != null) return@LaunchedEffect
+        savedPage = pager.currentPage
         store.setGuidedPlace(pujaId, pager.currentPage)
     }
     Column(Modifier.fillMaxSize().background(Ivory).statusBarsPadding()) {
