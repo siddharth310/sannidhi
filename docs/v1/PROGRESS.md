@@ -109,3 +109,11 @@ Telangana’s offering page leads with Undrallu. Maharashtra’s leads with Moda
 The debug date was set to the three acceptance days and put back to 14 Sep 2026. Home showed Thu 19 Mar · kṛṣṇa amāvāsyā with no observance, Vinayaka Chavithi on 14 Sep, and Sun 11 Oct · śukla pratipat with no observance. Those match `tests/calendar-export/hyderabad-2026.csv`. Vijayawada’s CSV is beside it. The calendar month still opens in airplane mode. No override was added.
 
 Moving the debug date to 11 Oct closed the 11-day aṣṭottaram, because that day is past its last day. That one row was set back to active. Its counts were left as they were. The comparison with the TTD panchāṅgam is still open.
+
+## M5 device pass
+
+Home shows Good afternoon, Mon 14 Sep · śukla tṛtīyā · Hyderabad, Vinayaka Chavithi with Start the puja, and Ganapati mula mantra and 4 more. Telugu switches the app at once and was set back to English. Maharashtra and Mumbai saved, then the profile was put back to Telangana and Hyderabad.
+
+About shows 0.3.0-dev and content pack 20261024.1303. Licences lists the four fonts. Privacy opens with no network and says the body is the English draft. At 200% the home greeting, the date line, the festival card and the sādhana bar are on screen. The manifest has no internet permission.
+
+Not run: Delete my data, the empty sādhana state, a 30-minute monkey, a network inspector, and a 200% screenshot of every route. Audio rows stay waiting.
