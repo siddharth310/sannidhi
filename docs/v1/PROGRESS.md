@@ -97,3 +97,9 @@ A missed tap during the language sheet started one extra empty japam. It was lef
 On the moon story, with no narration files: there is no age choice, each beat is one sentence, and swiping moves on at once. Read to me stays hidden, so pages wait to be turned, and the music plays. Pause, and locking the screen, both leave the control on Play and the bed does not start again. The last beat offers Do the puja and More stories of Ganesha, with no score. The beats now have their drawings, so the symbol fallback was not what showed.
 
 Still waiting for audio: the title and sentence lighting, the 1.5 second advance, the music ducking under a voice, the low bed on the marked beats, and a touch sound over the voice. Those rows in `tests/M2-stories.xlsx` stay “waiting for audio”.
+
+## M3 device pass
+
+The patra step counts to 21 of 21. Leaving the puja and opening it again shows 0 of 21, and the japam totals stay 112, 7 and 5. A durva tick is still there after a force-stop. Clear ticks removes it. The durva line reads “No Durva grass? Akshata is fine.” Pre, During and Post jump to those parts. Guided mode is one step at a time, and opening it again asks “Continue from step 24?”.
+
+Telangana’s offering page leads with Undrallu. Maharashtra’s leads with Modak. All five forms are listed, with Why this offering, the days it is offered, and the elder line. Search is on the page while the phone is online. In airplane mode the page still opens and Search is hidden. The profile is Telangana, Hyderabad, English again. A release build was not made this pass, so the draft-exclusion row is still open. Audio rows stay waiting.
