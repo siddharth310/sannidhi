@@ -56,6 +56,9 @@ fun ProfileScreen(
     onHome: () -> Unit,
     onDeleted: () -> Unit,
     onFindNakshatra: () -> Unit,
+    onAbout: () -> Unit,
+    onLicences: () -> Unit,
+    onPrivacy: () -> Unit,
 ) {
     val settings by store.settings.collectAsState(initial = settings)
     var master by remember { mutableStateOf<Master?>(null) }
@@ -137,6 +140,9 @@ fun ProfileScreen(
                 }
             }
             Text(stringResource(R.string.stays_on_phone), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
+            SelectRow(stringResource(R.string.about), false, onAbout)
+            SelectRow(stringResource(R.string.licences), false, onLicences)
+            SelectRow(stringResource(R.string.privacy), false, onPrivacy)
             Text(
                 text = stringResource(R.string.delete_data),
                 color = Maroon,

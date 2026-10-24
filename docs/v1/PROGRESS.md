@@ -57,3 +57,11 @@ Compared with the acceptance dates, from the Hyderabad file (Vijayawada agrees o
 These CSVs need a comparison with the TTD panchāṅgam. A difference goes in `content/calendar/overrides.csv`, not in code. I have not added an override.
 
 A missing te, hi or en line in a rāśi profile or gochara note fails the check, and so does a fear or remedy word in any language. The current notes pass. The observance page, today's note only, and the good-time list were already in the app. The good-time strings do not name rāhu kālam, yamagaṇḍam, durmuhūrtam, varjyam, avoid, bad or inauspicious.
+
+## M5 — Home and Profile
+
+Home on the emulator (English, Hyderabad, debug date 14 Sep) shows the greeting, the date · tithi · city line, Vinayaka Chavithi with Start the puja, the four module cards, the language pill, and the sādhana bar "Ganapati mula mantra and 3 more".
+
+Profile now has About, Licences and Privacy, each with Back and Home. About shows the app version and the content-pack version from the manifest. Licences lists the four fonts, the open-source libraries, and the music and sound licence files packed with the app. Privacy shows the English draft from `docs/v1/release/privacy-policy.md`, copied into the app so it opens with no network. Telugu and Hindi say that the body is still the English draft. Delete my data already clears the settings and the practice database, and now also clears the app cache, then returns to onboarding. I did not press it on this emulator, because that phone already holds sankalpam practice.
+
+Not done on a device: a full language switch walk, 200% font screenshots, TalkBack, contrast measurement, airplane mode, a 30-minute monkey run, and a network inspector. The manifest has no internet permission and no analytics SDK. The Search button on an offering page is the one place that opens the browser, and only while the phone is online.

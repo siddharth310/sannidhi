@@ -20,6 +20,7 @@ class AppContainer(context: Context) {
         settingsStore.clear()
         withContext(Dispatchers.IO) {
             database.clearAllTables()
+            appContext.cacheDir.deleteRecursively()
         }
     }
 }

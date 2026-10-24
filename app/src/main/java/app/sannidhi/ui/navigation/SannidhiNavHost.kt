@@ -31,6 +31,9 @@ import app.sannidhi.ui.sankalpam.SankalpamHomeScreen
 import app.sannidhi.ui.sankalpam.SankalpamPlayerScreen
 import app.sannidhi.ui.sankalpam.StartJapamScreen
 import app.sannidhi.ui.onboarding.OnboardingScreen
+import app.sannidhi.ui.profile.AboutScreen
+import app.sannidhi.ui.profile.LicencesScreen
+import app.sannidhi.ui.profile.PrivacyScreen
 import app.sannidhi.ui.profile.ProfileScreen
 import app.sannidhi.ui.theme.Ivory
 import androidx.compose.foundation.background
@@ -40,6 +43,9 @@ import kotlinx.serialization.Serializable
 @Serializable data object HomeRoute
 @Serializable data object OnboardingRoute
 @Serializable data object ProfileRoute
+@Serializable data object AboutRoute
+@Serializable data object LicencesRoute
+@Serializable data object PrivacyRoute
 @Serializable data object PujaRoute
 @Serializable data class PujaGodRoute(val deity: String)
 @Serializable data class PujaIdRoute(val pujaId: String)
@@ -124,7 +130,19 @@ fun SannidhiNavHost(container: AppContainer) {
                     }
                 },
                 onFindNakshatra = { nav.navigate(FindNakshatraRoute(fromMasam = false)) },
+                onAbout = { nav.navigate(AboutRoute) },
+                onLicences = { nav.navigate(LicencesRoute) },
+                onPrivacy = { nav.navigate(PrivacyRoute) },
             )
+        }
+        composable<AboutRoute> {
+            AboutScreen(repo, { nav.popBackStack() }, { home() })
+        }
+        composable<LicencesRoute> {
+            LicencesScreen({ nav.popBackStack() }, { home() })
+        }
+        composable<PrivacyRoute> {
+            PrivacyScreen({ nav.popBackStack() }, { home() })
         }
         composable<FindNakshatraRoute> { entry ->
             val route = entry.toRoute<FindNakshatraRoute>()

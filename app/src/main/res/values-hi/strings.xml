@@ -322,4 +322,13 @@
     <string name="speed_1">1×</string>
     <string name="speed_125">1.25×</string>
     <string name="speed_15">1.5×</string>
+    <string name="about">परिचय</string>
+    <string name="licences">लाइसेंस</string>
+    <string name="privacy">गोपनीयता</string>
+    <string name="made_with_care">परिवारों के लिए सावधानी से बनाया गया।</string>
+    <string name="app_version">ऐप संस्करण %1$s</string>
+    <string name="content_pack">सामग्री पैक %1$s</string>
+    <string name="font_licences">Cormorant Garamond, Inter, Noto Serif Telugu और Noto Serif Devanagari फ़ॉन्ट SIL Open Font License के अधीन हैं।</string>
+    <string name="library_licences">ओपन-सोर्स लाइब्रेरी: AndroidX, Jetpack Compose, Material 3, Navigation, Kotlin serialization, DataStore, Room, coroutines और Media3। हर एक का अपना लाइसेंस है।</string>
+    <string name="policy_in_english">नीचे की नीति अंग्रेज़ी मसौदा है। समीक्षा के बाद अनुवाद जोड़ा जाएगा।</string>
 </resources>

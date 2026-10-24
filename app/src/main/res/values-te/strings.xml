@@ -322,4 +322,13 @@
     <string name="speed_1">1×</string>
     <string name="speed_125">1.25×</string>
     <string name="speed_15">1.5×</string>
+    <string name="about">గురించి</string>
+    <string name="licences">లైసెన్సులు</string>
+    <string name="privacy">గోప్యత</string>
+    <string name="made_with_care">కుటుంబాల కోసం శ్రద్ధతో తయారు చేయబడింది.</string>
+    <string name="app_version">యాప్ వెర్షన్ %1$s</string>
+    <string name="content_pack">కంటెంట్ ప్యాక్ %1$s</string>
+    <string name="font_licences">Cormorant Garamond, Inter, Noto Serif Telugu, Noto Serif Devanagari ఫాంట్లు SIL Open Font License కింద ఉన్నాయి.</string>
+    <string name="library_licences">ఓపెన్ సోర్స్ లైబ్రరీలు: AndroidX, Jetpack Compose, Material 3, Navigation, Kotlin serialization, DataStore, Room, coroutines, Media3. ప్రతిదాని లైసెన్సు దానిదే.</string>
+    <string name="policy_in_english">కింద ఉన్న విధానం ఇంగ్లీషు ముసాయిదా. సమీక్ష తర్వాత అనువాదం వస్తుంది.</string>
 </resources>
