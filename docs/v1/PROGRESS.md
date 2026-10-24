@@ -41,3 +41,19 @@ A step with a mantra and a count shows "Chant 21 times" and a tap counter. The c
 `python3 tools/build_content.py --check` prints every draft row. A `--release` build already drops draft deities, pujas, mantras, texts, naivedyam, observances and stories.
 
 Not walked on the device this pass: the 21-count up to 21, Clear ticks after a restart, the 12-hour continue question, and a Maharashtra profile. The Telangana offering page was opened on the emulator.
+
+## M4 — Calendar
+
+`python3 tools/build_content.py --export-calendar hyderabad 2026` and the same for vijayawada write `build/check/<city>-2026.csv` (also copied to `tests/calendar-export/`). Each row is one day: weekday, sunrise, sunset, tithi, paksha, māsam, nakṣatra, moon rāśi, observances and good-time windows.
+
+Compared with the acceptance dates, from the Hyderabad file (Vijayawada agrees on the tithi):
+
+| Date | Computed sunrise tithi | Observance |
+| --- | --- | --- |
+| 19 Mar 2026 | kṛṣṇa 15, Phālguna. Tithi ends 06:54. | none. There is no Ugadi observance in the content, and Chaitra śukla 1 is not the sunrise tithi. 20 Mar is already śukla 2. |
+| 14 Sep 2026 | śukla 3, Bhādrapada | obs.vinayaka-chavithi. The good window 07:18–07:35 matches the Home card. |
+| 11 Oct 2026 | śukla 1, Āśvayuja | none attached. The tithi is the one asked for. |
+
+These CSVs need a comparison with the TTD panchāṅgam. A difference goes in `content/calendar/overrides.csv`, not in code. I have not added an override.
+
+A missing te, hi or en line in a rāśi profile or gochara note fails the check, and so does a fear or remedy word in any language. The current notes pass. The observance page, today's note only, and the good-time list were already in the app. The good-time strings do not name rāhu kālam, yamagaṇḍam, durmuhūrtam, varjyam, avoid, bad or inauspicious.

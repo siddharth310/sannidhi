@@ -762,18 +762,27 @@ def load_rashi():
         k = sec.keys("rashi/gochara.md")
         variants = sec.langs(variants=True)
         for l in LANGS:
-            if not variants.get(l):
-                (R.err if st_g != "draft" else R.warn)(f"rashi/gochara.md {sec.title}", f"missing {l}")
-        for txt in variants.get("en", []):
-            if FEAR_WORDS.search(txt):
-                R.err(f"rashi/gochara.md {sec.title}", f"fear / remedy word: '{FEAR_WORDS.search(txt).group(0)}'")
+            texts = variants.get(l) or []
+            if not texts:
+                R.err(f"rashi/gochara.md {sec.title}", f"missing {l}")
+            for txt in texts:
+                hit = FEAR_WORDS.search(txt)
+                if hit:
+                    R.err(f"rashi/gochara.md {sec.title}", f"fear / remedy word: '{hit.group(0)}'")
         if k.get("tone") not in ("open", "steady", "gentle"):
             R.err(f"rashi/gochara.md {sec.title}", "tone must be open, steady or gentle")
         houses.append({"house": int(m.group(1)), "tone": k.get("tone"), "suggest_text": k.get("suggest_text"),
                        "variants": variants})
     if sorted(h["house"] for h in houses) != list(range(1, 13)):
         R.err("rashi/gochara.md", "need exactly houses h01–h12")
-    profiles = {sec.title: localized(sec.langs(), f"rashi/profiles.md {sec.title}", st_p) for sec in p.children}
+    profiles = {}
+    for sec in p.children:
+        loc = localized(sec.langs(), f"rashi/profiles.md {sec.title}", "reviewed")
+        for txt in (loc or {}).values():
+            hit = FEAR_WORDS.search(txt or "")
+            if hit:
+                R.err(f"rashi/profiles.md {sec.title}", f"fear / remedy word: '{hit.group(0)}'")
+        profiles[sec.title] = loc
     return {"status": "draft" if "draft" in (st_g, st_p) else st_g, "profiles": profiles,
             "gochara": sorted(houses, key=lambda h: h["house"])}
 
@@ -1063,12 +1072,53 @@ def status_report(data, images):
             print(f"  {kind}  {item_id}")
 
 
+def export_calendar(city, year):
+    """Write one row per day so a year can be compared with a printed panchangam."""
+    import good_times
+    folder = os.path.join(ROOT, "app", "src", "main", "assets", "content", "calendar", city)
+    matches = sorted(glob.glob(os.path.join(folder, f"{year}-*.json")))
+    if not matches:
+        R.err("export", f"no calendar for {city} {year}; run a full build first")
+        R.print()
+        return 1
+    data = json.load(open(matches[0], encoding="utf-8"))
+    master = json.load(open(os.path.join(ROOT, "app", "src", "main", "assets", "content", "master.json"), encoding="utf-8"))
+    masa = {m["n"]: m["id"] for m in master["masams"]}
+    out_dir = os.path.join(ROOT, "build", "check")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, f"{city}-{year}.csv")
+    days = data["days"]
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["date", "weekday", "sunrise", "sunset", "tithi", "tithi_ends", "paksha", "masam",
+                    "nakshatra", "nakshatra_ends", "moon_rashi", "observances", "good_times"])
+        for day in days:
+            date = dt.date.fromisoformat(day["date"])
+            tithi = int(day["tithi"])
+            shown = tithi - 15 if tithi > 15 else tithi
+            paksha = "krishna" if tithi > 15 else "shukla"
+            goods = good_times.windows(days, date)
+            spans = "; ".join(f"{g.kind} {g.start.strftime('%H:%M')}-{g.end.strftime('%H:%M')}" for g in goods)
+            w.writerow([
+                day["date"], date.strftime("%A"), day.get("sunrise"), day.get("sunset"),
+                shown, day.get("tithi_ends"), paksha, masa.get(day.get("masa"), day.get("masa")),
+                day.get("nakshatra"), day.get("nakshatra_ends"), day.get("moon_rashi"),
+                " ".join(day.get("observances") or []), spans,
+            ])
+    print(f"Wrote {path}")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true", help="validate only")
     ap.add_argument("--release", action="store_true", help="include only reviewed / published")
     ap.add_argument("--no-calendar", action="store_true", help="skip calendar computation (faster)")
+    ap.add_argument("--export-calendar", nargs=2, metavar=("CITY", "YEAR"), help="write build/check/<city>-<year>.csv")
     args = ap.parse_args()
+    if args.export_calendar:
+        city, year = args.export_calendar
+        sys.exit(export_calendar(city, year))
 
     try:
         master = load_master()
