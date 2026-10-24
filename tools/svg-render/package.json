@@ -1,0 +1,7 @@
+{
+  "name": "sannidhi-svg-render",
+  "private": true,
+  "dependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  }
+}

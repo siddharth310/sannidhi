@@ -18,6 +18,8 @@ data class Sankalpam(
     val status: String,
     val completedAt: String? = null,
     val groupId: String? = null,
+    /** Set the first time the goal line is shown, so it never appears again. */
+    val goalNoted: Boolean = false,
 )
 
 /** One saved count. A cut-off recitation is never written. */

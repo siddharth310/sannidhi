@@ -55,6 +55,11 @@ class PracticeRepository(private val dao: PracticeDao) {
         dao.markCompleted(id, today.toString())
     }
 
+    /** The goal line is shown once for this japam, then never again. */
+    suspend fun noteGoal(id: String) {
+        dao.noteGoal(id)
+    }
+
     suspend fun sankalpam(id: String): Sankalpam? = dao.sankalpam(id)
 
     /** A finished recitation, a Done tap, a ring tap, or a hand add. Nothing is written before the start date. */

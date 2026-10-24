@@ -297,6 +297,7 @@
     <string name="reason_optional">Reason (optional)</string>
     <string name="reason_help">Only you see this, on this phone.</string>
     <string name="start_action">Start</string>
+    <string name="continue_step">Continue</string>
     <string name="choose_chant_error">Choose what you will chant</string>
     <string name="goal_zero_error">Enter a goal above zero</string>
     <string name="about_action">About</string>

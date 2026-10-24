@@ -27,8 +27,8 @@ and compiled by `tools/build_content.py` into `app/src/main/assets/content/`.
 | Run | Prompt | Test workbook | Needs from me |
 |---|---|---|---|
 | M0 Intake (once) | `docs/cursor/V1-00-INTAKE.md` | — | The zip in the repo root |
-| M1 Sankalpam (solo) | `docs/cursor/M1-sankalpam-complete.md` (P3a must already be built; if not, run `P3a-sankalpam-solo.md` first) | `tests/M1-sankalpam.xlsx` | Names are in `content/source/ganesha_ashtottara.json`; draft audio from Colab |
-| M2 Stories | `docs/cursor/P2d2-stories-audio.md`, then `M2-stories-complete.md` | `tests/M2-stories.xlsx` | Narration files from Colab; beat pictures when ready |
+| M1 Sankalpam (solo) | `docs/cursor/M1-sankalpam-complete.md` (P3a must already be built; if not, run `P3a-sankalpam-solo.md` first) | `tests/M1-sankalpam.xlsx` | Names are in `content/source/ganesha_ashtottara.json`. Audio arrives at the end of v1 in `_incoming/audio-from-sarvam/` |
+| M2 Stories | `docs/cursor/P2d2-stories-audio.md`, then `M2-stories-complete.md` | `tests/M2-stories.xlsx` | Narration arrives with the other audio in `_incoming/audio-from-sarvam/`; beat pictures when ready |
 | M3 Puja | `docs/cursor/M3-puja-complete.md` | `tests/M3-puja.xlsx` | Images when ready |
 | M4 Calendar | `docs/cursor/M4-calendar-complete.md` | `tests/M4-calendar.xlsx`, `tests/calendar-check.xlsx` | TTD panchāṅgam comparison |
 | M5 Home, Profile, quality | `docs/cursor/M5-home-profile.md` | `tests/M5-home-profile.xlsx` | — |
@@ -45,9 +45,11 @@ Design references for every module: `docs/design/sankalpam-design.md` (v7) and `
 - Never type, generate, translate or "fix" a mantra, a divine name or any sacred line. Sacred text comes only from
   files in `content/` that I supply; the aṣṭottaram comes only from `content/source/ganesha_ashtottara.json`
   through `tools/import_ashtottara.py`. If something looks wrong, list it for me; do not change it.
-- Release builds ship only content marked `reviewed` or `published`, and no draft audio. Dev and internal builds
-  may show drafts.
-- Sacred audio in a release build is a human recording. Machine-made audio is for testing only.
+- Release builds ship only content marked `reviewed` or `published`. Dev and internal builds may show drafts.
+- Audio is made outside the repo, on Sarvam’s website. The files arrive at the end of v1 in
+  `_incoming/audio-from-sarvam/`. Nothing in the repo makes audio. Bulbul audio, including the chants, ships in
+  the release once it is marked `reviewed`. Until then a text shows Done and a mantra shows the ring.
+  See `docs/v1/AUDIO.md`.
 
 **Free will, not tasks**
 - No streaks, reminders, badges, "0 today", missed days, gaps, red, or guilt. Show what was done, never what wasn't.

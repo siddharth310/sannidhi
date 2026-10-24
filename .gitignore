@@ -27,3 +27,4 @@ captures/
 gradle/wrapper/gradle-8.11.1-bin.zip
 _incoming/
 *.zip
+node_modules/

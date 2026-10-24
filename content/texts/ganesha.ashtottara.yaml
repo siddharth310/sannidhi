@@ -8,7 +8,6 @@ unit: reading
 title: { te: శ్రీ గణేశ అష్టోత్తర శతనామావళి, hi: श्री गणेश अष्टोत्तर शतनामावली, en: Ganesha Ashtottara (108 names) }
 status: draft
 reviewed_by:
-audio: { file: ganesha.ashtottara.mp3, intro_ms: 8000, slot_ms: 3500 }
 names:
 - {n: 1, sa: ॐ गजाननाय नमः}
 - {n: 2, sa: ॐ गणाध्यक्षाय नमः}

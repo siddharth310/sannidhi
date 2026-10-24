@@ -7,6 +7,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -138,12 +139,15 @@ fun SankalpamPlayerScreen(
     }
     LaunchedEffect(id) {
         practice.total(id).collect { value ->
-            val goal = practice.sankalpam(id)?.goal ?: return@collect
+            val sankalpam = practice.sankalpam(id) ?: return@collect
+            if (sankalpam.goalNoted) return@collect
+            val goal = sankalpam.goal
             if (!primed) {
                 baseline = value
                 primed = true
             } else if (!goalShown && baseline < goal && value >= goal) {
                 goalShown = true
+                practice.noteGoal(id)
             }
         }
     }
@@ -243,18 +247,10 @@ fun SankalpamPlayerScreen(
                                 scope.launch {
                                     practice.add(id, 1, "done", settings.today())
                                     added = true
-                                    listState.scrollToItem(0)
                                     delay(2000)
+                                    listState.scrollToItem(0)
                                     added = false
                                 }
-                            }
-                            if (added) {
-                                Text(
-                                    stringResource(R.string.reading_added),
-                                    color = LeafDark,
-                                    style = MaterialTheme.typography.bodyLarge,
-                                    modifier = Modifier.padding(horizontal = 16.dp),
-                                )
                             }
                         }
                     }
@@ -292,6 +288,14 @@ fun SankalpamPlayerScreen(
                     }
                 }
             }
+        }
+        if (added) {
+            Text(
+                stringResource(R.string.reading_added),
+                color = LeafDark,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            )
         }
         if (future && start != null) {
             val whenLabel = if (start == settings.today().plusDays(1)) {
@@ -491,7 +495,10 @@ private fun HandSheet(row: com.smaranam.app.practice.Sankalpam, settings: AppSet
             }
         }
         Text(stringResource(R.string.hand_which_day), color = Ink, style = MaterialTheme.typography.labelLarge)
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            Modifier.horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
             dates.forEach { day ->
                 val label = when (day) {
                     today -> stringResource(R.string.today)
@@ -511,12 +518,10 @@ private fun HandSheet(row: com.smaranam.app.practice.Sankalpam, settings: AppSet
             }
         }
         Text(stringResource(R.string.hand_note), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
-        LeafButton(stringResource(R.string.hand_add, indian(count))) {
-            if (count > 0) {
-                scope.launch {
-                    practice.add(row.id, count, "hand", date)
-                    onDone()
-                }
+        LeafButton(stringResource(R.string.hand_add, indian(count)), enabled = count > 0) {
+            scope.launch {
+                practice.add(row.id, count, "hand", date)
+                onDone()
             }
         }
     }
@@ -535,6 +540,7 @@ private fun AboutSheet(
     val entries by practice.monthEntries(row.id, prefix).collectAsState(initial = emptyList())
     val days = entries.groupBy { it.localDate }.entries
         .map { (date, list) -> Triple(date, list.sumOf { it.count }, list.any { it.source == "hand" }) }
+        .filter { it.second > 0 }
         .sortedByDescending { it.first }
     val start = runCatching { LocalDate.parse(row.startDate) }.getOrNull()
     val end = start?.let { lastDay(it, row.days) }

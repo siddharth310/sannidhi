@@ -294,8 +294,9 @@ fun StartJapamScreen(
     var chosen by remember { mutableStateOf<Chantable?>(null) }
     var goalText by remember { mutableStateOf(if (prefillGoal > 0) prefillGoal.toString() else "") }
     var days by remember { mutableIntStateOf(if (prefillDays > 0) prefillDays else 41) }
-    var otherDays by remember { mutableStateOf("") }
-    var otherOpen by remember { mutableStateOf(false) }
+    val oddDays = prefillDays > 0 && prefillDays !in setOf(11, 21, 41)
+    var otherDays by remember { mutableStateOf(if (oddDays) prefillDays.toString() else "") }
+    var otherOpen by remember { mutableStateOf(oddDays) }
     var start by remember { mutableStateOf(settings.today()) }
     var reason by remember { mutableStateOf("") }
     var error by remember { mutableStateOf<Int?>(null) }
@@ -421,6 +422,7 @@ fun StartJapamScreen(
                             Box(Modifier.padding(top = 12.dp).fillMaxWidth().height(1.dp).background(Gold))
                         }
                     }
+                    LeafButton(stringResource(R.string.continue_step), Modifier.padding(top = 16.dp)) { step = 3 }
                 }
             }
             else -> {
@@ -486,9 +488,20 @@ fun StartJapamScreen(
                         Text(stringResource(R.string.reason_optional), color = Ink, style = MaterialTheme.typography.labelLarge)
                         NumberField(reason, digitsOnly = false) { reason = it }
                         Text(stringResource(R.string.reason_help), color = InkSoft, style = MaterialTheme.typography.bodyLarge)
+                        val goalNow = goalText.toIntOrNull() ?: 0
+                        if (item == null) {
+                            Text(stringResource(R.string.choose_chant_error), color = Maroon, style = MaterialTheme.typography.bodyLarge)
+                        } else if (goalNow <= 0 || days <= 0) {
+                            Text(stringResource(R.string.goal_zero_error), color = Maroon, style = MaterialTheme.typography.bodyLarge)
+                        }
                         error?.let { Text(stringResource(it), color = Maroon, style = MaterialTheme.typography.bodyLarge) }
                     }
-                    LeafButton(stringResource(R.string.start_action), Modifier.navigationBarsPadding().padding(16.dp)) {
+                    val goalNow = goalText.toIntOrNull() ?: 0
+                    LeafButton(
+                        stringResource(R.string.start_action),
+                        Modifier.navigationBarsPadding().padding(16.dp),
+                        enabled = item != null && goalNow > 0 && days > 0,
+                    ) {
                         val goal = goalText.toIntOrNull() ?: 0
                         val chant = chosen
                         error = when {
@@ -626,12 +639,18 @@ private fun sacredName(sacred: com.smaranam.app.content.Sacred, settings: AppSet
     sacred.pick(settings.textViewEnum(), lang)
 
 @Composable
-internal fun LeafButton(label: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
+internal fun LeafButton(label: String, modifier: Modifier = Modifier, enabled: Boolean = true, onClick: () -> Unit) {
     Box(
-        modifier.fillMaxWidth().heightIn(min = 56.dp).clip(RoundedCornerShape(16.dp)).background(Leaf).clickable(onClick = onClick).padding(horizontal = 16.dp),
+        modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (enabled) Leaf else LeafBorder)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(horizontal = 16.dp),
         contentAlignment = Alignment.Center,
     ) {
-        Text(label, color = Ivory, style = MaterialTheme.typography.labelLarge)
+        Text(label, color = if (enabled) Ivory else InkSoft, style = MaterialTheme.typography.labelLarge)
     }
 }
 

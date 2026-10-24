@@ -42,6 +42,9 @@ interface PracticeDao {
     @Query("UPDATE sankalpam SET status = 'completed', completedAt = :at WHERE id = :id")
     suspend fun markCompleted(id: String, at: String)
 
+    @Query("UPDATE sankalpam SET goalNoted = 1 WHERE id = :id")
+    suspend fun noteGoal(id: String)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertEntry(entry: PracticeEntry)
 

@@ -284,6 +284,7 @@
     <string name="reason_optional">कारण (वैकल्पिक)</string>
     <string name="reason_help">यह केवल आपको, इसी फ़ोन पर दिखेगा।</string>
     <string name="start_action">आरम्भ</string>
+    <string name="continue_step">आगे बढ़ें</string>
     <string name="choose_chant_error">क्या जपेंगे, चुनें</string>
     <string name="goal_zero_error">शून्य से बड़ा लक्ष्य लिखें</string>
     <string name="about_action">विवरण</string>

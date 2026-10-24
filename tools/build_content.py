@@ -18,6 +18,7 @@ import json
 import os
 import re
 import shutil
+import subprocess
 import sys
 from collections import defaultdict
 
@@ -842,6 +843,30 @@ SIZES = {"deity": {"hero": (1200, 1500), "card": (600, 600)}, "symbol": (192, 19
          "observance": (1200, 800), "story": (1600, 1200), "naivedyam": (800, 800), "samagri": (256, 256)}
 
 
+def image_size(kind, iid):
+    size = SIZES.get(kind)
+    if isinstance(size, dict):
+        size = size.get(iid.rsplit(".", 1)[-1], (600, 600))
+    return size or (600, 600)
+
+
+def rasterize_svg(src, tmp, size):
+    """Write a PNG. Cairo is used when it is installed; otherwise resvg renders the same drawing."""
+    try:
+        import cairosvg
+        cairosvg.svg2png(url=src, write_to=tmp, output_width=size[0], output_height=size[1])
+        return
+    except Exception as cairo_error:
+        script = os.path.join(ROOT, "tools", "svg_to_png.mjs")
+        node = shutil.which("node")
+        if not node or not os.path.isfile(script):
+            raise cairo_error
+        proc = subprocess.run([node, script, src, tmp, str(size[0]), str(size[1])], capture_output=True, text=True)
+        if proc.returncode != 0:
+            detail = (proc.stderr or proc.stdout or "").strip()
+            raise RuntimeError(f"{cairo_error}; resvg: {detail}") from cairo_error
+
+
 def build_images(images, out_dir):
     out = {}
     for iid, im in images.items():
@@ -853,13 +878,13 @@ def build_images(images, out_dir):
             try:
                 from PIL import Image
                 if im["src"].endswith(".svg"):
-                    import cairosvg
-                    size = SIZES.get(im["kind"])
-                    if isinstance(size, dict):
-                        size = size.get(iid.rsplit(".", 1)[-1], (600, 600))
+                    size = image_size(im["kind"], iid)
                     tmp = dst + ".png"
-                    cairosvg.svg2png(url=im["src"], write_to=tmp, output_width=size[0], output_height=size[1])
-                    Image.open(tmp).save(dst, "WEBP", quality=90)
+                    rasterize_svg(im["src"], tmp, size)
+                    image = Image.open(tmp).convert("RGBA")
+                    if image.size != tuple(size):
+                        image = image.resize(tuple(size), Image.Resampling.LANCZOS)
+                    image.save(dst, "WEBP", quality=90)
                     os.remove(tmp)
                 else:
                     Image.open(im["src"]).save(dst, "WEBP", quality=88)

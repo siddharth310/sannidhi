@@ -284,6 +284,7 @@
     <string name="reason_optional">కారణం (ఐచ్ఛికం)</string>
     <string name="reason_help">ఇది ఈ ఫోన్‌లో మీకు మాత్రమే కనిపిస్తుంది.</string>
     <string name="start_action">మొదలుపెట్టండి</string>
+    <string name="continue_step">కొనసాగించండి</string>
     <string name="choose_chant_error">ఏమి జపిస్తారో ఎంచుకోండి</string>
     <string name="goal_zero_error">సున్నా కంటే ఎక్కువ లక్ష్యం రాయండి</string>
     <string name="about_action">గురించి</string>
