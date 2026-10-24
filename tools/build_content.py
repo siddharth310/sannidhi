@@ -191,10 +191,13 @@ def load_images():
             R.err(where, "duplicate image id")
         named = (r.get("file") or "").strip()
         src = os.path.join(C, "images", named) if named else None
-        if named and not os.path.exists(src):
-            R.err(where, f"image cannot be produced; file missing: {named}")
-            src = None
-        out[r["id"]] = {"kind": r["kind"], "src": src, "status": r["status"] if src else "missing",
+        exists = bool(src and os.path.exists(src))
+        status = r["status"]
+        if status in ("supplied", "approved") and not exists:
+            R.err(where, f"image cannot be produced; file missing: {named or '(none)'}")
+        if exists and status == "missing":
+            status = "supplied"
+        out[r["id"]] = {"kind": r["kind"], "src": src if exists else None, "status": status if exists else "missing",
                         "used_by": r["used_by"], "priority": r["priority"],
                         "alt": {l: r.get(f"alt_{l}", "") for l in LANGS if r.get(f"alt_{l}")}}
     return out
