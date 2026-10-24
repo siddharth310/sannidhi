@@ -91,3 +91,9 @@ Airplane mode: Stories and the moon story open, and the music plays. The offerin
 Back from the katha in guided mode stays on step 24 of 32. The first try had restarted the puja and asked “Continue from step 24?”; the guided page is now kept while the story is open, and a fresh entry still asks. The Vināyaka Chavithi observance page, under What families do, shows the same two-part card.
 
 A missed tap during the language sheet started one extra empty japam. It was left in place, because it cannot be told apart from an earlier empty row without deleting practice. Delete my data was not pressed.
+
+## M2 device pass
+
+On the moon story, with no narration files: there is no age choice, each beat is one sentence, and swiping moves on at once. Read to me stays hidden, so pages wait to be turned, and the music plays. Pause, and locking the screen, both leave the control on Play and the bed does not start again. The last beat offers Do the puja and More stories of Ganesha, with no score. The beats now have their drawings, so the symbol fallback was not what showed.
+
+Still waiting for audio: the title and sentence lighting, the 1.5 second advance, the music ducking under a voice, the low bed on the marked beats, and a touch sound over the voice. Those rows in `tests/M2-stories.xlsx` stay “waiting for audio”.
