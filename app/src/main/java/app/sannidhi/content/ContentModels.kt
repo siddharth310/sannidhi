@@ -95,6 +95,7 @@ data class Sacred(val sa: String, val iast: String, val te: String) {
     val fills: JsonObject? = null,         // {computed:[…], user:[…], region:"desha_clause"}
     @SerialName("needs_review") val needsReview: Boolean = false,
     val audio: MantraAudio? = null,
+    @SerialName("list_audio") val listAudio: ListAudio? = null,
 )
 
 /** One clean repetition. The app loops it. wordsMs is the start of each word of sa. */
@@ -102,6 +103,15 @@ data class Sacred(val sa: String, val iast: String, val te: String) {
     val file: String,
     @SerialName("length_ms") val lengthMs: Long = 0,
     @SerialName("words_ms") val wordsMs: List<Long> = emptyList(),
+    val draft: Boolean = false,
+)
+
+/** Names said one by one. namesMs is the start of each name. */
+@Serializable data class ListAudio(
+    val file: String,
+    @SerialName("length_ms") val lengthMs: Long = 0,
+    @SerialName("names_ms") val namesMs: List<Long> = emptyList(),
+    val draft: Boolean = false,
 )
 
 // ---------- texts (nāmalu) ----------
@@ -151,6 +161,23 @@ data class Chantable(
     val naivedyam: List<String> = emptyList(), val optional: Boolean = false,
     val stories: List<String> = emptyList(),
     val samagri: List<SamagriRow> = emptyList(),
+    val audio: StepAudio? = null,
+)
+
+@Serializable data class StepSentence(
+    @SerialName("start_ms") val startMs: Int = 0,
+    @SerialName("end_ms") val endMs: Int = 0,
+    val text: String = "",
+)
+
+@Serializable data class StepClip(
+    val file: String,
+    val sentences: List<StepSentence> = emptyList(),
+    val draft: Boolean = false,
+)
+
+@Serializable data class StepAudio(
+    val instruction: Map<String, StepClip> = emptyMap(),
 )
 @Serializable data class PujaStage(val stage: String, val steps: List<PujaStep>)  // pre | during | post
 @Serializable data class Puja(

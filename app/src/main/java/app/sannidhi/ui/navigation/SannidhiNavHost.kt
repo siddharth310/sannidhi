@@ -209,6 +209,7 @@ fun SannidhiNavHost(container: AppContainer) {
                 onClose = { nav.popBackStack() },
                 onNaivedyam = { nav.navigate(NaivedyamRoute(it)) },
                 onKatha = { ids, part, beat -> openKatha(nav, ids, part, beat, "puja") },
+                onKathaHandsFree = { ids, part, beat -> openKatha(nav, ids, part, beat, "puja-handsfree") },
             )
         }
         composable<CalendarRoute> {

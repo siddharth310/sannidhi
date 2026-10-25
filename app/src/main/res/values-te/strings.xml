@@ -84,6 +84,11 @@
     <string name="guided_step">%2$d లో %1$d</string>
     <string name="guided_previous">‹ వెనుక</string>
     <string name="guided_next">తర్వాత ›</string>
+    <string name="hands_free">దానంతట అదే</string>
+    <string name="repeat_step">ఈ అడుగు మళ్ళీ</string>
+    <string name="play_step">అడుగు %1$d వినండి</string>
+    <string name="guided_back">వెనక్కి</string>
+    <string name="step_notification">అడుగు %1$d / %2$d · %3$s</string>
     <string name="close">మూసివేయండి</string>
     <string name="till_time">%1$s వరకు</string>
     <string name="sunrise_label">సూర్యోదయం %1$s</string>

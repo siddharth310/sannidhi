@@ -35,6 +35,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ButtonDefaults
@@ -43,9 +44,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -55,6 +59,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,6 +68,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -92,6 +98,9 @@ import app.sannidhi.ui.common.ModuleKind
 import app.sannidhi.ui.common.FloatingPills
 import app.sannidhi.ui.common.ImageOrFallback
 import app.sannidhi.ui.common.TopBar
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import app.sannidhi.ui.theme.Gold
 import app.sannidhi.ui.theme.Ink
 import app.sannidhi.ui.theme.InkSoft
@@ -103,7 +112,9 @@ import app.sannidhi.ui.theme.Ivory
 import app.sannidhi.ui.theme.Maroon
 import app.sannidhi.ui.theme.Peacock
 import app.sannidhi.ui.theme.TintPuja
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -405,9 +416,68 @@ fun PujaPageScreen(
         }
     }
     val firstMantraStep = loaded?.puja?.stages?.asSequence()?.flatMap { it.steps }?.firstOrNull { it.mantras.isNotEmpty() }?.id
+    val audioContext = LocalContext.current
+    val hold = remember { Hold() }
+    var pageCue by remember { mutableStateOf(StepCue()) }
+    var speaking by remember { mutableStateOf<String?>(null) }
+    var phase by remember { mutableStateOf("idle") }
+    var speakJob by remember { mutableStateOf<Job?>(null) }
+    val langNow = rememberUpdatedState(settings.lang)
+    fun speak(step: PujaStep, number: Int, total: Int) {
+        val bundle = loaded ?: return
+        if (speaking == step.id && speakJob?.isActive == true && !hold.paused) {
+            hold.paused = true
+            PujaPlayback.pause()
+            return
+        }
+        if (speaking == step.id && hold.paused && speakJob?.isActive == true) {
+            hold.paused = false
+            PujaPlayback.resume(audioContext)
+            return
+        }
+        hold.paused = false
+        speaking = step.id
+        speakJob?.cancel()
+        speakJob = scope.launch {
+            playStepAudio(
+                context = audioContext,
+                step = step,
+                number = number,
+                total = total,
+                title = step.titleIast,
+                mantras = bundle.mantras,
+                lang = langNow.value,
+                hasFile = repository::hasAssetAudio,
+                speed = { PujaPlayback.speed },
+                hold = hold,
+                onCue = { pageCue = it },
+                onPhase = { phase = it },
+            )
+            if (isActive) {
+                pageCue = StepCue()
+                speaking = null
+                phase = "idle"
+            }
+        }
+    }
+    LaunchedEffect(settings.lang, loaded?.puja?.id) {
+        val bundle = loaded ?: return@LaunchedEffect
+        val id = speaking ?: return@LaunchedEffect
+        if (phase != "instruction") return@LaunchedEffect
+        val steps = bundle.puja.stages.flatMap { it.steps }
+        val step = steps.firstOrNull { it.id == id } ?: return@LaunchedEffect
+        speak(step, steps.indexOfFirst { it.id == id } + 1, steps.size)
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            speakJob?.cancel()
+            PujaPlayback.stop()
+        }
+    }
     Column(Modifier.fillMaxSize().background(Ivory)) {
         TopBar(title, onBack, onHome)
         if (loaded == null) return@Column
+        val order = loaded.puja.stages.flatMap { it.steps }.mapIndexed { index, step -> step.id to (index + 1) }.toMap()
         LazyColumn(state = listState, modifier = Modifier.fillMaxSize(), contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 24.dp)) {
             item(key = "header") {
                 Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -473,6 +543,13 @@ fun PujaPageScreen(
                             kathaPlace = kathaPlace,
                             onKatha = onKatha,
                             guided = false,
+                            cue = if (speaking == step.id) pageCue else StepCue(),
+                            onSpeak = if (stepHasMedia(step, settings.lang, loaded.mantras, repository::hasAssetAudio)) {
+                                { speak(step, order[step.id] ?: (index + 1), order.size) }
+                            } else {
+                                null
+                            },
+                            speakNumber = order[step.id] ?: (index + 1),
                         )
                     }
                 }
@@ -490,6 +567,7 @@ fun GuidedPujaScreen(
     onClose: () -> Unit,
     onNaivedyam: (String) -> Unit,
     onKatha: (List<String>, Int, Int) -> Unit,
+    onKathaHandsFree: (List<String>, Int, Int) -> Unit = onKatha,
 ) {
     var bundle by remember { mutableStateOf<PujaBundle?>(null) }
     val kathaPlace by store.kathaPlace().collectAsState(initial = null)
@@ -533,6 +611,26 @@ fun GuidedPujaScreen(
         savedPage = pager.currentPage
         store.setGuidedPlace(pujaId, pager.currentPage)
     }
+    var cue by remember { mutableStateOf(StepCue()) }
+    var kathaReady by remember { mutableStateOf(false) }
+    var kathaReturn by remember { mutableStateOf(false) }
+    val shownStep = pages.getOrNull(pager.currentPage)?.second
+    LaunchedEffect(shownStep?.stories, settings.lang) {
+        val stories = shownStep?.stories.orEmpty()
+        val index = repository.storyIndex()
+        kathaReady = stories.size >= 2 && stories.all { id -> index.any { it.id == id && settings.lang in it.narrationLangs } }
+    }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME && KathaHandoff.consume()) kathaReturn = true
+        }
+        lifecycle.addObserver(observer)
+        onDispose { lifecycle.removeObserver(observer) }
+    }
+    LaunchedEffect(Unit) {
+        if (KathaHandoff.consume()) kathaReturn = true
+    }
     Column(Modifier.fillMaxSize().background(Ivory).statusBarsPadding()) {
         val stage = pages.getOrNull(pager.currentPage)?.first ?: ""
         Row(
@@ -559,6 +657,22 @@ fun GuidedPujaScreen(
         Box(Modifier.fillMaxWidth().height(2.dp).background(Gold.copy(alpha = 0.3f))) {
             Box(Modifier.fillMaxWidth(progress).height(2.dp).background(Gold))
         }
+        Row(
+            Modifier.fillMaxWidth().heightIn(min = 56.dp).padding(horizontal = 16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                stringResource(R.string.hands_free),
+                color = if (settings.handsFree) Maroon else Ink,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f),
+            )
+            Switch(
+                checked = settings.handsFree,
+                onCheckedChange = { on -> scope.launch { store.setHandsFree(on) } },
+                colors = SwitchDefaults.colors(checkedTrackColor = Maroon, checkedThumbColor = Ivory),
+            )
+        }
         HorizontalPager(state = pager, modifier = Modifier.weight(1f).fillMaxWidth()) { page ->
             val (_, step) = pages[page]
             Column(
@@ -578,7 +692,6 @@ fun GuidedPujaScreen(
                     count = counts[step.id] ?: 0,
                     meaningsOpen = emptySet(),
                     repository = repository,
-                    onScript = {},
                     onTick = { itemId, ticked -> scope.launch { store.setSamagriTick(pujaId, date, itemId, ticked) } },
                     onCount = {
                         val times = step.repeat
@@ -594,6 +707,8 @@ fun GuidedPujaScreen(
                     kathaPlace = kathaPlace,
                     onKatha = onKatha,
                     guided = true,
+                    cue = if (page == pager.currentPage) cue else StepCue(),
+                    onScript = { chosen -> scope.launch { store.setTextView(mantraStorage(chosen)) } },
                 )
             }
         }
@@ -603,39 +718,24 @@ fun GuidedPujaScreen(
             style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
         )
-        Row(
-            Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                stringResource(R.string.guided_previous),
-                color = Maroon,
-                style = MaterialTheme.typography.labelLarge,
-                modifier = Modifier
-                    .heightIn(min = 56.dp)
-                    .clickable { if (pager.currentPage > 0) scope.launch { pager.animateScrollToPage(pager.currentPage - 1) } }
-                    .padding(horizontal = 8.dp),
-            )
-            Text(
-                stringResource(R.string.guided_step, pager.currentPage + 1, pages.size),
-                color = Ink,
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f),
-            )
-            Text(
-                stringResource(R.string.guided_next),
-                color = Maroon,
-                style = MaterialTheme.typography.labelLarge,
-                textAlign = TextAlign.End,
-                modifier = Modifier
-                    .heightIn(min = 56.dp)
-                    .clickable {
-                        if (pager.currentPage < pages.lastIndex) scope.launch { pager.animateScrollToPage(pager.currentPage + 1) }
-                    }
-                    .padding(horizontal = 8.dp),
-            )
-        }
+        GuidedPlayback(
+            pages = pages,
+            pager = pager,
+            mantras = loaded.mantras,
+            lang = settings.lang,
+            handsFree = settings.handsFree,
+            script = script,
+            onScript = { chosen -> scope.launch { store.setTextView(mantraStorage(chosen)) } },
+            hasFile = repository::hasAssetAudio,
+            kathaReady = kathaReady,
+            onCue = { cue = it },
+            onKatha = {
+                val current = pages.getOrNull(pager.currentPage)?.second ?: return@GuidedPlayback
+                onKathaHandsFree(current.stories, 0, 0)
+            },
+            kathaReturn = kathaReturn,
+            onKathaReturnConsumed = { kathaReturn = false },
+        )
     }
     val resume = offer
     if (resume != null) {
@@ -710,6 +810,9 @@ private fun StepCard(
     kathaPlace: app.sannidhi.settings.KathaPlace? = null,
     onKatha: (List<String>, Int, Int) -> Unit = { _, _, _ -> },
     guided: Boolean,
+    cue: StepCue = StepCue(),
+    onSpeak: (() -> Unit)? = null,
+    speakNumber: Int = number,
 ) {
     var kathaCover by remember(step.stories) { mutableStateOf<String?>(null) }
     LaunchedEffect(step.stories) {
@@ -737,6 +840,15 @@ private fun StepCard(
                 Text(number.toString(), color = Maroon, style = MaterialTheme.typography.headlineMedium)
             }
             Text(step.titleIast, color = Ink, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.weight(1f))
+            if (onSpeak != null) {
+                val spoken = stringResource(R.string.play_step, speakNumber)
+                Icon(
+                    Icons.Filled.PlayArrow,
+                    contentDescription = spoken,
+                    tint = Maroon,
+                    modifier = Modifier.size(56.dp).clickable(onClick = onSpeak).padding(16.dp),
+                )
+            }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             val times = step.repeat
@@ -746,8 +858,13 @@ private fun StepCard(
             if (step.optional) Chip(stringResource(R.string.optional_chip))
         }
         if (step.repeat != null && step.mantras.isNotEmpty()) {
+            val times = step.repeat
+            val listing = cue.listIndex != null && cue.mantraId in step.mantras
+            val raw = if (listing) cue.listIndex ?: count else count
+            val shown = if (listing) raw.coerceAtMost(times) else raw
+            val total = times
             Text(
-                stringResource(R.string.chant_of, count, step.repeat),
+                stringResource(R.string.chant_of, shown, total),
                 color = Ink,
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.fillMaxWidth().heightIn(min = 56.dp).clickable(onClick = onCount).padding(vertical = 12.dp),
@@ -764,7 +881,17 @@ private fun StepCard(
             )
         }
         step.body?.pick(lang)?.takeIf { it.isNotBlank() }?.let { body ->
-            Text(body, color = Ink, fontSize = bodySize, lineHeight = bodySize * 1.4f, style = MaterialTheme.typography.bodyLarge)
+            val sentences = step.audio?.instruction?.get(settings.lang)?.sentences.orEmpty()
+            if (cue.sentence >= 0 && sentences.isNotEmpty()) {
+                Text(
+                    litSentences(body, sentences, cue.sentence),
+                    fontSize = bodySize,
+                    lineHeight = bodySize * 1.4f,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            } else {
+                Text(body, color = Ink, fontSize = bodySize, lineHeight = bodySize * 1.4f, style = MaterialTheme.typography.bodyLarge)
+            }
         }
         step.note?.pick(lang)?.takeIf { it.isNotBlank() }?.let { note ->
             Text(note, color = InkSoft, fontSize = 16.sp, fontStyle = FontStyle.Italic, lineHeight = 22.sp)
@@ -842,18 +969,32 @@ private fun StepCard(
             val mantra = bundle.mantras[id] ?: return@forEach
             val values = placeholderValues(bundle.master, bundle.today, bundle.samvatsaraId, settings, script)
             val lines = if (mantra.lines.isNotEmpty()) mantra.lines else listOfNotNull(mantra.text)
-            lines.forEach { sacred ->
-                Text(
-                    text = displayMantra(sacred, script, lang, values),
-                    color = Ink,
-                    fontSize = mantraSize,
-                    lineHeight = mantraSize * 1.45f,
-                    fontFamily = when (script) {
-                        MantraScript.Iast -> app.sannidhi.ui.theme.CormorantFamily
-                        MantraScript.Telugu -> app.sannidhi.ui.theme.NotoSerifTeluguFamily
-                        MantraScript.Devanagari -> app.sannidhi.ui.theme.NotoSerifDevanagariFamily
-                    },
-                )
+            val family = when (script) {
+                MantraScript.Iast -> app.sannidhi.ui.theme.CormorantFamily
+                MantraScript.Telugu -> app.sannidhi.ui.theme.NotoSerifTeluguFamily
+                MantraScript.Devanagari -> app.sannidhi.ui.theme.NotoSerifDevanagariFamily
+            }
+            lines.forEachIndexed { index, sacred ->
+                val shown = displayMantra(sacred, script, lang, values)
+                val active = cue.mantraId == id && index == cue.line
+                if (active && cue.word >= 0) {
+                    Text(
+                        text = litWords(shown, cue.word),
+                        fontSize = mantraSize,
+                        lineHeight = mantraSize * 1.45f,
+                        fontFamily = family,
+                    )
+                } else if (active && cue.listIndex != null) {
+                    LitLine(shown, true, mantraSize, MaterialTheme.typography.bodyLarge.copy(fontFamily = family))
+                } else {
+                    Text(
+                        text = shown,
+                        color = Ink,
+                        fontSize = mantraSize,
+                        lineHeight = mantraSize * 1.45f,
+                        fontFamily = family,
+                    )
+                }
             }
             val meaning = mantra.meaning?.pick(lang).orEmpty()
             if (meaning.isNotBlank() && !guided) {

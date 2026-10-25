@@ -315,7 +315,7 @@ fun StoryPlayerScreen(
                 symbolId = symbolId,
                 deityName = deityName,
                 repository = repository,
-                readToMe = settings.readToMe && telling.hasNarration(langCode),
+                readToMe = (origin == "puja-handsfree" || settings.readToMe) && telling.hasNarration(langCode),
                 music = settings.storyMusic,
                 pujaId = if (series.isEmpty()) pujaId else null,
                 onPuja = onPuja,
@@ -323,9 +323,15 @@ fun StoryPlayerScreen(
                 startBeat = if (part == startPart) startBeat else 0,
                 katha = series.isNotEmpty(),
                 lastPart = part >= ids.lastIndex,
-                leaveLabel = stringResource(if (origin == "puja") R.string.back_to_the_puja else R.string.back),
+                leaveLabel = stringResource(if (origin == "puja" || origin == "puja-handsfree") R.string.back_to_the_puja else R.string.back),
                 onAdvance = { part += 1 },
+                handsFreeReturn = origin == "puja-handsfree",
                 onLeave = {
+                    scope.launch { store.clearKathaPlace() }
+                    onBack()
+                },
+                onFinished = {
+                    app.sannidhi.ui.puja.KathaHandoff.arm()
                     scope.launch { store.clearKathaPlace() }
                     onBack()
                 },
@@ -411,6 +417,8 @@ private fun BeatPlayer(
     leaveLabel: String = "",
     onAdvance: () -> Unit = {},
     onLeave: () -> Unit = {},
+    onFinished: () -> Unit = {},
+    handsFreeReturn: Boolean = false,
     onBeat: (Int) -> Unit = {},
 ) {
     val beats = story.beats
@@ -479,11 +487,15 @@ private fun BeatPlayer(
             turn = scope.launch {
                 if (page == beats.lastIndex) {
                     audio.fadeOutBed()
+                    if (handsFreeReturn && lastPart) onFinished()
                     return@launch
                 }
                 delay(1500)
                 if (pager.currentPage == page) pager.animateScrollToPage(page + 1)
             }
+        }
+        if (handsFreeReturn && clip == null) {
+            audio.onNarrationFinished?.invoke()
         }
         if (!readToMe) {
             if (page == beats.lastIndex) {

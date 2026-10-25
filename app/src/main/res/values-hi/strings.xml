@@ -84,6 +84,11 @@
     <string name="guided_step">%2$d में से %1$d</string>
     <string name="guided_previous">‹ पीछे</string>
     <string name="guided_next">आगे ›</string>
+    <string name="hands_free">अपने आप</string>
+    <string name="repeat_step">यह चरण फिर</string>
+    <string name="play_step">चरण %1$d सुनें</string>
+    <string name="guided_back">पीछे</string>
+    <string name="step_notification">चरण %1$d / %2$d · %3$s</string>
     <string name="close">बंद करें</string>
     <string name="till_time">%1$s तक</string>
     <string name="sunrise_label">सूर्योदय %1$s</string>

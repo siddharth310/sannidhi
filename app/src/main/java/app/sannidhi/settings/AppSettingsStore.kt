@@ -32,6 +32,7 @@ data class AppSettings(
     val readToMe: Boolean = true,
     val storyMusic: Boolean = true,
     val debugStorySearch: Boolean = false,
+    val handsFree: Boolean = true,
 ) {
     fun language(): Lang = when (lang) {
         "te" -> Lang.te
@@ -237,6 +238,10 @@ class AppSettingsStore(private val context: Context) {
         }
     }
 
+    suspend fun setHandsFree(on: Boolean) {
+        dataStore.edit { it[Keys.handsFree] = on }
+    }
+
     suspend fun setGuidedPlace(pujaId: String, index: Int) {
         dataStore.edit { prefs ->
             val kept = prefs[Keys.guidedPlaces].orEmpty().filter { !it.startsWith("$pujaId|") }.toMutableSet()
@@ -263,6 +268,7 @@ class AppSettingsStore(private val context: Context) {
             readToMe = this[Keys.readToMe] ?: true,
             storyMusic = this[Keys.storyMusic] ?: true,
             debugStorySearch = this[Keys.debugStorySearch] ?: false,
+            handsFree = this[Keys.handsFree] ?: true,
         )
     }
 
@@ -287,6 +293,7 @@ class AppSettingsStore(private val context: Context) {
         val debugStorySearch = booleanPreferencesKey("debug_story_search")
         val kathaPlace = stringPreferencesKey("katha_place")
         val guidedPlaces = stringSetPreferencesKey("guided_places")
+        val handsFree = booleanPreferencesKey("hands_free")
     }
 
     companion object {

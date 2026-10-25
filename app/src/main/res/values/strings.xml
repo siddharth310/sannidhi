@@ -114,6 +114,11 @@
     <string name="god_stories">%1$s · %2$d stories</string>
     <string name="guided_previous">‹ Previous</string>
     <string name="guided_next">Next ›</string>
+    <string name="hands_free">Hands-free</string>
+    <string name="repeat_step">Repeat step</string>
+    <string name="play_step">Play step %1$d</string>
+    <string name="guided_back">Back</string>
+    <string name="step_notification">Step %1$d of %2$d · %3$s</string>
     <string name="close">Close</string>
     <string name="view_telugu" translatable="false">తెలుగు</string>
     <string name="view_devanagari" translatable="false">संस्कृतम्</string>

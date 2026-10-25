@@ -355,6 +355,104 @@ def mantra_from_sidecar(side, sa: str, where: str, mid: str):
     return out
 
 
+def list_from_sidecar(mid: str, line_count: int, where: str):
+    """One recording of names said one by one. The pause count must match the names."""
+    stem = f"{mid}.list"
+    side = read_sidecar(stem)
+    if not side:
+        return None
+    where = f"audio/{stem}.json"
+    file_name = companion_audio(stem)
+    if not file_name:
+        R.err(where, f"audio file missing for {stem}")
+        return None
+    length = sidecar_length(side, where)
+    if length is None:
+        return None
+    names = side.get("names_ms") or []
+    if len(names) != line_count:
+        R.err(where, f"names_ms has {len(names)} marks for {line_count} names; no list timings")
+        return None
+    marks = rising_marks(names, length, where, "names_ms")
+    if marks is None:
+        return None
+    out = {"file": file_name, "length_ms": length, "names_ms": marks}
+    if draft_flag(side):
+        out["draft"] = True
+    return out
+
+
+def instruction_from_sidecar(stem: str, body: str):
+    """Sentence timings for one step in one language. The words must be the step text."""
+    side = read_sidecar(stem)
+    if not side:
+        return None
+    where = f"audio/{stem}.json"
+    file_name = companion_audio(stem)
+    if not file_name:
+        R.err(where, f"audio file missing for {stem}")
+        return None
+    sentences = side.get("sentences") or []
+    if not isinstance(sentences, list) or not sentences:
+        R.err(where, "sidecar needs sentences")
+        return None
+    cleaned = []
+    previous = -1
+    for sentence in sentences:
+        if not isinstance(sentence, dict):
+            R.err(where, "a sentence must be an object")
+            return None
+        try:
+            start = int(sentence["start_ms"])
+            end = int(sentence["end_ms"])
+        except (KeyError, TypeError, ValueError):
+            R.err(where, "sentence start_ms and end_ms must be numbers")
+            return None
+        text = sentence.get("text")
+        if not isinstance(text, str) or start < 0 or end <= start or start <= previous:
+            R.err(where, "sentence timings must rise and carry their text")
+            return None
+        previous = start
+        cleaned.append({"start_ms": start, "end_ms": end, "text": text})
+    source = re.sub(r"\s+", "", body)
+    joined = re.sub(r"\s+", "", "".join(item["text"] for item in cleaned))
+    if joined != source:
+        R.err(where, "sentence text does not match the step")
+        return None
+    out = {"file": file_name, "sentences": cleaned}
+    if draft_flag(side):
+        out["draft"] = True
+    return out
+
+
+def attach_list_audio(item: dict, where: str):
+    lines = item.get("lines") or []
+    if not lines:
+        return
+    listed = list_from_sidecar(item["id"], len(lines), where)
+    if listed:
+        item["list_audio"] = listed
+
+
+def attach_puja_audio(data):
+    """Instruction clips, only where a recording and its timings have both arrived."""
+    for puja in data["pujas"]:
+        for stage in puja["stages"]:
+            for step in stage["steps"]:
+                clips = {}
+                body = step.get("body") or {}
+                for lang in ("te", "hi", "en"):
+                    text = body.get(lang) or ""
+                    if not str(text).strip():
+                        continue
+                    stem = f"puja.{puja['id']}.{stage['stage']}.{step['slug']}.{lang}"
+                    clip = instruction_from_sidecar(stem, str(text).strip())
+                    if clip:
+                        clips[lang] = clip
+                if clips:
+                    step["audio"] = {"instruction": clips}
+
+
 def media_length_ms(path: str):
     """Duration of an audio file, when the platform can read it."""
     try:
@@ -458,9 +556,14 @@ def load_mantras():
                     review = "REVIEW" in sa_line
                     sa_line = sa_line.replace("(REVIEW)", "").strip()
                     check_id("mantra", mid, w)
-                    out.append({"id": mid, "deity": deity, "status": file_status, "kind": "upachara",
-                                "text": sacred(f"{prefix} {sa_line}", f"{w} {mid}"), "lines": [], "use": ["puja"],
-                                "count_default": None, "meaning": None, "fills": None, "needs_review": review})
+                    text = sacred(f"{prefix} {sa_line}", f"{w} {mid}")
+                    item = {"id": mid, "deity": deity, "status": file_status, "kind": "upachara",
+                            "text": text, "lines": [], "use": ["puja"],
+                            "count_default": None, "meaning": None, "fills": None, "needs_review": review}
+                    side = read_sidecar(mid)
+                    if side and text:
+                        item["audio"] = mantra_from_sidecar(side, text["sa"], w, mid)
+                    out.append(item)
                 continue
             mid = sec.title
             check_id("mantra", mid, f"{w} '{mid}'")
@@ -481,6 +584,7 @@ def load_mantras():
             })
             if not k.get("sa") and not k.get("sa_lines"):
                 R.err(f"{w} {mid}", "mantra has no sa: or sa_lines:")
+            attach_list_audio(out[-1], w)
     return out
 
 
@@ -815,6 +919,28 @@ def report_katha(data):
                     print(f"Vināyaka Chavithi katha: {short}")
 
 
+def report_puja_audio(data):
+    """Which puja steps have a recording attached, and which are still waiting."""
+    mantras = {item["id"]: item for item in data["mantras"]}
+    ready, waiting = [], []
+    for puja in data["pujas"]:
+        for stage in puja["stages"]:
+            for step in stage["steps"]:
+                instruction = (step.get("audio") or {}).get("instruction") or {}
+                mantra_audio = False
+                for mid in step.get("mantras") or []:
+                    mantra = mantras.get(mid) or {}
+                    if mantra.get("audio") or mantra.get("list_audio"):
+                        mantra_audio = True
+                (ready if instruction or mantra_audio else waiting).append(step["id"])
+    print(f"\npuja steps with audio: {len(ready)}")
+    for step_id in ready:
+        print(f"  with     {step_id}")
+    print(f"puja steps without audio: {len(waiting)}")
+    for step_id in waiting:
+        print(f"  without  {step_id}")
+
+
 def check_refs(data, images, release=False):
     ids = defaultdict(set)
     for k in ("deities", "mantras", "texts", "pujas", "naivedyam", "samagri", "observances", "stories"):
@@ -903,6 +1029,18 @@ def drop_draft_audio(data):
             audio = item.get("audio")
             if isinstance(audio, dict) and audio.get("draft"):
                 item["audio"] = None
+            listed = item.get("list_audio")
+            if isinstance(listed, dict) and listed.get("draft"):
+                item["list_audio"] = None
+    for puja in data.get("pujas", []):
+        for stage in puja["stages"]:
+            for step in stage["steps"]:
+                audio = step.get("audio") or {}
+                kept = {lang: clip for lang, clip in (audio.get("instruction") or {}).items() if not clip.get("draft")}
+                if kept:
+                    step["audio"] = {"instruction": kept}
+                elif "audio" in step:
+                    step["audio"] = None
 
 
 def prune_for_release(data):
@@ -1181,8 +1319,10 @@ def main():
                 if box:
                     touch["box"] = box
 
+    attach_puja_audio(data)
     check_refs(data, images, args.release)
     report_katha(data)
+    report_puja_audio(data)
     for o in data["observances"]:
         for pid in o["links"].get("pujas", []):
             p = next((p for p in data["pujas"] if p["id"] == pid), None)

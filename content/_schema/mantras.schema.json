@@ -81,6 +81,22 @@
      }
     ]
    },
+   "list_audio": {
+    "anyOf": [
+     { "type": "null" },
+     {
+      "type": "object",
+      "required": ["file", "length_ms", "names_ms"],
+      "additionalProperties": false,
+      "properties": {
+       "file": { "type": "string" },
+       "length_ms": { "type": "integer", "minimum": 1 },
+       "names_ms": { "type": "array", "items": { "type": "integer", "minimum": 0 } },
+       "draft": { "type": "boolean" }
+      }
+     }
+    ]
+   },
    "meaning": {
     "anyOf": [
      {
