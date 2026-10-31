@@ -1,0 +1,19 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 1388,
+      "text": "A snake on the path!"
+    },
+    {
+      "start_ms": 1388,
+      "end_ms": 2683,
+      "text": "The mouse jumped."
+    },
+    {
+      "start_ms": 2683,
+      "end_ms": 6665,
+      "text": "Ganesha tumbled, and the modakas rolled everywhere."
+    }
+  ]
+}

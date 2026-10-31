@@ -1,0 +1,29 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 1558,
+      "text": "Then Shiva arrived."
+    },
+    {
+      "start_ms": 1558,
+      "end_ms": 5454,
+      "text": "\"I promised my mother — you cannot go in,\" said the boy."
+    },
+    {
+      "start_ms": 5454,
+      "end_ms": 10227,
+      "text": "Shiva didn't know who the boy was, and the boy didn't know Shiva."
+    },
+    {
+      "start_ms": 10227,
+      "end_ms": 12077,
+      "text": "Neither would give way."
+    },
+    {
+      "start_ms": 12077,
+      "end_ms": 16464,
+      "text": "In that quarrel, in a single moment, the boy lost his head."
+    }
+  ]
+}

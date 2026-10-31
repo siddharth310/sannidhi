@@ -1,0 +1,14 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 2792,
+      "text": "At night he rode home on his mouse."
+    },
+    {
+      "start_ms": 2792,
+      "end_ms": 5792,
+      "text": "The little mouse puffed and pulled."
+    }
+  ]
+}

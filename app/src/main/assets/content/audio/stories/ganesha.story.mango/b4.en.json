@@ -1,0 +1,29 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 5346,
+      "text": "Ganesha walked around his parents three times and bowed."
+    },
+    {
+      "start_ms": 5346,
+      "end_ms": 8076,
+      "text": "\"You are my whole world,\" he said."
+    },
+    {
+      "start_ms": 8076,
+      "end_ms": 10464,
+      "text": "Shiva and Parvati smiled."
+    },
+    {
+      "start_ms": 10464,
+      "end_ms": 16493,
+      "text": "Wisdom isn't about being fastest — it's knowing what truly matters."
+    },
+    {
+      "start_ms": 16493,
+      "end_ms": 18884,
+      "text": "The fruit went to Ganesha."
+    }
+  ]
+}

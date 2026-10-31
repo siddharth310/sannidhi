@@ -1,0 +1,24 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 1135,
+      "text": "Parvati wept."
+    },
+    {
+      "start_ms": 1135,
+      "end_ms": 2476,
+      "text": "Shiva was sorry."
+    },
+    {
+      "start_ms": 2476,
+      "end_ms": 6914,
+      "text": "\"Bring the head of the first creature you find,\" he said."
+    },
+    {
+      "start_ms": 6914,
+      "end_ms": 9186,
+      "text": "They found a kind elephant."
+    }
+  ]
+}

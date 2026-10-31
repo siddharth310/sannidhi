@@ -1,0 +1,19 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 4901,
+      "text": "Satrajit's brother Prasena wore the jewel and went into the forest."
+    },
+    {
+      "start_ms": 4901,
+      "end_ms": 6326,
+      "text": "He did not come back."
+    },
+    {
+      "start_ms": 6326,
+      "end_ms": 9090,
+      "text": "The shining jewel ended up with a lion."
+    }
+  ]
+}

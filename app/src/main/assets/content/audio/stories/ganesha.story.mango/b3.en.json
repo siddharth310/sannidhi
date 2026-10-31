@@ -1,0 +1,14 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 4288,
+      "text": "Kartikeya leapt onto his peacock and flew off in a flash."
+    },
+    {
+      "start_ms": 4288,
+      "end_ms": 7925,
+      "text": "Ganesha looked at his little mouse and thought."
+    }
+  ]
+}

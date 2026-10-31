@@ -732,12 +732,21 @@ def _audio_ms(path):
     return int(float(match.group(1)) * 1000) if match else None
 
 
+def _narration_file(story_id, name):
+    """The recording for one step, in m4a, mp3 or wav."""
+    base = os.path.join(C, "audio", "stories", story_id)
+    for ext in (".m4a", ".mp3", ".wav"):
+        path = os.path.join(base, name + ext)
+        if os.path.isfile(path):
+            return path
+    return None
+
+
 def _narration_clip(story_id, name, expected, where):
     """Read one narration file. Returns the clip, or None when the file is absent."""
-    base = os.path.join(C, "audio", "stories", story_id)
-    audio = os.path.join(base, f"{name}.m4a")
-    timing = os.path.join(base, f"{name}.json")
-    if not (os.path.exists(audio) and os.path.exists(timing)):
+    audio = _narration_file(story_id, name)
+    timing = os.path.join(C, "audio", "stories", story_id, f"{name}.json")
+    if not (audio and os.path.exists(timing)):
         return None
     try:
         data = json.load(open(timing, encoding="utf-8"))
@@ -762,12 +771,12 @@ def _narration_clip(story_id, name, expected, where):
         joined.append(str(row["text"]))
     length = _audio_ms(audio)
     if length is None:
-        R.warn(where, f"could not read the length of {name}.m4a")
+        R.warn(where, f"could not read the length of {os.path.basename(audio)}")
     elif last_end(sentences) > length + 80:
         R.err(where, f"{name}.json ends after the audio")
     if re.sub(r"\s+", "", "".join(joined)) != re.sub(r"\s+", "", expected or ""):
         R.err(where, f"{name}.json text does not match the story line")
-    return {"file": f"audio/stories/{story_id}/{name}.m4a",
+    return {"file": f"audio/stories/{story_id}/{os.path.basename(audio)}",
             "sentences": [{"start_ms": int(s["start_ms"]), "end_ms": int(s["end_ms"]), "text": str(s["text"])}
                           for s in sentences]}
 

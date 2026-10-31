@@ -1,0 +1,19 @@
+{
+  "sentences": [
+    {
+      "start_ms": 0,
+      "end_ms": 3248,
+      "text": "The boy woke again with an elephant's head!"
+    },
+    {
+      "start_ms": 3248,
+      "end_ms": 10699,
+      "text": "Shiva hugged him: \"You will be worshipped before everyone.\" They named him Ganapati, leader of all."
+    },
+    {
+      "start_ms": 10699,
+      "end_ms": 14617,
+      "text": "It was the gift for his courage in keeping his word."
+    }
+  ]
+}
