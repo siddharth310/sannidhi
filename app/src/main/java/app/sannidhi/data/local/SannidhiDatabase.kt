@@ -28,6 +28,7 @@ abstract class SannidhiDatabase : RoomDatabase() {
         fun create(context: Context): SannidhiDatabase =
             Room.databaseBuilder(context, SannidhiDatabase::class.java, "smaranam.db")
                 .addMigrations(MIGRATION_7_8)
+                .fallbackToDestructiveMigration()
                 .build()
     }
 }

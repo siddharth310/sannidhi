@@ -80,7 +80,7 @@ fun SannidhiNavHost(container: AppContainer) {
     val scope = rememberCoroutineScope()
     val repo: ContentRepository = container.contentRepository
     LaunchedEffect(current.debugToday) {
-        container.practiceRepository.closeExpired(current.today())
+        runCatching { container.practiceRepository.closeExpired(current.today()) }
     }
     fun home() {
         nav.navigate(HomeRoute) {
